@@ -1,0 +1,301 @@
+---
+layout: post
+status: published
+published: true
+title: Improving CSS Star Rating
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2008-01-15 03:18:13 UTC
+permalink: "/progress/permalink/CSS-star-rating.html"
+redirect_from:
+- "/archives/202-Improving-CSS-Star-Rating.html"
+categories:
+- Web Activities
+- Tutorials
+tags:
+- css
+- howto
+- serendipity
+comments:
+- id: 308
+  author: Don Chambers
+  author_email: don.chambers@optional-necessity.com
+  author_url: http://www.optional-necessity.com
+  date: '1200499091'
+  content: "Great find for the original tutorial!!!  An exceptionally thorough explanation
+    of how it works, and an even better implementation of using a full width (5 star)
+    image to allow the effect you are creating with the animated smilies!!\r\n\r\nThe
+    stacking diagram really does a great job of explaining what is at work in the
+    css!!!\r\n\r\nThanks for the effort Judebert!!!  This technique really made a
+    huge difference in the serendipiity karma plugin, even though that implementation
+    was a slightly different markup structure."
+- id: 313
+  author: Judebert.com
+  author_email: ''
+  author_url: http://judebert.com/progress/archives/208-Graphical-Rating-Bars-for-Serendipity-Karma-Plugin.html
+  date: '1203633031'
+  content: ' I''ve been working on updating the Serendipity Karma plugin to include
+    CSS graphical rating bars. (I just love the thought patterns behind "Serendipity
+    Karma".) It started as a simple code cleanup, to make things more understandable
+    to novice progr'
+- id: 378
+  author: Diego
+  author_email: djuritz@hotmail.com
+  author_url: http://www.elsecreto.com.ar
+  date: '1214276856'
+  content: "Hey, this looks great, but how can I do to avoid people voting twice?\r\nThe
+    code should change in order to show the current average, *but not to let you rate
+    again*.\r\nSome sites do that, after voting it shows the starts, but the are no
+    longer links.\r\nThanks!"
+- id: 379
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1214315544'
+  content: "Got it covered!  In fact, the Serendipity karma plugin already takes care
+    of that; you can test it on the rating bars on my website.\r\n\r\nKeep in mind
+    we're talking about dynamically generated HTML here.  To avoid duplicate voting,
+    the script has to detect whether the user has already voted.  You could do that
+    in the database, the session, or a cookie.\r\n\r\nWhen you determine that the
+    user has already voted, you simply output the HTML for the LI items, but leave
+    out the A links.  The same CSS will work in both cases."
+- id: 380
+  author: Diego
+  author_email: djuritz@hotmail.com
+  author_url: http://www.contactosdelacole.com
+  date: '1214319813'
+  content: "Hi  Judebert, thanks for your answer.\r\nSo you mean that I should remove
+    the links from the pictures and that's it?\r\n\r\nThe only way to remove the links
+    is refreshing the page, right?\r\nOr generating the next HTML using ajax.\r\n\r\nMy
+    idea is to let user vote and refresh the starts so that it reflects the average
+    but that user is no longer allowed to vote.\r\n\r\nThanks!\r\n  Diego."
+- id: 381
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1214512520'
+  content: Right on all counts.  The Serendipity karma plugin generates a link if
+    voting is enabled; when the user clicks, the current page is reloaded, but the
+    links are not supplied.  The same thing could be accomplished through AJAX, if
+    you wanted to get fancy.
+excerpt_separator: <a id="extended"></a>
+---
+<!-- s9ymdb:623 --><img width="125" height="75" style="float: left; border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/s9y/plugins/jude-demo-star-2.png" alt="" />&#13;
+<p>I'm considering adding a star rating tool to my website.  But I don't like using JavaScript if I can avoid it.  Luckily, I found <a href="http://komodomedia.com/blog/index.php/2005/08/24/creating-a-star-rater-using-css/">a tutorial on creating a star rating bar using pure CSS</a> on the web.&#13;
+</p><p>&#13;
+Using the lessons learned in his tutorials (note the plural), I had a few insights and made a few improvements.  For instance, the rating bar can vary in color or shape from one end to another.  It can even be animated!  Finally, I made the current rating parameter easier to generate for blogs and such.&#13;
+</p><a id="extended"></a><p>Here's an example of my rater, using the single image from the start of this article.  It's in PNG format:</p>&#13;
+<ul class="rating">&#13;
+<li class="current" style="width: 2.65em;" alt="Currently rated 2.65 out of 5 stars">2.65 out of 5</li>&#13;
+<li><a href="#1" class="rate1" title="I hated it" alt="one star">*</a></li>&#13;
+<li><a href="#2" class="rate2" title="I disliked it" alt="two stars">*</a></li>&#13;
+<li><a href="#3" class="rate3" title="It was OK" alt="three stars">*</a></li>&#13;
+<li><a href="#4" class="rate4" title="I liked it" alt="four stars">*</a></li>&#13;
+<li><a href="#5" class="rate5" title="I loved it" alt="five stars">*</a></li>&#13;
+</ul>&#13;
+<p>This is similar, but with a different (perhaps more pleasing) color scheme:</p>&#13;
+<ul class="rating ratingbar2">&#13;
+<li class="current" style="width: 2.65em;">2.65 out of 5</li>&#13;
+<li><a href="#1" class="rate1" title="I hated it">*</a></li>&#13;
+<li><a href="#2" class="rate2" title="I disliked it">*</a></li>&#13;
+<li><a href="#3" class="rate3" title="It was OK">*</a></li>&#13;
+<li><a href="#4" class="rate4" title="I liked it">*</a></li>&#13;
+<li><a href="#5" class="rate5" title="I loved it">*</a></li>&#13;
+</ul>&#13;
+<p>I modified those (on my own) to create this glowing scheme, which uses only a single star image instead of a full bar:</p>&#13;
+<ul class="rating glowing">&#13;
+<li class="current" style="width: 3.5em;">3.5 out of 5</li>&#13;
+<li><a href="#1" class="rate1" title="I hated it">*</a></li>&#13;
+<li><a href="#2" class="rate2" title="I disliked it">*</a></li>&#13;
+<li><a href="#3" class="rate3" title="It was OK">*</a></li>&#13;
+<li><a href="#4" class="rate4" title="I liked it">*</a></li>&#13;
+<li><a href="#5" class="rate5" title="I loved it">*</a></li>&#13;
+</ul>&#13;
+<p>&#13;
+Here's a rainbow rating bar:&#13;
+</p>&#13;
+<ul class="rating ratingbow">&#13;
+<li class="current" style="width: 3.0em;">3.0 out of 5</li>&#13;
+<li><a href="#1" class="rate1" title="I hated it">*</a></li>&#13;
+<li><a href="#2" class="rate2" title="I disliked it">*</a></li>&#13;
+<li><a href="#3" class="rate3" title="It was OK">*</a></li>&#13;
+<li><a href="#4" class="rate4" title="I liked it">*</a></li>&#13;
+<li><a href="#5" class="rate5" title="I loved it">*</a></li>&#13;
+</ul>&#13;
+<p>&#13;
+Here's a nice animated GIF example, taken from emoticons I found online:&#13;
+</p>&#13;
+<ul class="rating ratingsmile">&#13;
+<li class="current" style="width: 3.5em;">3.5 out of 5</li>&#13;
+<li><a href="#1" class="rate1" title="I hated it">*</a></li>&#13;
+<li><a href="#2" class="rate2" title="I disliked it">*</a></li>&#13;
+<li><a href="#3" class="rate3" title="It was OK">*</a></li>&#13;
+<li><a href="#4" class="rate4" title="I liked it">*</a></li>&#13;
+<li><a href="#5" class="rate5" title="I loved it">*</a></li>&#13;
+</ul>&#13;
+<p>&#13;
+My graphics skills leave much to be desired.  Especially at the pixel level.  (That's why I learned <a href="/progress/brot.html">how to generate fractals</a> and to ray-trace.)  <a href="http://www.optional-necessity.com/">Thanks to Don for his <b>much</b> better star image and rainbow bar!</a>&#13;
+</p><p>&#13;
+In case you missed the original tutorial (cheater!) here's a quick explanation of how it works.&#13;
+</p><p>&#13;
+The stars are implemented as a big UL.  Each star is in its own LI.  There's an A in there, too, because <b>some</b> browsers don't know how to implement :hover on anything else.  The current rating goes in an LI, too.&#13;
+</p><p>&#13;
+We assign the rating bar image as the background for the UL itself, the current rating, and the <em>hovered</em> anchors.  The LIs and the <em>unhovered</em> anchors we leave with no background at all.  &#13;
+</p><p>&#13;
+Next we shove everything up into one rating bar of space.  We accomplish this with "position: relative;" on the UL (making it a valid container) and "position: absolute;" on the anchors and the current-rating LI.  By default, absolutely positioned elements are removed from the flow and placed at 0,0 in the first explicitly positioned container (in our case, the UL).  Normally the UL would now take 0 pixels of space (because all its contents have been removed from the flow), so we explicitly assign it one rating bar of space.&#13;
+</p><p>&#13;
+Note that the background image is placed in the upper-left corner by default.  Since we just made the UL big enough to display only one rating bar of the image, it displays the top bar.  That's the one that looks empty.&#13;
+</p><p>&#13;
+Everybody else is stuck together, with no size, in the UL's top-left corner.  So we assign each anchor a size equivalent to the number of stars it holds.  The leftmost anchor gets 20%, the next gets 40%, the next 60%, and so on.  The current-rating LI is handled specially: its size is determined by the rating.&#13;
+</p>&#13;
+<figure class="figure_left" style="width: 300px">
+<!-- mdb='624' -->
+  <img src="/progress/media/s9y/plugins/starlayers.png" width="300" height="175" alt="" />
+  <figcaption>The stack of rating bars</figcaption>
+</figure><p>&#13;
+We want these things stacked on top of one another so they show through in the correct places.  The UL, with its empty-bar image, should be on the bottom; this is the default, z-index: 0.  The current-rating LI is next up, at z-index: 1.  Then the anchors.  Order is important: we want the browser to notice when we move the mouse, and if the rightmost anchor is always on top, it'll completely cover all the others.  So we make the rightmost the lowest, at z-index: 2;  it covers everything below it.  Four-stars is next, at z-index: 3; it covers everything below it, except for the rightmost star.  We keep it up until we get to the leftmost, one-star, which is z-index: 6.  It only covers one star of the stack, but it's on top, on the left.&#13;
+</p><p>&#13;
+Finally, we've got to modify the images.  If you've been following diligently along, you know that we've got all the bars stacked on top of one another, with their rightmost stars peeking out.  But you may have noticed that they're all showing the empty-bar portion of the image.  We'll fix this by aligning the background image to the top, bottom, or center.&#13;
+</p><p>&#13;
+For the current-rating bar, we specify "background-position: center;", which corresponds to the "rated" bar.  Since it's only one bar tall, it displays only the rated portion of the image.  Since it's width corresponds to the rating, it doesn't cover up the whole image.  And since it's underneath everything but the UL itself, it only covers up the empty bar.&#13;
+</p><p>&#13;
+The <em>hovered</em> anchors we set to background-position: bottom;", which corresponds to the "my rating" bar.  Normal anchors contain no background, so they're completely transparent until you hover on them.  Again, they're only one bar high, so they only let the "my rating" portion of the image show through.  And each one only covers its section of the bar, so when you hover, you don't cover the whole thing (unless you're voting for 5 stars).&#13;
+</p><p>&#13;
+In the original tutorial, the background image is repeated, so the stars must all be identical.  However, if a full bar is used instead of an individual star, the image replacement still works as expected.  That opens the possibilities of stars with different faces (or just emotions), not to mention animated rating bars.  If we make the full-bar animated image with all three bars in sync, it should always stay in sync, since we're just displaying different parts of the same image anyway.&#13;
+</p><p>&#13;
+So I had discovered eye-candy (despite my terrible graphics).  But the real problem was the current rating size.  &#13;
+</p><p>&#13;
+The original method needed the server to know two pieces of information: the width of a single star in pixels, and the rating average.  These were multiplied together to create a pixel width, which is added to the rating as an inline style.  That's a hindrance for blogs and other dynamically generated raters, since they need to know the pixel width of a single star.  That makes it difficult to substitute differently-sized graphics for your bar.&#13;
+</p><p>&#13;
+To make the rating bar truly flexible, it needs to be freed from the pixel.  Luckily, it's not all that tough to make the browser do that little piece of math (at least in FireFox; I haven't tested IE).&#13;
+</p><p>&#13;
+I just modified the CSS so the font pixel size was one star width.  Then I set the current rating in EMs.  The browser does the multiplication for me.  When I change the image, I only need to change the CSS.&#13;
+</p><p>&#13;
+In the example above, here's the HTML:&#13;
+</p>&#13;
+<blockquote>&#13;
+&lt;ul class="rating"&gt;<br />&#13;
+&lt;li class="current" style="width: 2.75em;"&gt;2.75 out of 5&lt;/li&gt;<br />&#13;
+&lt;li&gt;&lt;a href="#1" class="rate1" title="I hated it"&gt;*&lt;/a&gt;&lt;/li&gt;<br />&#13;
+&lt;li&gt;&lt;a href="#2" class="rate2" title="I disliked it"&gt;*&lt;/a&gt;&lt;/li&gt;<br />&#13;
+&lt;li&gt;&lt;a href="#3" class="rate3" title="It was OK"&gt;*&lt;/a&gt;&lt;/li&gt;<br />&#13;
+&lt;li&gt;&lt;a href="#4" class="rate4" title="I liked it"&gt;*&lt;/a&gt;&lt;/li&gt;<br />&#13;
+&lt;li&gt;&lt;a href="#5" class="rate5" title="I loved it"&gt;*&lt;/a&gt;&lt;/li&gt;<br />&#13;
+&lt;/ul&gt;<br />&#13;
+</blockquote>&#13;
+<p>&#13;
+To get the different bar image and size, I just added a single class ("ratingsmile", in this case) to the HTML and a tiny bit of CSS, just like the original tutorial did for his small-star class.&#13;
+</p><p>&#13;
+In fact, here's the CSS now:&#13;
+<code>&#13;
+/* Background is full bar */<br />&#13;
+.rating,<br />&#13;
+.rating a:hover,<br />&#13;
+.rating .current<br />&#13;
+{<br />&#13;
+  background: url(ratingstars.gif) left;<br />&#13;
+}<br />&#13;
+.rating<br />&#13;
+{<br />&#13;
+  position: relative;<br />&#13;
+  width: 125px; /* 5 stars width */<br />&#13;
+  height: 25px; /* 1 star height */<br />&#13;
+  overflow: hidden;<br />&#13;
+  list-style: none;<br />&#13;
+  margin: 0px;<br />&#13;
+  padding: 0px;<br />&#13;
+  background-position: top left;<br />&#13;
+}<br />&#13;
+.rating li<br />&#13;
+{<br />&#13;
+  display: inline;<br />&#13;
+}<br />&#13;
+.rating a,<br />&#13;
+.rating .current<br />&#13;
+{<br />&#13;
+  position: absolute;<br />&#13;
+  top: 0;<br />&#13;
+  left: 0;<br />&#13;
+  text-indent: -9000px;<br />&#13;
+  height: 25px; /* 1 star height */<br />&#13;
+  line-height: 25px; /* 1 star height */<br />&#13;
+  outline: none;<br />&#13;
+  overflow: hidden;<br />&#13;
+  border: none;<br />&#13;
+  /* I replaced the pixel-width with an em-width, but must set font size in px */<br />&#13;
+  font-size: 25px; /* 1 star width */<br />&#13;
+}<br />&#13;
+/* Show stars when hovered */<br />&#13;
+.rating a:hover<br />&#13;
+{<br />&#13;
+  background-position: left bottom;<br />&#13;
+}<br />&#13;
+/* Set each section to the appropriate width, stacking so leftmost is topmost */<br />&#13;
+.rating a.rate1<br />&#13;
+{<br />&#13;
+  width: 20%;<br />&#13;
+  z-index: 6;<br />&#13;
+}<br />&#13;
+.rating a.rate2<br />&#13;
+{<br />&#13;
+  width:40%;<br />&#13;
+  z-index: 5;<br />&#13;
+}<br />&#13;
+.rating a.rate3<br />&#13;
+{<br />&#13;
+  width:60%;<br />&#13;
+  z-index: 4;<br />&#13;
+}<br />&#13;
+.rating a.rate4<br />&#13;
+{<br />&#13;
+  width:80%;<br />&#13;
+  z-index: 3;<br />&#13;
+}<br />&#13;
+.rating a.rate5<br />&#13;
+{<br />&#13;
+  width:100%;<br />&#13;
+  z-index: 2;<br />&#13;
+}<br />&#13;
+.rating .current<br />&#13;
+{<br />&#13;
+  z-index: 1;<br />&#13;
+  background-position: left center;<br />&#13;
+}<br />&#13;
+/* Overrides for smiley bar */<br />&#13;
+.ratingsmile<br />&#13;
+{<br />&#13;
+  width: 100px; <br />&#13;
+  height: 20px; <br />&#13;
+}<br />&#13;
+.ratingsmile,<br />&#13;
+.ratingsmile a:hover,<br />&#13;
+.ratingsmile .current<br />&#13;
+{<br />&#13;
+  background-image: url(ratingsmiles.gif);<br />&#13;
+  /* Set these if different from original bar height */<br />&#13;
+  line-height: 20px;<br />&#13;
+  height: 20px;<br />&#13;
+  font-size: 20px;<br />&#13;
+}<br />&#13;
+/* Overrides for rainbow bar <br />&#13;
+   (since size is the same, only need to change the image) */<br />&#13;
+.ratingbow,<br />&#13;
+.ratingbow a:hover,<br />&#13;
+.ratingbow .current<br />&#13;
+{<br />&#13;
+  background-image: url(rainbow-bar-1.png);<br />&#13;
+}<br />&#13;
+/* Overrides for alternate color */<br />&#13;
+.ratingbar2,<br />&#13;
+.ratingbar2 a:hover,<br />&#13;
+.ratingbar2 .current<br />&#13;
+{<br />&#13;
+  background-image: url(jude-demo-star-1.gif);<br />&#13;
+}<br />&#13;
+</code>&#13;
+</p>&#13;
+I hope to get this improved, more readable version into the Serendipity karma plugin sometime soon.<br />&#13;

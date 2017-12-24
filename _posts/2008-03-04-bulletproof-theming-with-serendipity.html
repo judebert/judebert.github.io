@@ -1,0 +1,542 @@
+---
+layout: post
+status: published
+published: true
+title: Bulletproof Theming with Serendipity
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2008-03-04 21:05:00 UTC
+permalink: "/archives/217-Bulletproof-Theming-with-Serendipity.html"
+categories:
+- Tutorials
+tags:
+- criterion
+- howto
+- serendipity
+- templates
+- themes
+comments:
+- id: 352
+  author: David Cummins
+  author_email: dave@daves.me.uk
+  author_url: http://themes.daves.me.uk
+  date: '1204745026'
+  content: "Great tutorial Judebert - and great to see BP proving so useful for a
+    port too.\r\n\r\nDave"
+- id: 353
+  author: Don Chambers
+  author_email: don.chambers@optional-necessity.com
+  author_url: http://www.optional-necessity.com
+  date: '1204769331'
+  content: "Excellent post Judebert!  And a great colorset!\r\n\r\nA bit of clarification
+    regarding this: \"...... and colors from the sidebar titles for \"self\" comments
+    (comments made by the current visitor)\"\r\n\r\nIn bulletproof, the class serendipity_comment_self
+    is applied to an author comment, not to a current visitor.  If the entry's author
+    name and comment author names are an exact match, the class applies.\r\n\r\nMight
+    I also suggest you try text-align: center to your  colorset's .serendipity_comment_source
+    class...  you may, or may not, prefer the results.\r\n\r\nYou know who to contact
+    if you want this colorset available for download on the bulletproof docsite!   :-)\r\n\r\nAnd
+    check your plugins - especially nl2br... every time I insert 2 line breaks into
+    this comment, they are being doubled for a total of 4.   :-O"
+- id: 354
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1204812436'
+  content: "Thanks, Don.  I've edited the article to indicate the true purpose of
+    \"self\" in BP.  \r\n\r\nI've been having the double-break problem, too.  I'm
+    going to try disabling nl2br for comments -- if that works, I can just delete
+    it."
+- id: 372
+  author: Fiona
+  author_email: blog@fiona.biz
+  author_url: http://www.blog.fiona.biz
+  date: '1212676996'
+  content: "That's really a nice template. How much is it, to move it into a nice
+    pink like here: www.candymore.de/wordpress I'm going to transfer the candyblog
+    to serendiptiy. \r\n\r\nThank you."
+- id: 374
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1213286175'
+  content: "It shouldn't be difficult to make it pink.  The big problem (for someone
+    with my limited skills) would be changing the color of all the graphics.  \r\n\r\nCandyblog
+    would be a nice theme to have.  Good luck!"
+- id: 376
+  author: Fiona
+  author_email: blog@fiona.biz
+  author_url: http://www.blog.fiona.biz
+  date: '1213340305'
+  content: 'Yes, you are right. I managed it with a little help from yellowled and
+    garvin. Please take a look: http://www.candysbonboniere.de'
+- id: 391
+  author: Busby SEO Test
+  author_email: renzer_nazer@yahoo.com
+  author_url: http://pinayspeak.com/pinaytest/
+  date: '1227146534'
+  content: that is a great tutorial you have there!!thanks!
+- id: 402
+  author: busby seo test
+  author_email: rakhmaningsih@gmail.com
+  author_url: http://intersindo.com/seo-contest/
+  date: '1230222781'
+  content: yes this more like a website than a blog.
+- id: 557
+  author: Jonny
+  author_email: jonnyack@gmail.com
+  author_url: ''
+  date: '1259935482'
+  content: I like this theme.
+- id: 589
+  author: Judebert
+  author_email: judebert@judebert.com
+  author_url: ''
+  date: '1263304929'
+  content: I'm certainly enjoying it!  Maybe it's time to shake things up a little.
+- id: 630
+  author: 'manchester united football shirts     '
+  author_email: arun@gmail.com
+  author_url: www.soccerbox.com/manchesterunitedshop/
+  date: '1277541567'
+  content: Why didnâ€™t I find this post earlier? Keep up the good work!
+excerpt_separator: <a id="extended"></a>
+---
+<figure class="figure_left" style="width: 110px">
+<!-- mdb='698' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step17.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step17.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>The "criterion" Template</figcaption>
+</figure><p>&#13;
+Judebert.com may be <a href="http://s9y.org/">powered by the Serendipity blog engine</a>, but it's really more like a website than a blog.  There's a lot of information, some of which is not dynamic, like Contraction Timer or the EV conversion diary.  &#13;
+</p><p>&#13;
+To make the information more available, I decided to redesign.  I visited <a href="http://www.freecsstemplates.org/">Free CSS Templates</a> to find a template with big, immediately visible tabs, clear text, and a well-defined separation for links and sidebar items.&#13;
+</p><p>&#13;
+After some searching among many excellent alternatives, I picked <a href="http://www.freecsstemplates.org/preview/criterion">criterion</a> for my website.  Although it was presented as a corporate template, it looked like it would fit my layout without too much modification.  An easy fit was important because this would be my first template port.  &#13;
+</p><p>&#13;
+<a href="http://s9y-bulletproof.com/">The Bulletproof template made porting a breeze.</a> Here's how I did it.&#13;
+</p><a id="extended"></a><h2>Porting CSS Templates to Serendipity</h2>&#13;
+<p>&#13;
+It really wasn't difficult, and it didn't take long -- despite the length of this tutorial.  I learned almost everything I know about CSS from <a href="http://css.maxdesign.com.au/selectutorial/%22">this CSS tutorial</a> and goofing around elsewhere on the net (Google is almost as useful as a library).  So you don't need to be a programmer to make Serendipity templates, it's not so complex it requires a college degree, and it's really quite rewarding.  You should give it a try!&#13;
+</p>&#13;
+<h3>Template or Colorset?</h3>&#13;
+<p>&#13;
+Instead of creating an entire template on my own, I decided to make a Bulletproof colorset.  Although the name implies only changing colors, a BP colorset can do anything CSS can do.  Switching columns, replacing text with images, you name it.  Since BP has been extensively tested on multiple browsers and operating systems, I saved myself a load of compatibility headaches, too.  It turned out to be exceedingly easy: <b>I was done in under four hours, including image reformatting and nitpicking cleanup</b>.&#13;
+</p>&#13;
+<h3>Getting Samples</h3>&#13;
+<p>&#13;
+I downloaded and unarchived criterion to get its CSS and images.  That also gave me a reference for criterion's structure.&#13;
+</p><p>&#13;
+Next I wanted a sample of Serendipity's HTML to apply the CSS to.  It's possible there's a standard, typical blog load that designers use; I couldn't find it.  I wanted something reasonably representative, but I didn't want to mess up my live website. &#13;
+</p>&#13;
+<figure class="figure_left" style="width: 110px">
+<!-- mdb='681' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-original.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-original.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Quickie Website</figcaption>
+</figure>&#13;
+<p>&#13;
+Luckily, Serendipity is dirt simple to install.  I created a test blog in a subdirectory and imported the entries from <a href="http://themes.s9y.org/">themes.s9y.org</a>.  I used the Bulletproof blue colorset with a custom header and a tab bar.  (This didn't allow me to look at extended entries, comments, or archive pages; next time I'll probably switch themes.s9y.org to the Bulletproof template and save a few pages from that instead.)&#13;
+</p><p>&#13;
+Then I saved the web page to a local directory as judebert.html.  FireFox saved the images and CSS locally, too.  That way I knew I wouldn't be hitting my website and using up bandwidth every time I wanted to test a change.  Unfortunately, it didn't retrieve all the images referenced in the CSS.  That wasn't so bad, as the screenshot shows; the only CSS image was the custom header.&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='682' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step1.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step1.s9yThumb.png" width="110" height="99" alt="" />
+  </a>
+  <figcaption>Local Copy</figcaption>
+</figure>&#13;
+<h3>Replacing the Styling</h3>&#13;
+<p>&#13;
+Next I opened the source and started looking for the CSS.  Bulletproof included a lot of different stylesheets, but the one I wanted to replace was:&#13;
+</p>&#13;
+<code>&#13;
+        &lt;link rel="stylesheet" type="text/css" href="judebert_files/blue_style.css"&gt;<br />&#13;
+</code><br />&#13;
+<p>&#13;
+I removed the link entirely, just to see what Bulletproof looked like without any colorset.  As you can see, it's pretty basic.  What you can't see is that it's as cross-platform compatible as possible.  All I have to do is shift it around and style it.&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='683' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step2.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step2.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Plain BP Styling</figcaption>
+</figure>&#13;
+<p>&#13;
+I copied the criterion stylesheet, which was called default.css, into the judebert_files/ directory as criterion_style.css.  <b>Bulletproof requires colorset stylesheets to be named <i>colorset</i>_style.css.</b>  That's how it detects extra colorsets and figures out their names.  Then I replaced the blue_style with my new stylesheet:&#13;
+</p>&#13;
+<code>&#13;
+        &lt;link rel="stylesheet" type="text/css" href="judebert_files/criterion_style.css"&gt;<br />&#13;
+</code><br />&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='684' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step3.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step3.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Unmodified criterion Styling</figcaption>
+</figure>&#13;
+<p>&#13;
+That looked like a step backward.  But it had styled the text to a new font and size.  I figured it was just styling generic elements, and so messed up my Serendipity-specific stuff.  I started walking through the criterion stylesheet, replacing stuff as I went.&#13;
+</p>&#13;
+<h3>Sidebar Boxes</h3>&#13;
+<p>&#13;
+I removed any empty styles, figuring they were superfluous.  Nothing was ever affected, so I guess I was right.  The first interesting style I came to was <code>.boxed</code>.  Checking the criterion index.html, I found that this was the equivalent of a Serendipity sidebar.  I could tell because it contained the "Client Account" and "Recent Entries" boxes, floated left, just like a sidebar.  &#13;
+</p><p>&#13;
+I checked my website HTML and found that Serendipity sidebars have the class <code>serendipitySideBarItem</code>.  A little more digging to find the corresponding classes, and I replaced <code>.title</code> with <code>.serendipitySideBarTitle</code> and <code>.content</code> with <code>.serendipitySideBarContent</code>.&#13;
+</p><p>&#13;
+The criterion CSS used generic names, like "img06.gif", for their images.  I wanted descriptive names: after all, if I installed more than one colorset, I didn't want them overwriting each other's images.  I like PNG format, too.  So I used the Gimp to reformat all the images and rename them whenever necessary.  &#13;
+</p><p>&#13;
+So images/img05.gif was reformatted from the criterion directory as judebert_files/img/criterion_sbtitle.png, and img06.gif became criterion_sbcontent.png.  A quick reload showed that I had styled sidebars!&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='685' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step4.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step4.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Styled Sidebar Boxes</figcaption>
+</figure>&#13;
+<h3>Entries</h3>&#13;
+<p>&#13;
+But the entries were still way down low, below the sidebars.  This is where <a href="https://addons.mozilla.org/en-US/firefox/addon/1843">Firebug, a fantastic web-development tool</a>, saved my project.  Without it, I certainly would have gone crazy and given up.  With it, I just goofed around with a few things until I discovered that assigning a width to #content in criterion_style.css bumped the entries below the sidebar.  I commented out that line, and it was fixed!&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='686' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step5.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step5.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Firebug Saves the Entries</figcaption>
+</figure>&#13;
+<p>&#13;
+Next in the file was the <code>.post</code> class.  This, it turned out, corresponded to the blog entries.  The structure of the HTML was a little different, though.  In criterion, the post was a wrapper around the title and text; in Bulletproof, there is no such wrapper.  But the title is <code>.serendipity_title</code>, so I used that in place of <code>.post .title</code>.  The text, originally in <code>.post .story</code>, was now <code>.serendipity_entry</code>.  Of course, img07.gif was changed to criterion_entry.png.  &#13;
+</p><p>&#13;
+The only odd thing there for the post class was that its paragraphs, blockquotes, and other tags were styled separately to have a bottom-margin and line-height.  I decided this was a good thing for all those tags, regardless of their containers, so I promoted the style to <code>p, blockquote, ul, ol</code>.&#13;
+</p><p>&#13;
+And at the end of a reload, I was getting happy!&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='687' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step6.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step6.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Styled Entries</figcaption>
+</figure>&#13;
+<h3>The Tab Bar!</h3>&#13;
+<p>&#13;
+Continuing down the stylesheet, I found <code>#header</code>.  But I couldn't find any "header" in the criterion stylesheet at all.  I can only assume that this designer is accustomed to making templates with extra features, and this style was a leftover.  Commenting it out had no effect, and I moved on.&#13;
+</p><p>&#13;
+Next up, the moment I had been waiting for: <code>#menu</code>!  I checked the criterion HTML to verify that these were, in fact, the tabs.  In the BP source, the tabs are <code>#sitenav</code>.  The structures were identical, too: unordered lists.  Changing the class selector was all that was required there.  Then I took care of the images, converting img02.gif to criterion_tab.png, img03.gif to criterion_tabhover.png, and img04.gif to criterion_tabactive.png. &#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='688' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step7.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step7.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Styled Tabs!</figcaption>
+</figure>&#13;
+<h4>Fixing Tab Bar Problems</h4>&#13;
+<p>&#13;
+While I now had tabs, there was some sort of serious problem: the first tab was higher than all the others.  Once again, Firebug came to the rescue.  I toggled each attribute on the <code>sitenav</code>, the <code>ul</code>, and the <code>li</code> styles until the tabs lined up.  The problem turned out to be that serendipity.css was applying a padding to <code>#sitenav ul li</code>.  I have no idea why it didn't bump the first menu item down, but removing it lined everything up.&#13;
+</p><p>&#13;
+Since that style didn't appear in criterion_style.css, I created it, setting the padding to 0.  I had tabs!  With a hover effect, no less!  (You can just see some of the Firebug menu in the screenshot.)&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='689' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step8.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step8.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Firebug Saves the Tabs</figcaption>
+</figure>&#13;
+<h3>The Banner</h3>&#13;
+<p>&#13;
+Next up in the stylesheet was <code>#logo</code>.  This corresponded almost exactly with <code>#serendipity_banner</code>. That was a quick search-and-replace, without even any images to worry about.  Neat what you can do with CSS, isn't it? &#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='690' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step9.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step9.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Styled Banner</figcaption>
+</figure>&#13;
+<h3>The Page Width</h3>&#13;
+<p>&#13;
+Continuing along, I found <code>#content</code>.  This is where I commented out the width, because it messed up BP's content div,  which wrapped the entries.  But criterion's content div wrapped entries <i>and</i> the sidebar, leaving the header and tab menu outside.  Nothing in BP matched that.&#13;
+</p><p>&#13;
+Since I couldn't find a perfect match for structure, I tried to find a match in functionality.  The content div pretty much set the width of the page for criterion; in BP, the closest thing is <code>#wrapper</code>.  So I changed #content to #wrapper and restored the <code>width: 740px;</code> line I had commented out earlier.&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='691' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step10.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step10.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Styled Width</figcaption>
+</figure>&#13;
+<p>&#13;
+As you can see, everything has moved over.  I've never been a fan of fixed width templates, but I decided not to fix it yet.  I wanted to finish the rest of the porting before I moved on to actual modifications.&#13;
+</p>&#13;
+<h3>The Entry Column Width</h3>&#13;
+<p>&#13;
+The next style from criterion was <code>#main</code>.  This wrapped the entries, which corresponded to BP's content div.  The only style was a width and a float. Since BP already takes care of the placement of sidebars and entries -- allowing lots of combinations not considered by the designers of criterion -- I didn't want to float the entries on my own.  I removed the float from <code>#content</code>, but I kept the width, just to stay true to criterion's original design.&#13;
+</p><p>&#13;
+Then followed styles for the welcome entry and the example entry.  They were empty, so I deleted them.&#13;
+</p>&#13;
+<h3>The Sidebar Width</h3>&#13;
+<p>&#13;
+The next useful style was for <code>#sidebar</code>.  Anybody could tell that was for the sidebar.  Again, I kept the size and removed the placement, so BP could place the sidebar wherever it wanted.  But Serendipity provides for two sidebars, <code>#serendipityLeftSideBar</code> and <code>#serendipityRightSideBar</code>, so I had to include both in the style selector.&#13;
+</p><p>&#13;
+Then came a bunch of criterion-specific styles, like the login box, text entry fields, the updates box, and the partners box.  I deleted these.  That was plenty for one edit, so I saved and had a look at my progress.&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='692' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step11.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step11.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Sidebar Width Styled</figcaption>
+</figure>&#13;
+<h3>The Footer</h3>&#13;
+<p>&#13;
+The next style was <code>#footer</code>, which matched BP in structure and name.  The only thing I had to change was the image: img08.gif became criterion_pagefooter.png.&#13;
+</p><p>&#13;
+There were some more styles specific to criterion afterwards, so I deleted them.  That led me to the end of the file, and a feeling of accomplishment.&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='693' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step12.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step12.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Styled Footer</figcaption>
+</figure>&#13;
+<h3>Troubleshooting</h3>&#13;
+<h4>Missing Graphics</h4>&#13;
+<p>&#13;
+But wait!  There's something missing: the background from the top of the page!  The original has a crosshatch, leading to a nice fade.  Where's mine?&#13;
+</p><p>&#13;
+I figured this must be on the body, so I searched my stylesheet for the body tag.  Sure enough, I had forgotten to port an image.  I changed img01.gif to criterion_body.png and got my crosshatch.&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='694' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step13.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step13.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Body Background</figcaption>
+</figure>&#13;
+<h4>Misaligned Tabs</h4>&#13;
+<p>&#13;
+More problems?!  (I thought this was supposed to be easy!)  My tabs didn't line up with the body graphic.  I mulled this over for a little while, and decided the problem must be in one of the other stylesheets: I was using the same CSS as the original, so the problem had to be elsewhere.  Firebug again, but this time I only toggled properties that came from other stylesheets.&#13;
+</p><p>&#13;
+I found that base.css was applying <code>display:inline;</code> to the list, which was preventing any margins from taking effect.  Toggling it in Firebug dropped the tabs <i>too</i> far, though.  More toggling, and I found that serendipity.css applied more padding to the sitenav div.  &#13;
+</p><p>&#13;
+I added <code>padding:0</code> to the sitenav style, and <code>display:block</code> to <code>#sitenav ul</code>.&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='695' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step14.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step14.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Tabs Aligned</figcaption>
+</figure>&#13;
+<h4>Unstyled Tab</h4>&#13;
+<p>&#13;
+So, what's up with the gray first tab?  Firebug didn't want to load its style, so I was reduced to using my intelligence.  (We're doomed!)&#13;
+</p><p>&#13;
+I examined the HTML from Bulletproof, and discovered the tabs are identical except for their class: the first tab's li is both <code>currentpage</code> and <code>navlink_first</code>, while the others have an empty class.  When I removed the currentpage class, the first tab displayed like all the other tabs.&#13;
+</p><p>&#13;
+That told me something else, too: <code>#sitenav .active a</code> from criterion corresponds to <code>#sitenav .currentpage a</code> in the BP structure.  Simply replacing the style selector with the BP specification fixed the problem.&#13;
+</p>&#13;
+<h4>Tiny Little Words</h4>&#13;
+<p>&#13;
+I also think the font is a bit small.  Sure enough, BP sets the font size to 80% on #wrapper.  I put that back to 100%.&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='696' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step15.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step15.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Perfect Tabs and Text</figcaption>
+</figure>&#13;
+<h2>Serendipity and Bulletproof Improvements</h2>&#13;
+<p>&#13;
+So my adaptation now looks like the original.  That's good.  But Bulletproof and Serendipity allow much more than the original example HTML.  For starters, BP allows multiple sidebar configurations.  And Serendipity includes comments and archives, which aren't considered in criterion.  Rather than trying to create a bunch of local pages, I uploaded my files to my live website to try some of Bulletproof's options.&#13;
+</p><p>&#13;
+I simply copied the files into the templates/bulletproof and templates/bulletproof/img directories.  When I went to manage themes, BP found criterion and let me choose it as my colorset.  No modifying code!&#13;
+</p><p>&#13;
+Since I was modifying a live website, I didn't wait around to take screenshots for the problems or odd configurations.  You'll just have to take my word for my results.&#13;
+</p>&#13;
+<h3>Sidebar Configurations</h3>&#13;
+<p>&#13;
+BP allows multiple sidebars in multiple configurations.  Including top and bottom sidebars.  My first problem was that the width of the sidebars was just too big for configurations with two sidebars, such as S-B-S.  I fixed that by changing the generic Serendipity styles to BP configuration-specific styles.&#13;
+</p><p>&#13;
+For instance, the content column (#content) was too big in any three-column mode.  In BP, the content is marked with <code>.twomain</code> in two-column mode and <code>.threemain</code> in three-column mode.  So I changed my stylesheet from:<br />&#13;
+<code>&#13;
+#content {<br />&#13;
+  width: 505px;<br />&#13;
+}<br />&#13;
+</code>&#13;
+</p><p>to: <br />&#13;
+<code>&#13;
+/* Two columns, main and sidebar, just like criterion */<br />&#13;
+.twomain {<br />&#13;
+  width: 505px;<br />&#13;
+}<br />&#13;
+/* Three columns, main and two equal sidebars */<br />&#13;
+.threemain {<br />&#13;
+  width: 400px;<br />&#13;
+}<br />&#13;
+</code>&#13;
+</p><p>&#13;
+Likewise, the sidebars were just too big for three-column mode, so I reduced their size, too.  In BP, the two-column sidebar class is <code>.twoside</code>, while the three-column is <code>.threeside</code>.  (Hurray for concise class names!)&#13;
+</p><p>&#13;
+When I tried side and bottom sidebars, stuff broke.  The BP-assigned width for the side sidebar was fine, but there were supposed to be five sidebars across the bottom, and I only got four.  I found that the 740px provided by criterion was just insufficient to fit 18.5% sidebars with an 11px margin.  I chose to reduce the sidebar width to 18%, which fixed the problem.&#13;
+</p><p>&#13;
+All in all, I changed the stylesheet from: <br />&#13;
+<code>&#13;
+#serendipityLeftSideBar, <br />&#13;
+#serendipityRightSideBar { <br />&#13;
+  width: 220px;<br />&#13;
+}<br />&#13;
+</code>&#13;
+</p><p>to: <br />&#13;
+<code>&#13;
+/* Two columns, main and sidebar, just like criterion */<br />&#13;
+.twoside {<br />&#13;
+  width: 220px;<br />&#13;
+}<br />&#13;
+/* Three columns, main and two equal sidebars */<br />&#13;
+.threeside {<br />&#13;
+  width: 160px;<br />&#13;
+}<br />&#13;
+/* Bottom sidebars, 5 items at a time */<br />&#13;
+.onefull .serendipitySideBarItem {<br />&#13;
+  width: 18%;<br />&#13;
+}<br />&#13;
+</code>&#13;
+</p>&#13;
+<h3>Archive Bars</h3>&#13;
+<p>&#13;
+I also wanted to do something different for the archive page.  It uses images as graph bars.  The default is a nice dark blue with a black border; while criterion is also bluish, the dark blue default bars clashed with the criterion's cyan page.&#13;
+</p><p>&#13;
+I resized one of the tabs to a shorter height and saved it as criterion_graph_bar.png, which is also required by Bulletproof.  Since the black border was applied as a style directly on the img tag, overriding it required <code>!important</code> in the stylesheet:<br />&#13;
+<code>&#13;
+/* s9y-specific items */<br />&#13;
+/* Archive page <br />&#13;
+ * This uses a element-styled black border, and stretches the bar image. <br />&#13;
+ */<br />&#13;
+.archives_graph img {<br />&#13;
+border: 1px solid #479ac6 !important;<br />&#13;
+}<br />&#13;
+</code>&#13;
+</p>&#13;
+<figure class="figure_center" style="width: 110px">
+<!-- mdb='697' -->
+  <a href="/progress/media/s9y/templates/criterion/ss-step16.png">
+    <img src="/progress/media/s9y/templates/criterion/ss-step16.s9yThumb.png" width="110" height="98" alt="" />
+  </a>
+  <figcaption>Archive Bars</figcaption>
+</figure>&#13;
+<h3>Comments</h3>&#13;
+<p>&#13;
+Of course, Serendipity also supports comments and trackbacks.  Under BP, each goes in its own separate container, but the containers have multiple classes, including <code>serendipity_comments</code>.  I decided to copy the entry divider, so I just copied its style with the correct class name:<br />&#13;
+<code>&#13;
+/* Comment and trackback dividers */<br />&#13;
+.serendipity_comment {<br />&#13;
+  padding: 20px 20px 10px 20px;<br />&#13;
+  background: url(img/criterion_entry.png) repeat-x;<br />&#13;
+}<br />&#13;
+</code>&#13;
+</p><p>&#13;
+<a href="http://www.optional-necessity.com">Don Chambers</a> and I have been working together on Serendipity for a while.  He noticed my comments were not styled.  I took a hint from his website, and copied part of the comment format.  Instead of his grays, I used colors taken from the tabs for normal comments, and colors from the sidebar titles for "self" comments (comments made by the article author):<br />&#13;
+<code>&#13;
+/* Comments */<br />&#13;
+.comment_oddbox, .comment_evenbox {<br />&#13;
+  border: 1px solid #91c2dd;<br />&#13;
+  padding: 5px 5px 3px 5px;<br />&#13;
+  background: #e7f5fc;<br />&#13;
+}<br />&#13;
+<br />&#13;
+.comment_oddbox .serendipity_commentBody,<br />&#13;
+.comment_evenbox .serendipity_commentBody {<br />&#13;
+  border: 1px solid #c8e3f3;<br />&#13;
+  padding: 1em;<br />&#13;
+  background: #f8fcfe;<br />&#13;
+}<br />&#13;
+<br />&#13;
+.serendipity_comment_author_self<br />&#13;
+{<br />&#13;
+  border: 1px solid #fed98a;<br />&#13;
+  padding: 5px 5px 3px 5px;<br />&#13;
+  background: #fef3d3;<br />&#13;
+}<br />&#13;
+<br />&#13;
+.serendipity_comment_author_self .serendipity_commentBody<br />&#13;
+{<br />&#13;
+  border: 1px solid #fed98a;<br />&#13;
+  padding: 1em;<br />&#13;
+  background: #fffaed;<br />&#13;
+}<br />&#13;
+</code>&#13;
+</p>&#13;
+<h3>Going Fluid</h3>&#13;
+<p>&#13;
+I don't like fixed width templates.  I much prefer fluid styles.  So I adapted the criterion_style.css to a fluid version, criterion_fluid.css.  I copied <i>all the BP required images</i> from criterion_whatever.png to criterion_fluid_whatever.png: </p>&#13;
+<ul>&#13;
+<li>
+<i>colorset</i>_back.png -- The previous month arrow for the calendar</li>&#13;
+<li>
+<i>colorset</i>_forward.png -- The next month arrow for the calendar</li>&#13;
+<li>
+<i>colorset</i>_graph_bar.png -- The archive page graph bar</li>&#13;
+</ul>&#13;
+<p>&#13;
+I left the stylesheet the same, so I was reusing all the other images.  Then I removed every "width" property from all the elements.  The only exception was the #wrapper: I wanted to have a little margin around the content.  So I set it to 95% instead of 740px.&#13;
+</p><p>&#13;
+Since I was going to allow BP to control the size of the content and sidebars, I also removed the <code>.twomain</code>, <code>.twoside</code>, <code>.threemain</code>, <code>.threeside</code>, and <code>.onefull .serendipitySideBarItem</code> styles.  These didn't have anything but width in them anyway.&#13;
+</p><p>&#13;
+Voila! Fluid webpage!  You don't even need a screenshot: you're soaking in it!&#13;
+</p>&#13;
+<h3>Respecting the Copyright</h3>&#13;
+<p>&#13;
+As far as I was concerned, I was done.  The only problem with this whole exercise was that I couldn't distribute it.  The license for all templates from Free CSS Templates requires a link back to their website, and I respect copyrights.  BP provides a way for the user to add text to the footer, so I could add the link on my own website and use the template.  But I couldn't give it back to the s9y community, because there was no way to ensure the link would be added.&#13;
+</p><p>&#13;
+I discussed this with <a href="http://s9y.org/forums">the best community in the world, the Serendipity Forums</a>.  They said if I made modifications to BP that allowed colorsets to include a license, they'd include the mods.  So I did; about an hour later, colorset designers could get an attribution in the credit line, copied from their <code><i>colorset</i>_license.txt</code> file.  This is <i>not a BP required file</i>; if you leave it out, no attribution will appear.&#13;
+</p><p>&#13;
+I then made a <code>criterion_license.txt</code> and <code>criterion_fluid_license.txt</code> file.  I packed everything up in a zip file and submitted it in the Serendipity forums, which is probably why you're here now.&#13;
+</p>&#13;
+<h3>Using Criterion Yourself</h3>&#13;
+<p>&#13;
+It probably won't be long before my criterion ports are available on <a href="http://s9y-bulletproof.com">s9y-bulletproof.com</a>.  Until then, you can <a href="/progress/media/s9y/templates/criterion/bp-criterion.tgz" title="bp-criterion.tgz" target="_blank">download criterion here</a>.&#13;
+</p>&#13;
+<div class="download_link">&#13;
+<a href="/progress/media/s9y/templates/criterion/bp-criterion.zip" target="_blank">Download .zip</a>&#13;
+<a href="/progress/media/s9y/templates/criterion/bp-criterion.tgz" target="_blank">Download .tgz</a>&#13;
+</div>&#13;
+<p>&#13;
+Just unzip the archive into a new directory (it doesn't come with one of its own).  Use FTP or your provider's file manager to upload the files to Serendipity's templates/bulletproof/ and templates/bulletproof/img/ directory.  &#13;
+</p><p>&#13;
+Now go to your admin screen and click "Manage Themes".  Pick the Bulletproof template, if you haven't already.  When the template options come up, just choose "criterion" or "criterion_fluid" from the colorset choices.  I recommend using a navbar, positioned above the header.  It'll probably work in other configurations, but it'll probably look a little weird. &#13;
+</p><p>&#13;
+Make sure to hit the save button!  Enjoy your new template!&#13;
+</p>&#13;
+<hr style="width: 80%; margin: 0px auto;" />&#13;
+<p>&#13;
+You like this little tutorial?  Want more like it?  Or maybe you just want to support my ongoing efforts to improve our world; either way, feel free to donate a little something.&#13;
+</p>&#13;
+<div style="text-align: center;">&#13;
+<form class="donate" method="post" action="https://www.paypal.com/cgi-bin/webscr" style="display: inline;">&#13;
+<input type="hidden" value="_xclick" name="cmd" />&#13;
+<input type="hidden" value="judebert@judebert.com" name="business" />&#13;
+<input type="hidden" value="Bulletproof criterion Colorset and Tutorial" name="item_name" />&#13;
+<input type="hidden" value="1" name="no_shipping" />&#13;
+<input type="hidden" value="Comments" name="cn" />&#13;
+<input type="hidden" value="USD" name="currency_code" />&#13;
+<input type="hidden" value="0" name="tax" />&#13;
+<input type="hidden" value="US" name="lc" />&#13;
+<input type="image" border="0" title="Support Serendipity development at Judebert.com with your donation!" alt="Support Serendipity development at Judebert.com with your donation!" name="submit" src="/progress/media/donate.png" />&#13;
+</form>&#13;
+</div>

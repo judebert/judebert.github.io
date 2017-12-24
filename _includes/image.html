@@ -1,0 +1,20 @@
+{%- comment -%}
+An image wrapper.
+ - src: The image to display.
+ - alt: alt-text / hover text for the image. If not specified, caption will be used.
+ - caption: A caption to display, centered, below the image. Optional; if not provided, no caption will appear.
+ - float: 'left' or 'right': the image will float to the specified side, with text wrapping around it. Defaults to non-floating.
+{%- endcomment -%}
+{%- unless include.alt %}{% assign include.alt = include.caption %}{% endunless -%}
+{%- case include.float -%}
+  {%- when 'left' -%}
+    {%- assign cssclass = "figure-left" -%}
+  {%- when 'right' -%}
+    {%- assign cssclass = "figure-right" -%}
+  {%- else -%}
+    {%- assign cssclass = "figure-none" -%}
+{%- endcase -%}
+<figure class="{{ cssclass }}">
+  <img src="{{ include.src }}" alt="{{ include.alt }}">
+  {% if include.caption -%}<figcaption>{{ include.caption }}</figcaption>{%- endif -%}
+</figure>

@@ -1,0 +1,202 @@
+---
+layout: post
+status: published
+published: true
+title: Setting Up A Gaming LAN with OpenVPN
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2006-02-28 21:30:18 UTC
+permalink: "/progress/permalink/GameVPN.html"
+redirect_from:
+- "/archives/59-Setting-Up-A-Gaming-LAN-with-OpenVPN.html"
+categories:
+- Tutorials
+tags: []
+comments:
+- id: 357
+  author: Kevin
+  author_email: KevinFisk@hotmail.com
+  author_url: http://www.characterplanet.com
+  date: '1205245777'
+  content: Thanks for this firewall work around...I'm trying to get my wife into playing
+    games as well and features like this might help make it appear more "social" ;)
+- id: 358
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1205463331'
+  content: "Anything that works!  I especially like the Age of Empires cooperative
+    play, but there are other games with cooperative modes that you guys might enjoy,
+    too.\r\n\r\nGood luck getting your wife involved.  The family that plays together
+    stays together!"
+- id: 638
+  author: Maiya Russo
+  author_email: maiyarusso@gmail.com
+  author_url: ''
+  date: '1279739289'
+  content: "Hey,\r\nI have StrongVPN and just got a new router from Sabai Technology
+    that lets me play like I'm in the US and I can also play locally through my regular
+    network. It rocks!"
+- id: 673
+  author: lee
+  author_email: l.jewitt@G,x.com
+  author_url: ''
+  date: '1289423068'
+  content: hi cheers for the info. do i need to set it to route traffic trough the
+    server or not. i can ping other users. but its just if i do route it trough the
+    server i cant access the internet.
+- id: 675
+  author: Judebert
+  author_email: judebert@judebert.com
+  author_url: ''
+  date: '1289837321'
+  content: "You should only route the game traffic through the server.  Usually that's
+    a matter of making the game work on the new virtual ethernet card you created
+    with the VPN, and it's specific to the game.\r\n\r\nOf course, this has mostly
+    been obsoleted by Hamachi and its zero-configuration VPN brethren."
+- id: 914
+  author: Agustin
+  author_email: agus2009@gmail.com
+  author_url: ''
+  date: '1319070309'
+  content: is there any chance to config hamachi to use bridging mode instead of tunneling?
+    A friend and i are trying to play coop vs ai in civ5 and using hamachi in default
+    but we cannot find the games
+- id: 937
+  author: Judebert
+  author_email: judebert@judebert.com
+  author_url: ''
+  date: '1320260902'
+  content: The problem is probably that Civ5 uses broadcast networking, which is broken
+    in Hamachi v.1.0.2.0 and above.  You might want to check out [url=http://logmeinwiki.com/wiki/Hamachi:Gaming_over_Hamachi]their
+    wiki[/url] for more information.
+excerpt_separator: <a id="extended"></a>
+---
+<p>Age of Empires has a very nice feature: two people can play the same civilization, as a single player.  This is different from teaming up, because you can give conflicting orders to the villagers.   My wife and I love to play this way, especially when we can play against... I mean, with... our other friends.&#13;
+</p><p>&#13;
+Unfortunately, if you want to play with multiple players behind a firewall, and at least one player outside the firewall, you're out of luck: DirectPlay doesn't allow you to remap the ports.&#13;
+</p><p>&#13;
+One solution is to set up a VPN.  That way the players behind the firewall can keep their IP addresses, and the players outside the firewall look like they're on the local LAN.  Businesses often use a VPN service, and one even comes with Windows (PPTP).  I recently set up a gaming LAN with <a href="http://openvpn.net/">OpenVPN</a>.  Here's how.&#13;
+</p><a id="extended"></a><p>&#13;
+VPN stands for Virtual Private Network.  There are several kinds, and one even comes with Windows (PPTP).  Unfortunately, the Windows version has been discovered to be insecure.  Since my entire internal network would be exposed to the outside world, I needed good encryption.  Besides, my firewall/gateway runs Linux -- and so do I, when I can.  I needed something that would work on multiple platforms.  &#13;
+</p><p>&#13;
+The games I was using didn't necessarily support TCP/IP, either.  I needed a VPN solution that would send all the network traffic, not just the TCP traffic like a proxy.&#13;
+</p><p>&#13;
+OpenVPN does all that and more.  It wasn't even difficult to set up.&#13;
+</p>&#13;
+<h3>What to Get</h3>&#13;
+<p>&#13;
+To make this work, you'll need an OpenVPN server for your platform.  I'm running Debian Linux on my gateway, so I just used apt-get to pull down the official distribution and all its dependencies.&#13;
+</p><p>&#13;
+Each machine outside your network that you want to add to your VPN will need a client.  &#13;
+</p>&#13;
+<h3>About Bridging</h3>&#13;
+<p>&#13;
+Since we're talking about a gaming VPN, we need to support more than TCP/IP.  Stuff like IPX and UDP are common for multiplayer games.  That means we can't use standard "tunnel" mode.  We need "bridging" mode.  Everything from the internal LAN and the connected machines will get copied across the Internet.  Including your Windows shares, your network printers... <b>everything</b>.  That's why we want encryption.  Yes, you CAN turn off encryption to squeeze a bit of extra performance out, but then everything on your network is easily deciphered by outsiders.  <i>Don't do it!</i>&#13;
+</p><p>&#13;
+That said, bridging will solve all our gaming problems.  And it's easy to set up: just use "dev tap0" in your configuration file, as we'll see below.&#13;
+</p>&#13;
+<h3>Setting Up The Clients</h3>&#13;
+<p>&#13;
+By default, OpenVPN uses certificates for authentication.  That's truly cool, because your friends can connect to your VPN without using a password.  It's not as difficult as it sounds, either.  The <a href="http://openvpn.net/faq.html">OpenVPN FAQ</a> covers it pretty thoroughly.  &#13;
+</p><p>&#13;
+In short, you use the utilities in the easy-rsa directory on the server to generate a server certificate and key, then you generate a certificate and key for each client you expect to connect.  I signed all my certificates, since the FAQ didn't say not to.&#13;
+</p><p>&#13;
+Before we hand out the certificates, let's get our configurations correct.  For the best gaming performance, your VPN should be tunnelled through a UDP connection.  That's default.  When your buddies install OpenVPN, it'll make a new "Local Connection" in Windows.  They'll want to rename it to something understandable anyway; since OpenVPN uses the connection's <b>name</b>, if they all rename it to the same thing, like "GameVPN", it'll be easier to send them configuration files they can use.  Finally, we'll assume the keys should go in a keys/ directory off the OpenVPN installation directory.  The players can change this stuff if they want, but then they'll have to edit their config files.  Their call.&#13;
+</p><p>&#13;
+So, now we make a configuration file.  I modified the sample file provided with the OpenVPN installation.  There were only 8 lines to change.  I changed the mode from "tun" to "tap" for bridging, set the "dev-node" line to match the expected network connection name, added a "fragment" line to work around pissy ISPs, changed the "remote" line to point at my server, and pointed to the certificates I was going to hand out.  Here's a list of all the changes, as they appear in the config file:&#13;
+</p><pre>&#13;
+dev tap&#13;
+;dev tun&#13;
+dev-node GameVPN&#13;
+fragment 1024&#13;
+remote my-server.com 1194&#13;
+ca ..\\keys\\ca.crt&#13;
+cert ..\\keys\NAME.crt&#13;
+key ..\\keys\\NAME.key&#13;
+</pre>&#13;
+Substitute the name you used when you made the certificate for NAME.  Don't forget to use double-backslashes for Windows.  Then you're done.  &#13;
+<p>&#13;
+For convenience, I made a zip file with this structure for each player:&#13;
+</p><pre>&#13;
+config\GameVPN.ovpn&#13;
+keys\ca.crt&#13;
+keys\NAME.crt&#13;
+keys\NAME.key&#13;
+</pre>&#13;
+I zipped it with a password, since those keys are important.  Then I mailed each player his own zip file with his own certificates, and told them each to unzip the file in the OpenVPN directory.  Nobody had to make any changes, and it worked like a charm.&#13;
+&#13;
+<h3>Setting Up The Server</h3>&#13;
+<p>&#13;
+This was a bit more complicated.  First, I wanted a static name for my server.  Since it runs on DSL, it's got a dynamic IP.  <a href="http://freedns.afraid.org/">FreeDNS is easy and has lots of domains to choose from.</a>  I downloaded one of their scripts and modified it for my own nefarious purposes, then stuck it in ppp/ip-up.d so my server would re-register whenever its IP changed.&#13;
+</p><p>&#13;
+Next, I installed OpenVPN.  No problem there.  I followed the instructions in the FAQ.  I copied their sample server configuration, modified the "dev" line to match my bridge adapter, changed the certificate lines, and added the fragment and mssfix lines.  Be careful here; the client and server configurations must match!&#13;
+</p><p>&#13;
+&#13;
+Next was the biggest pain of the entire installation: configuring the box to start with the bridge set up.  The file to modify under Debian is /etc/network/interfaces.  I made a backup before editing, just in case.  Then I changed the "auto eth0" section to:&#13;
+</p><pre>&#13;
+# The VPN interface, with default settings for 10.x.x.x&#13;
+auto br0&#13;
+iface br0 inet static&#13;
+        # First bring up the OpenVPN interface so we can bridge it&#13;
+        pre-up /usr/sbin/openvpn --mktun --dev tap0&#13;
+        # Copied from eth0&#13;
+        address 10.10.10.127 # Gateway's inside static IP&#13;
+        netmask 255.0.0.0&#13;
+        network 10.0.0.0&#13;
+        broadcast 10.255.255.255&#13;
+        # New options&#13;
+        #&#13;
+        bridge_ports eth0 tap0&#13;
+        # Forward delay in seconds&#13;
+        bridge_fd 1&#13;
+        bridge_stp off&#13;
+        # DNS setup copied from eth0, too&#13;
+        # dns-* options are implemented by the resolvconf package, if installed&#13;
+        dns-nameservers 205.152.144.23 205.152.37.23 205.152.111.254&#13;
+        dns-search default.net&#13;
+        # And bring it down again when we're done&#13;
+        post-down /usr/sbin/openvpn --rmtun --dev tap0&#13;
+</pre>&#13;
+<p>&#13;
+Since I had changed my connection from eth0 to br0, I had to change my firewall to use the new connection.  No biggie; basically just changed a variable to br0 instead of eth0.  But then, I built my firewall script by hand, so I made it easy to work with.  I used <code>ifconfig ppp0</code> to find the outside IP address, then used <code>PPP_LOCAL=that_ip ./0firewall</code> to reload my IPTables rules.  A little testing assured me that my inside network could still do web and mail just fine.&#13;
+</p>&#13;
+<h3>Special Cases</h3>&#13;
+<h4>Tunneling TCP Over SSH</h4>&#13;
+<p>&#13;
+To test my VPN, I wanted to connect from work.  Another certificate, another email, and ten minutes later I was ready.  Until I discovered that my work firewall, like most other firewalls, doesn't pass UDP.  &#13;
+</p><p>&#13;
+Luckily, it did pass TCP, on both web and telnet ports.  Why <i>telnet</i>, the least secure protocol ever?  I don't know.  But I've used this in the past to connect to my home network.  I just run an SSH server on that port instead of a telnet server.&#13;
+</p><p>&#13;
+So I used <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/">PuTTY, a free SSH client,</a> to log on to my firewall and add an additional OpenVPN server.  How?  I copied the GameVPN.conf file to WorkVPN.conf, changed the "proto udp" line to "proto tcp", removed the "fragment" and "mssfix" lines (since they don't work with TCP anyway), and changed "tap0" to "tap1".  Four changes, all told.  Then I added tap1 to my bridge in /etc/network/interfaces, opened up TCP port 1194 in my firewall, and rebooted.&#13;
+</p><p>&#13;
+Five minutes later I used PuTTY again to log in and verify that my bridges were configured as expected.  (I just used ifconfig and made sure everything was reported.)  Then I configured PuTTY to tunnel localhost:1194 to my-server.com:1194.  Finally, I modified my GameVPN.ovpn file to use "remote 127.0.0.1 1194".  &#13;
+</p><p>&#13;
+Worked like a charm.  So I was tunnelling my network traffic through OpenVPN TCP, which was itself tunnelling through SSH.  Weird, but working through the work firewall!  And while SSH won't tunnel anything but TCP, OpenVPN was wrapping all the traffic in TCP packets.  I could see shared drives on my home computers from work.&#13;
+</p>&#13;
+<h4>Proxy Servers</h4>&#13;
+<p>&#13;
+Then I found an <b>easier</b> way.  The work firewall supported a proxy; all I had to do was change my "remote" line back to my dynamic DNS hostname and enable the "http-proxy" line.  I filled it out with my proxy server and port, just like it shows in the sample.  Boom!  I was connected and using the VPN again.  And this time, I wasn't slowed down by tunneling over SSH.  &#13;
+</p>&#13;
+<h3>Troubleshooting</h3>&#13;
+<h4>The Odd Man Out</h4>&#13;
+<p>&#13;
+Everybody was fine, except one of my buddies just couldn't connect.  We went through loads of testing: we turned off all his firewalls, we tried to modify his routing tables, we pinged him over the normal net... we just couldn't figure it out.  It started getting worse, too: his TeamSpeak server started disconnecting at irregular intervals.  Turned out, his cable was so badly frayed it was disconnecting whenever it swayed in the wind.  That fixed, we could use his TeamSpeak server again.  Then we tried OpenVPN again.&#13;
+</p>&#13;
+<h4>The Odd Man Out, Part 2</h4>&#13;
+<p>&#13;
+Still no luck.  He could see our games, but couldn't join.  We tried letting him host, with identical results.  Then I noticed my firewall going crazy on port 2300.  The DirectPlay port.  Ah-ha!  But the IP was from his server to my server; not over the VPN.  Why wasn't he redirecting all traffic to the VPN?&#13;
+</p><p>&#13;
+The nice thing about having friends is that they can compare their configurations.  We were about to do some crazy routing stuff when we discovered that the broken connection had the same routing as a working one.  So we stopped and tried something else.  We copied a configuration file from a working connection, since we had been trying some crazy stuff with his.  Still no dice.  Then it hit me: maybe his computer wasn't doing the redirection.  Maybe his <b>ROUTER</b> was.  We disabled the configuration on his cable router for Age Of Empires serving; that might have helped, but not immediately.  But as soon as we disabled all those other VPN configurations (PPTP, so on and so forth), we could immediately ping him.&#13;
+</p>&#13;
+<h3>Conclusion</h3>&#13;
+<p>&#13;
+So, there you have it; how I got an OpenVPN server running on my Linux box, allowing all my friends to connect to my home LAN for gaming.  We've been running a Friday night "LAN" party ever since, occasionaly extending our VPN between Kansas and Florida.  &#13;
+</p>&#13;
+<p>&#13;
+We eventually switched to <a href="https://secure.logmein.com/products/hamachi/vpn.asp?lang=en">Hamachi</a>, because it's designed for gaming, and provides better performance in some cases.  Its configuration is much easier, since it's preset to use their servers (and it uses a little magic to bypass the server when possible).  It even has a Linux version, so it has become the de-facto VPN for our Friday night "LAN" party.&#13;
+</p>

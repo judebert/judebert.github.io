@@ -1,0 +1,273 @@
+---
+layout: post
+status: published
+published: true
+title: PHP String Formatting Performance
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2008-01-24 20:12:17 UTC
+permalink: "/archives/204-PHP-String-Formatting-Performance.html"
+categories:
+- Web Activities
+tags: []
+comments:
+- id: 360
+  author: G. Crisp
+  author_email: ''
+  author_url: ''
+  date: '1206390897'
+  content: "Can you please share your test code?  I'm running in MAMP on OS X 10.5,
+    and I'm getting the opposite results between single-quote cat and double-quote
+    eval [e.g. single quote cat of 3 strings over 10,000,000 iterations takes about
+    20 seconds, while double-quoted eval with the same parameters takes about 24 seconds]\r\n\r\nThanks!"
+- id: 366
+  author: HM2K
+  author_email: php@hm2k.org
+  author_url: http://www.hm2k.com/
+  date: '1209378748'
+  content: I'd also be interested in the code used here...
+- id: 368
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1209736714'
+  content: Right, I meant to provide that.  Slipped through the cracks.  Let me just
+    vet it, and I'll add it to the article!
+- id: 546
+  author: zawmn
+  author_email: zawmn83@gmail.com
+  author_url: ''
+  date: '1257844536'
+  content: "$a = \"Hello \";\r\n\r\n$b = \"World\";\r\n\r\n(1) $c = $a.$b;\r\n\r\n(2)
+    $c = \"$a$b\";\r\n\r\nI would like to know which one is faster to concat (1) or
+    (2). OR if there is another faster way to contact, let me know."
+- id: 551
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com
+  date: '1257965091'
+  content: While I suspect (1) is faster, I didn't specifically test that case. Since
+    the code I provided is reasonably modular, I'd recommend extending it and trying
+    for yourself.  Let us know what you find!
+- id: 552
+  author: zawmn
+  author_email: zawmn83@gmail.com
+  author_url: ''
+  date: '1258021713'
+  content: "Yes.  No.1 is faster.\r\nWhen I test this operation 10000000, \r\n$c =
+    $a.$b;  takes 4.47 sec\r\n$c = \"$a$b\"; takes 7.22 sec"
+- id: 593
+  author: fkaufusi
+  author_email: ''
+  author_url: ''
+  date: '1263851587'
+  content: "sprintf use to organize your code for an easy maintain and easy to read.\r\n\r\nI
+    use sprintf on the query only."
+excerpt_separator: <a id="extended"></a>
+---
+<p>I'm working on some PHP right now, and I want it as fast as possible.  Naturally, I have to output some interesting stuff; concatenated strings, with integer or floating-point values in them.&#13;
+</p><p>&#13;
+The question becomes: is it faster to print values that must be formatted, such as the string "\n", or integers or floating-point numbers, by:&#13;
+</p>&#13;
+<ol>&#13;
+<li>Including them in one long double-quoted string</li>&#13;
+<li>Concatenating them between multiple single-quoted strings</li>&#13;
+<li>Using the heredoc format</li>&#13;
+<li>Using the sprintf() function</li>&#13;
+</ol>&#13;
+<p>I made a quick PHP script to do the benchmark for me.  The results were interesting.</p>&#13;
+<p>
+  <i>Update 2008-05-02: source code!</i>
+</p><a id="extended"></a><p>This test was done on a Linux server running PHP 5.2.2.  The Zend optimizer was installed.&#13;
+</p><p>All calculations are done by putting the value into a variable, outstr.  Once the string is obtained, a simple print or echo can be used to output it.  This way I don't actually have to generate a lot of output in the HTML, so I can run the test online.&#13;
+</p><p>&#13;
+Here's a snip of the output:&#13;
+</p>&#13;
+<blockquote>&#13;
+<p>calculating a very long string using only single-quote concatenation... 319ms.<br />calculating the same string using a large double-quoted concatenation... 259ms.<br />calculating the same string using a heredoc... 282ms.<br />calculating the same string using an sprintf()... 401ms.<br />calculating the same string using an sprintf() with positional params... 456ms.<br /></p>&#13;
+<h3>Graphical comparisons</h3>&#13;
+<table id="toptable" border="1">&#13;
+<tr>
+<th>Method (100000 iterations)</th>
+<th>Percent of time out of max (456 ms)</th>
+</tr>&#13;
+<tr>
+<td>Single quote concat</td>
+<td><table width="69.956140350877%" style="background: #0000FF"><tr><td></td></tr></table></td>
+</tr>&#13;
+&#13;
+<tr>
+<td>Double quote eval</td>
+<td><table width="56.798245614035%" style="background: #0000FF"><tr><td></td></tr></table></td>
+</tr>&#13;
+<tr>
+<td>Heredoc eval</td>
+<td><table width="61.842105263158%" style="background: #0000FF"><tr><td></td></tr></table></td>
+</tr>&#13;
+<tr>
+<td>Simple sprintf()</td>
+<td><table width="87.938596491228%" style="background: #0000FF"><tr><td></td></tr></table></td>
+</tr>&#13;
+<tr>
+<td>sprintf() with positional params</td>
+<td><table width="100%" style="background: #0000FF;"><tr><td></td></tr></table></td>
+</tr>&#13;
+</table>&#13;
+</blockquote>&#13;
+<p>&#13;
+I ran it multiple times, and this is pretty typical.  Apparently double quotes are actually faster than concatenating a bunch of variables with single-quoted literals.  How about that?  Heredoc format is usually pretty close, but sprintf() is always the slowest of the bunch.  Using sprintf() with positional parameters (like "%2$s") is always the slowest.&#13;
+</p><p>&#13;
+<i>Update 2008-05-02:</i> There have been multiple requests to see the code.  I forgot where I found the original basis, but that timer function is slightly magic to me, so I haven't touched it.  All the other stuff I modified to fit my own tests.  While I won't tell you where I stored it, or what I named it (I can just see the spammers hitting this over and over), here's what the code looks like:&#13;
+</p>&#13;
+<blockquote>
+  <pre>&#13;
+&lt;?php&#13;
+set_time_limit(0);&#13;
+&#13;
+@$getnumtimes = $_GET['numtimes'];&#13;
+print("Argument was: $getnumtimes&lt;br /&gt;\n");&#13;
+if (is_numeric($getnumtimes) and $getnumtimes &gt; 0 and $getnumtimes &lt; 1000000) {&#13;
+print ("Argument was numeric&lt;br /&gt;\n");&#13;
+    $numtimes = $getnumtimes;&#13;
+} else {&#13;
+print("Argument was invalid.&lt;br /&gt;\n");&#13;
+    $numtimes = 1000;&#13;
+}&#13;
+$bgcolor = '#0000FF';&#13;
+&#13;
+$data = 'This is data to be concatenated. It is long, so as to make it take longer to concatenate and hence widen the gap between the faster and the slower of the methods.';&#13;
+&#13;
+$int = 1;&#13;
+$float = 3.1415927;&#13;
+$n = "\n";&#13;
+&#13;
+$max = 1;&#13;
+&#13;
+class timer&#13;
+{&#13;
+	var $_start;&#13;
+	var $_current;&#13;
+	function timer()&#13;
+	{&#13;
+		$this-&gt;_start = array_sum(explode(' ', microtime()));&#13;
+	}&#13;
+	function tick()&#13;
+	{&#13;
+		$this-&gt;_current = round((array_sum(explode(' ', microtime()))-$this-&gt;_start)*1000, 0);&#13;
+		return $this-&gt;_current;&#13;
+	}&#13;
+	function reset()&#13;
+	{&#13;
+		$this-&gt;timer();&#13;
+	}&#13;
+}&#13;
+&#13;
+print &lt;&lt;&lt;EOS&#13;
+&lt;head&gt;&#13;
+&lt;title&gt;PHP string formatting benchmark&lt;/title&gt;&#13;
+&lt;/head&gt;&#13;
+&lt;body&gt;&#13;
+&lt;p&gt;I'm working on some PHP right now, and I want it as fast as possible.  Naturally, I have to output some interesting stuff; concatenated strings, with integer or floating-point values in them.&#13;
+&lt;/p&gt;&lt;p&gt;&#13;
+The question becomes: is it faster to print values that must be formatted, such as the string "\\n", or integers or floating-point numbers, by:&#13;
+&lt;/p&gt;&lt;p&gt;&#13;
+&lt;ol&gt;&#13;
+&lt;li&gt;Including them in one long double-quoted string&lt;/li&gt;&#13;
+&lt;li&gt;Concatenating them between multiple single-quoted strings&lt;/li&gt;&#13;
+&lt;li&gt;Using the heredoc format&lt;/li&gt;&#13;
+&lt;li&gt;Using the sprintf() function&lt;/li&gt;&#13;
+&lt;/ol&gt;&#13;
+&lt;p&gt;All calculations are done by putting the value into a variable, outstr.  Once the string is obtained, a simple print or echo can be used to output it.  This way I don't actually have to generate a lot of output in the HTML, so I can run the test online.&#13;
+&lt;/p&gt;&lt;p&gt;&#13;
+EOS;&#13;
+&#13;
+print('calculating a very long string using only single-quote concatenation...');&#13;
+$single_quote_timer = new timer();&#13;
+for($i = 0; $i &lt; $numtimes; $i++) {&#13;
+	$outstr = 'literal' . $n . $data . $int . $data . $float . $n;&#13;
+}&#13;
+$single_quote_timer = $single_quote_timer-&gt;tick();&#13;
+if ($single_quote_timer &gt; $max) { $max = $single_quote_timer; }&#13;
+print(' '.$single_quote_timer.'ms.&lt;br /&gt;');&#13;
+$single_quote_outstr = $outstr;&#13;
+//print("$single_quote_outstr&lt;br /&gt;&lt;br /&gt;\n");&#13;
+&#13;
+print('calculating the same string using a large double-quoted concatenation...');&#13;
+$double_quote_timer = new timer();&#13;
+for($i = 0; $i &lt; $numtimes; $i++) {&#13;
+	$outstr = "literal$n$data$int$data$float$n";&#13;
+}&#13;
+$double_quote_timer = $double_quote_timer-&gt;tick();&#13;
+if ($double_quote_timer &gt; $max) { $max = $double_quote_timer; }&#13;
+print(' '.$double_quote_timer.'ms.&lt;br /&gt;');&#13;
+$double_quote_outstr = $outstr;&#13;
+//print("$double_quote_outstr&lt;br /&gt;&lt;br /&gt;\n");&#13;
+&#13;
+print('calculating the same string using a heredoc...');&#13;
+$heredoc_timer = new timer();&#13;
+for($i = 0; $i &lt; $numtimes; $i++) {&#13;
+	$outstr =&lt;&lt;&lt;EOS&#13;
+literal$n$data$int$data$float$n&#13;
+EOS;&#13;
+}&#13;
+$heredoc_timer = $heredoc_timer-&gt;tick();&#13;
+if ($heredoc_timer &gt; $max) { $max = $heredoc_timer; }&#13;
+print(' '.$heredoc_timer.'ms.&lt;br /&gt;');&#13;
+$heredoc_outstr = $outstr;&#13;
+//print("$heredoc_outstr&lt;br /&gt;&lt;br /&gt;\n");&#13;
+&#13;
+print('calculating the same string using an sprintf()...');&#13;
+$sprintf_timer = new timer();&#13;
+for($i = 0; $i &lt; $numtimes; $i++) {&#13;
+	$outstr = sprintf('literal%s%s%d%s%f%s', $n, $data, $int, $data, $float, $n);&#13;
+}&#13;
+$sprintf_timer = $sprintf_timer-&gt;tick();&#13;
+if ($sprintf_timer &gt; $max) { $max = $sprintf_timer; }&#13;
+print(' '.$sprintf_timer.'ms.&lt;br /&gt;');&#13;
+$sprintf_outstr = $outstr;&#13;
+//print("$sprintf_outstr&lt;br /&gt;&lt;br /&gt;\n");&#13;
+&#13;
+print('calculating the same string using an sprintf() with positional params...');&#13;
+$pos_sprintf_timer = new timer();&#13;
+for($i = 0; $i &lt; $numtimes; $i++) {&#13;
+	$outstr = sprintf('literal%s%5$s%2$d%3$s%4$f%s', $n, $int, $data, $float, $data, $n);&#13;
+}&#13;
+$pos_sprintf_timer = $pos_sprintf_timer-&gt;tick();&#13;
+if ($pos_sprintf_timer &gt; $max) { $max = $pos_sprintf_timer; }&#13;
+print(' '.$pos_sprintf_timer.'ms.&lt;br /&gt;');&#13;
+$pos_sprintf_outstr = $outstr;&#13;
+//print("$pos_sprintf_outstr&lt;br /&gt;&lt;br /&gt;\n");&#13;
+&#13;
+// Calculate percents&#13;
+$single_quote_percent = ($single_quote_timer * 100)/$max;&#13;
+$double_quote_percent = ($double_quote_timer * 100)/$max;&#13;
+$heredoc_percent = ($heredoc_timer * 100)/$max;&#13;
+$sprintf_percent = ($sprintf_timer * 100)/$max;&#13;
+$pos_sprintf_percent = ($pos_sprintf_timer * 100)/$max;&#13;
+print &lt;&lt;&lt;EOS&#13;
+&lt;/p&gt;&#13;
+&lt;h3&gt;Graphical comparisons&lt;/h3&gt;&#13;
+&lt;p&gt;&#13;
+&lt;table id="toptable" border="1"&gt;&#13;
+&lt;tr&gt;&lt;th&gt;Method ($numtimes repetitions)&lt;/th&gt;&lt;th&gt;Percent of time out of max ($max ms)&lt;/th&gt;&lt;/tr&gt;&#13;
+&lt;tr&gt;&lt;td&gt;Single quote concat&lt;/td&gt;&lt;td&gt;&lt;table width='$single_quote_percent%' style='background: $bgcolor'&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&#13;
+&lt;tr&gt;&lt;td&gt;Double quote eval&lt;/td&gt;&lt;td&gt;&lt;table width='$double_quote_percent%' style='background: $bgcolor'&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&#13;
+&lt;tr&gt;&lt;td&gt;Heredoc eval&lt;/td&gt;&lt;td&gt;&lt;table width='$heredoc_percent%' style='background: $bgcolor'&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&#13;
+&lt;tr&gt;&lt;td&gt;Simple sprintf()&lt;/td&gt;&lt;td&gt;&lt;table width='$sprintf_percent%' style='background: $bgcolor'&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&#13;
+&lt;tr&gt;&lt;td&gt;sprintf() with positional params&lt;/td&gt;&lt;td&gt;&lt;table width='$pos_sprintf_percent%' style='background: $bgcolor;'&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&#13;
+&lt;/table&gt;&#13;
+&lt;/p&gt;&#13;
+EOS;&#13;
+&#13;
+/*&#13;
+print('&lt;hr /&gt;php version: '. phpversion()); &#13;
+print('&lt;br /&gt;php info: ');&#13;
+phpinfo();&#13;
+print('&lt;br /&gt;&lt;hr /&gt;');&#13;
+*/&#13;
+</pre>
+</blockquote>&#13;

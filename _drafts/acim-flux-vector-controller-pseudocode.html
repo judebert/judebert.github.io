@@ -1,0 +1,197 @@
+---
+layout: post
+status: draft
+title: ACIM Flux-Vector Controller Pseudocode
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2009-09-07 20:04:00 UTC
+permalink: "/progress/EV/ACIM-Controller-Pseudocode.html"
+redirect_from:
+- "/archives/258-ACIM-Flux-Vector-Controller-Pseudocode.html"
+categories:
+- Programming
+tags:
+- electric vehicles
+- ev
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+I was hanging out on the DIY Electric Car Forums and found a topic about an "open source" hub motor and controller.  There were several people with electronics or motor experience, but no programmers.&#13;
+</p><p>&#13;
+I'd love to have a brushless, maintenance free motor for my EV.  Four hub motors would be even better.  And I'm a programmer, right?&#13;
+</p><p>&#13;
+This page includes all my notes and pseudocode for a flux-vector controller, based on the capabilities of the Microchip dsPIC30F 6010A controller.&#13;
+</p><a id="extended"></a><h2>Introduction and References</h2>&#13;
+<p>&#13;
+Flux-vector control refers to controlling each of the three phases in an AC induction motor (ACIM) separately, resulting in control over torque.  <a href="http://ww1.microchip.com/downloads/en/AppNotes/00908B.pdf">Microchip application note AN908 has been used for other flux-vector control software</a>, but no source code was used from that document due to copyright restrictions.  Instead the description was used as a guideline, and multiple other sources (especially <a href="http://focus.ti.com/lit/an/bpra073/bpra073.pdf">this fantastic TI document</a>, as well as <a href="http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO1&amp;Sect2=HITOFF&amp;d=PALL&amp;p=1&amp;u=%2Fnetahtml%2FPTO%2Fsrchnum.htm&amp;r=1&amp;f=G&amp;l=50&amp;s1=4678248.PN.&amp;OS=PN/4678248&amp;RS=PN/4678248">US Patent 4678248</a>, <a href="http://www.ece.umn.edu/users/riaz/macsim/readme.html">simulations and data from M. Riaz</a>, and <a href="http://focus.ti.com/docs/prod/folders/print/tms320c2812.html">other TI references</a>) were consulted and used.  &#13;
+</p><p>&#13;
+This code and pseudocode is copyrighted (C) 2008 Judebert.  Distribution is allowed under the terms of the GNU Public License, version 2.  &#13;
+</p>&#13;
+<h2>Data</h2>&#13;
+<p>Since this is a microprocessor, and I want to provide as much control and flexibility as possible, all data will be global.</p>&#13;
+<h3>Functions</h3>&#13;
+<ol>&#13;
+<li>Proportional, Integral, Derivative (PID) controller</li>&#13;
+<li>Orthoganalization (3 phases to two axes)</li>&#13;
+<li>Inverse orthogonalization</li>&#13;
+<li>Rotation (stator to rotor frame)</li>&#13;
+<li>Inverse Rotation</li>&#13;
+</ol>&#13;
+<h3>Inputs</h3>&#13;
+<ol>&#13;
+<li>Existing instantaneous phase currents (Ia, Ib, Ic)</li>&#13;
+<li>Rotor speed</li>&#13;
+<li>Motor electrical flux speed (time constant)</li>&#13;
+<li>Desired torque (or speed)</li>&#13;
+</ol>&#13;
+<h3>Outputs</h3>&#13;
+<ol>&#13;
+<li>New phase voltages (PWM averaged)</li>&#13;
+</ol>&#13;
+<h3>Globals</h3>&#13;
+<p>Globals could become inputs or outputs, depending on the amount of configurability and logging required.</p>&#13;
+<ol>&#13;
+<li>PID structure for each PID controller, including:&#13;
+  <ol>&#13;
+  <li>Multiplier (gain) for each component</li>&#13;
+  <li>Integral sum</li>&#13;
+  <li>Derivative sum(if necessary)</li>&#13;
+  </ol>&#13;
+</li>&#13;
+<li>Max current</li>&#13;
+<li>Max voltage</li>&#13;
+<li>Max torque</li>&#13;
+<li>Max speed</li>&#13;
+<li>Two-axis current axes (Ialpha, Ibeta)</li>&#13;
+<li>Two-dimensional torque/flux axes (Id, Iq)</li>&#13;
+<li>Rotor/flux position (phi)</li>&#13;
+</ol>&#13;
+<h2>Pseudocode</h2>&#13;
+<p>Obviously, there are optimizations that can be done here.  Most obvious are preoptimizations to avoid recalculating values.  This is left for the transformation from pseudocode to useful code.&#13;
+</p>&#13;
+<h3>Main Loop</h3>&#13;
+<p>Contents of the basic loop for controlling the motor.  Could be interrupt driven.  Continually being updated as I become more intelligent.&#13;
+</p><p>&#13;
+</p><pre>
+  <code>&#13;
+// Get current and rotor speed inputs (estimate for open-loop)&#13;
+(*measure)();&#13;
+// Where's the rotor?&#13;
+estimateFlux();&#13;
+// Orthogonalize the phase axes and convert to rotor space&#13;
+orthogonalize();&#13;
+rotate(phi);&#13;
+// Figure out new flux and torque values&#13;
+Id = updateLimitedPid(*dPid, Id);&#13;
+Iq = updateLimitedPid(*qPid, Iq);&#13;
+// Return to three phases&#13;
+rotate(-phi);&#13;
+deorthogonalize();&#13;
+// Figure out what PWMs need to be to drive the gate&#13;
+updatePWMs();&#13;
+</code>
+</pre>&#13;
+&#13;
+<h3>Orthogonalization</h3>&#13;
+<p>This is the algorithm that converts from the weird, 120*, three-axis reference frame to a standard, 90*, two-axis reference frame.  All input and output is global variables.&#13;
+</p><p>&#13;
+</p><pre>
+  <code>&#13;
+void orthogonalize()&#13;
+{&#13;
+  Ialpha = Ia;&#13;
+  Ibeta = (Ia + (2 * Ib)) / sqrt(3);&#13;
+}&#13;
+</code>
+</pre>&#13;
+&#13;
+<h3>Rotation</h3>&#13;
+<p>This is the algorithm that converts from the stator reference frame to the rotor reference frame, which coincidentally turns them into flux (Id) and torque (Iq).  Again, global variables are used.&#13;
+</p><p>&#13;
+</p><pre>
+  <code>&#13;
+void rotate()&#13;
+{&#13;
+  Id = (Ialpha * cos(phi)) + (Ibeta * sin(phi));&#13;
+  Iq = (Ibeta * cos(phi)) - (Ialpha * sin(phi));&#13;
+}&#13;
+</code>
+</pre>&#13;
+&#13;
+<h3>PID controllers</h3>&#13;
+<p>See Wikipedia for a good description of a PID controller. For motor control, a derivative is not required; this is a PI ramp.&#13;
+</p><p>&#13;
+</p><pre>
+  <code>&#13;
+typedef struct&#13;
+{&#13;
+  // Multipliers&#13;
+  double pGain, iGain, dGain;&#13;
+  // Integral sum&#13;
+  double iSum;&#13;
+  // Previous measurement (for derivative)&#13;
+  double dPrev;&#13;
+} PidData;&#13;
+typedef struct&#13;
+{&#13;
+  // "Inherit" PID data&#13;
+  struct PidData super;&#13;
+  // Limits&#13;
+  double min, max;&#13;
+} LimitedPidData;&#13;
+&#13;
+double UpdateLimitedPID(LimitedPidData *pid, double measured)&#13;
+{&#13;
+  // Terms&#13;
+  double p, i, d, command;&#13;
+  double diff = desired - measured;&#13;
+  // proportional term&#13;
+  p = pid-&gt;pGain * diff;&#13;
+  // Use *last* round's integral term, for more efficient limiting&#13;
+  i = pid-&gt;iGain * pid-&gt;iSum;&#13;
+  // Derivative/Dampening (can be disregarded for motor control)&#13;
+  d = pid-&gt;dGain * (measured - pid-&gt;dPrev);&#13;
+  pid-&gt;dPrev = measured;&#13;
+  // Calculate unlimited commanded output&#13;
+  command = p + i - d;&#13;
+&#13;
+  // Limit output, calculate integral term&#13;
+  if (command &gt; pid-&gt;max)&#13;
+  {&#13;
+    // Motor is moving slower than commanded.  Could be integrator&#13;
+    // windup, could be pGain &gt; 1.  &#13;
+    // Assume integrator windup, forget accumulated error.&#13;
+    pid-&gt;iSum = 0;&#13;
+    command = pid-&gt;max;&#13;
+  } &#13;
+  else if (command &lt; pid-&gt;min)&#13;
+  {&#13;
+    // As above, forget accumulated error to avoid integrator windup&#13;
+    pid-&gt;iSum = 0;&#13;
+    command = min;&#13;
+  }&#13;
+  else &#13;
+  {&#13;
+    // calculate the integral term&#13;
+    pid-&gt;iSum += pid-&gt;iGain * diff;&#13;
+  }&#13;
+&#13;
+  return total;&#13;
+}&#13;
+</code>
+</pre>&#13;
+<p>&#13;
+</p><h3>Calibration</h3>&#13;
+<p>Okay, I haven't gotten to this point yet.  Perhaps a nice Ziegler-Nichols calibration routine for the PIDs would be appreciated?&#13;
+</p>&#13;
+<h3>Throttle Ramp</h3>&#13;
+<p>The PID controllers were originally intended to control the current, voltage, and frequency outputs.  Perhaps a PID controller should be applied to the throttle (desired value)?  Maybe a nice logarithmic or custom curve would be better?&#13;
+</p>&#13;
+<h3>The Motor</h3>&#13;
+<p>The motor itself warrants some explanation.  In particular, this <a href="http://www.ece.umn.edu/users/riaz/animations/sinvec.html">animation of the currents in an 3-phase AC Induction motor</a> shows how the rotor's induced field is created by the stator fields.  The only non-obvious observation is that the magnetic fields created by the poles in a star winding are <i>perpendicular</i> to the winding: a vertical pole will produce horizontal magnetic fields.  I hope to design a <a href="http://www.ece.umn.edu/users/riaz/animations/sinwdg.html">sinusoidally wound ACIM</a>.&#13;
+</p>

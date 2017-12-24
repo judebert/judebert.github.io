@@ -1,0 +1,44 @@
+---
+layout: post
+status: published
+published: true
+title: Hard Drive Restored
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2009-01-05 14:16:32 UTC
+permalink: "/archives/308-Hard-Drive-Restored.html"
+categories:
+- Web Activities
+tags: []
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+It turns out <a href="archives/306-Zorchy-New-Year.html">the hard drive that crashed earlier</a> was actually a motherboard problem.  The secondary IDE bus is flaky.  The destroyed power supply was completely superfluous; just more trouble for my vacation.&#13;
+</p><p>&#13;
+My weird configuration got in my way while trying to determine and fix the problem.  Ironically, it's that way because of an earlier hard drive failure.&#13;
+</p><a id="extended"></a><p>&#13;
+This was originally a Windows 95 machine, so it had an 8GB hard drive.  When I upgraded to Windows XP, I replaced it with an 80GB hard drive.  Since Windows only allowed me to install on C:\, the first drive had the boot sector.&#13;
+</p><p>&#13;
+When I added Linux, I used an old 2GB drive I had laying around.  GRUB replaced the original boot sector; it allowed me to keep all the Linux files on the third drive (hdc in Linux, E:\ in Windows).  &#13;
+</p><p>&#13;
+But the drive was so old it eventually crashed, taking lots of my data with it.  I spent a long time cleaning up and restoring data with disk forensics tools on bootable Linux disks.&#13;
+</p><p>&#13;
+When it was time to reinstall Linux, I decided to hedge my bets on data retrieval.  I split Linux on to two drives: the system files (easily replaceable) went on the original 8GB drive, while the user files (not easily replaceable) got split into separate partitions on a new 160GB drive.  That setup could make it easier to do backups, too.&#13;
+</p><p>&#13;
+Not that I ever did any backups.  As you can see, that means the primary IDE bus held the Windows drive with the boot partition and the Linux system drive, while the secondary IDE bus held the DVD-ROM drive and the Linux user drive.&#13;
+</p><p>&#13;
+With the secondary bus roasted, I had to move the DVD to the primary bus.  But then I could only have one hard drive to work on.  How would I be able to tell if the "interrupt lost" problem was due to a damaged drive or a bad motherboard?&#13;
+</p><p>&#13;
+I eventually removed the Windows drive, since I never use it any more anyway.  I booted the DVD and Linux system drive with a GParted live Linux disk.  I edited the /boot/grub/menu.lst to reflect both Linux drives on the primary IDE bus.  Although the version of GRUB on the GParted CD was a little older than the one originally on my boot sector, I used it to put the new boot sector on my Linux system drive.  Then I made it the master, replaced the DVD drive with the Linux user drive, and rebooted.&#13;
+</p><p>&#13;
+I had missed the setting for the splash screen, but everything started up.  I immediately copied all my user data to another machine via my home network.  No "lost interrupt" error this time.  On the next boot, everything came up working correctly.&#13;
+</p><p>&#13;
+So, no data loss.  I left my DVD installed on the secondary bus, just in case it can be useful, but I'm not going to rely on it.  Now I've got plenty of time to consider a replacement motherboard.&#13;
+</p><p>&#13;
+And find a decent backup solution.&#13;
+</p>

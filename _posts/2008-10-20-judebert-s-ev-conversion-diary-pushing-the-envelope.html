@@ -1,0 +1,91 @@
+---
+layout: post
+status: published
+published: true
+title: 'Judebert''s EV Conversion Diary: Pushing the Envelope'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2008-10-20 13:11:54 UTC
+permalink: "/progress/EV/Long-Trip.html"
+redirect_from:
+- "/archives/287-Judeberts-EV-Conversion-Diary-Pushing-the-Envelope.html"
+categories:
+- EV
+- EV Conversion Diary
+tags:
+- electric vehicles
+- ev
+comments:
+- id: 386
+  author: guydownthehall
+  author_email: harlan3@hotmail.com
+  author_url: ''
+  date: '1224730173'
+  content: "There is a flooded lead acid discharge graph in the pdf located at:\r\nhttp://www.arttec.net/Solar_Mower/4_Electrical/Battery%20Charging.pdf\r\n\r\nI
+    wouldn't expect the data to vary widely with AGMs utilizing the same lead-acid
+    chemistry.\r\n\r\nThe open-circuit voltage of lead acid at ~2.1v per cell is not
+    a very good indicator of state of charge from what I have read on the subject.
+    \ The open circuit voltage of your traction pack seems to be high at 132 volts.
+    \ Is this immediately following charging?  The nominal open circuit voltage calculates
+    to 126 (2.1*6*10).\r\n\r\nThe 110v estimate at 80%, however, does look fairly
+    close by interpolating the C3 discharge rate to a C1 rate in the pdf document
+    above."
+- id: 387
+  author: Judebert
+  author_email: ''
+  author_url: ''
+  date: '1224788563'
+  content: "Thanks for the chart!  It helps to put my mind at ease, and makes me think
+    my E-meter is just screwy.  Maybe I can go farther than I am.\r\n\r\nI found 13.2V
+    on [url=http://www.optimabatteries.com/_media/documents/specs/D34_082104.pdf]the
+    manufacturer's spec sheet[/url].  (Turns out it's only 13.1V.)  Perhaps the lead
+    acid chemistry varies a little by manufacturer.\r\n\r\nI found an [url=http://spreadsheets.google.com/ccc?key=pRk3hQKpzKD_bgtNSWZy-KA]EV
+    spreadsheet that includes voltage at different charge states[/url] at Google,
+    too!  It thinks 80% on a 120V pack should be 115.8V, which is good.  My 122V experience
+    should have been only 40% discharged!"
+- id: 388
+  author: guydownthehall
+  author_email: harlan3@hotmail.com
+  author_url: ''
+  date: '1224813914'
+  content: "Handy spreadsheet!  After looking in Wikipedia on lead acid batteries,
+    there is a simple explanation of where the difference in voltage is coming from
+    (12.6v versus 13.2v).  Both values are actually correct when put into proper context.\r\n\r\nAfter
+    full charge the terminal voltage will drop quickly to 13.2 V and then slowly to
+    12.6 V.\r\nOpen-circuit (quiescent) at full charge: 12.6 V to 12.8 V (2.10-2.13V
+    per cell)\r\n\r\nOf course we know which value the marketing folks are going to
+    choose! :)"
+- id: 397
+  author: prefabrik
+  author_email: prefabrik12341354@hotmail.com
+  author_url: www.prefabrikev.biz
+  date: '1228604146'
+  content: Wouldnt expect the data to vary widely with AGMs utilizing the same lead-acid
+    chemistry.
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+This morning I used Silent E for a scenario outside its design plan: I dropped Tatiana off on my way to work.  It's about 5 miles out of my way.&#13;
+</p><p>&#13;
+Knowing that my battery capacity was limited, I drove quite carefully.  I drove a route that (I hoped) would reduce the overall distance; I braked carefully and utilized coasting as much as possible; I accelerated so that my voltage never dropped below 110V on my 120V pack.  I even started with an overcharged pack.&#13;
+</p><p>&#13;
+When I got to work, I had driven 11.7 miles, and my resting voltage was 122V.  &#13;
+</p><p>&#13;
+Is that good?&#13;
+</p><a id="extended"></a><p>&#13;
+Heck if I know.  This is just a WAG, but let's assume voltage declines linearly with battery capacity: if you've got 50% of your voltage, you've got 50% of the energy in your battery pack left.&#13;
+</p><p>&#13;
+I know that DEAD is 10.5V, and FULL is 13.2V (although on these damaged batteries, full appears to be 130V; we'll ignore that for our calculations).  If all 10 batteries were the same, the pack would be dead at 105V and full at 132V.  Since I'm at 122V, I must not be dead.&#13;
+</p><p>&#13;
+But we never want to get below 80% of the battery capacity (or 20% full).  The voltage range is 132 - 105 = 27V.  20% of 27V is 5.4V.  So I would never want to be below 105 + 5.4 = 110.4V.  &#13;
+</p><p>&#13;
+<b>But that's only if resting voltage is a good linear indicator of battery capacity.</b>  Somehow I doubt it is.  On the EV list, they say the best way to measure battery capacity from voltage is to check the <b>voltage under load</b>.  That's why I keep my E-meter on its voltage display: I don't want voltage to drop under 110V even while I accelerate, and I can watch the voltage under load.&#13;
+</p><p>&#13;
+10 miles into the trip, my E-meter thought I was down to 20% of the pack.  Around that time, I was actually using 1st gear.  And even mild acceleration was dipping below 105V, if only for fractions of a second.&#13;
+</p><p>&#13;
+I hope someone can tell me how to interpret this data.  I intend to ask the EVDL later tonight.&#13;
+</p>

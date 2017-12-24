@@ -1,0 +1,140 @@
+---
+layout: post
+status: published
+published: true
+title: Graphical Rating Bars for Serendipity Karma Plugin
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2008-02-11 02:16:56 UTC
+permalink: "/progress/permalink/Improved_Karma_Plugin.html"
+redirect_from:
+- "/archives/208-Graphical-Rating-Bars-for-Serendipity-Karma-Plugin.html"
+categories:
+- Web Activities
+tags: []
+comments:
+- id: 362
+  author: Flominator
+  author_email: flominator@gmx.net
+  author_url: http://flominator.ramselehof.de
+  date: '1207249649'
+  content: Hi, thanks for the great plugin. Is there any way to checkout my karma
+    votes without clicking every entry and without displaying it them in public?
+- id: 363
+  author: Judebert
+  author_email: judebert@judebert.com
+  author_url: http://judebert.com/
+  date: '1207453574'
+  content: "Glad you like it!  At the moment the only way to check an article's karma
+    is either through the public interface or the database.  But you should be able
+    to see groups of them on any overview page.\r\n\r\nI think this is a great idea
+    though; I'll add a log.\r\n(Unrolls list)\r\n(time passes)\r\n(adds to bottom)\r\n
+    I should get to that around... 2023."
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+I've been working on updating the Serendipity Karma plugin to include <a href="/progress/permalink/CSS-star-rating.html">CSS graphical rating bars</a>.  (I just love the thought patterns behind "Serendipity Karma".)  &#13;
+</p><p>&#13;
+It started as a simple code cleanup, to make things more understandable to novice programmers and to comply with Serendipity coding conventions.  It wound up nearly a complete rewrite.&#13;
+</p><p>&#13;
+I committed it to the Serendipity trunk moments ago; that means it should make it into the next Serendipity 1.3 nightly build.  If you don't want to upgrade to the nightly builds, or you just want the plugin on its own, read on...&#13;
+</p><p>&#13;
+<b>Update 2008-02-14:</b> Misspelled class name fixed.  New zip available.  <br />&#13;
+<b>Update 2008-02-15:</b> Ratings now correctly translated to words.  New zip available.  <br />&#13;
+</p><a id="extended"></a><div style="text-align:center">&#13;
+  <form style="display:inline" class="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post">&#13;
+    <input type="hidden" name="cmd" value="_xclick" />&#13;
+    <input type="hidden" name="business" value="judebert@judebert.com" />&#13;
+    <input type="hidden" name="item_name" value="Serendipity Karma Plugin" />&#13;
+    <input type="hidden" name="no_shipping" value="1" />&#13;
+    <input type="hidden" name="cn" value="Comments" />&#13;
+    <input type="hidden" name="currency_code" value="USD" />&#13;
+    <input type="hidden" name="tax" value="0" />&#13;
+    <input type="hidden" name="lc" value="US" />&#13;
+    <input type="image" src="/progress/media/donate.png" border="0" name="submit" alt="Support Serendipity development at Judebert.com with your donation!" title="Support Serendipity development at Judebert.com with your donation!" />&#13;
+  </form>&#13;
+</div> <!-- donatebox -->&#13;
+<p>&#13;
+I worked for nearly three weeks on the karma plugin; three real weeks, more than 100 total hours.  I did more than just adding graphical bars; that alone took very little time.  I converted it from an inefficient, confusing jumble of code to a straightforward, robust thing of beauty. <a href="/progress/archives/204-PHP-String-Formatting-Performance.html">I even checked PHP string operations to get the best possible performance.</a>  If you value this kind of effort, or if you want more of this kind of work for Serendipity, please consider a donation.&#13;
+</p><p>&#13;
+<a href="/progress/media/s9y/plugins/serendipity_event_karma.zip" title="serendipity_event_karma.zip" target="_blank">You can download the improved Serendipity Karma Plugin right here: serendipity_event_karma.zip</a>&#13;
+</p>&#13;
+<div class="download_link">
+  <a href="/progress/media/s9y/plugins/serendipity_event_karma.zip">Download .zip</a>
+</div>&#13;
+<p>&#13;
+If there's enough demand for a .tar.bz2 format, I'll provide that too.  However, I expect that demand will fall as Serendipity 1.3 is more widely adopted, since the improved plugin is provided by default.&#13;
+</p><p>&#13;
+I expect that this page will become a mini-FAQ for the Karma plugin.  I'll incorporate information directly from the comments into the page.&#13;
+</p>&#13;
+<h3>Is there somewhere I can find other rating bars?</h3>&#13;
+<p>&#13;
+Don Chambers just put up <a href="http://www.optional-necessity.com/archives/9-99-New-Images-for-the-Serendipity-Karma-voting-plugin.html" title="Don's Serendipity Rating Bars">a collection of 99 professional rating bar images</a> on his website.  There are 33 bars, each in 3 sizes.  &#13;
+</p><p>&#13;
+And of course, if Don doesn't have something that suits you, there's always the option to make your own.&#13;
+</p>&#13;
+<h3>How do I make new graphical rating bars for the Karma plugin?</h3>&#13;
+<p>&#13;
+Glad you asked.  <a href="/progress/permalink/CSS-star-rating.html">I explained in an earlier post how the new Karma bars can be made in two categories: single-element and full-bar.</a>  The single-element bars are, as the name implies, a single element of the full rating bar.  Here's a quick example:&#13;
+</p>&#13;
+<!-- s9ymdb:628 --><img width="25" height="75" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/s9y/plugins/glowing.png" alt="" /> &#13;
+<p>&#13;
+A standard rating bar, like the one at the bottom of this page, has five ratings.  If this single-element image were used, it would be repeated and appear to be five stars, each exactly alike.  But if you want five elements that appear different from each other, you can use a full-bar image instead, like this one:&#13;
+</p>&#13;
+<!-- s9ymdb:625 --><img width="125" height="75" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/s9y/plugins/rainbow-bar-1.png" alt="" />&#13;
+<p>&#13;
+The final appearance of these rating bars may not be apparent from these images.  <a href="/progress/permalink/CSS-star-rating.html">For a better look, check out my previous article.</a>   The plugin supports anything the browser supports, so you can use gif, png, or jpg images.  You can even use animated images!&#13;
+</p>&#13;
+<h3>Why are the images three rows high?</h3>&#13;
+<p>&#13;
+That allows me to use a single image for a rating bar.  If multiple images were required, your visitors could experience delays while the different images loaded.  With a single image, it's a single, compact, fast experience.&#13;
+</p><p>&#13;
+An explanation of the rows may be in order.  &#13;
+</p>&#13;
+<ul>&#13;
+<li>
+<b>Top row:</b> the empty bar.  The current rating appears to "fill up" this empty bar; so does the user's rating, as he makes it.</li>&#13;
+<li>
+<b>Middle row:</b> the current rating bar.  This is displayed only when a rating exists for an entry.</li>&#13;
+<li>
+<b>Bottom row:</b> the user rating bar.  This is displayed while the user is making a rating, and covers up all the other bars as far as the user's mouse.</li>&#13;
+</ul>&#13;
+<p> &#13;
+All three rows are required for the image to work in the improved Karma Plugin.&#13;
+</p>&#13;
+<h3>How does the Karma Plugin tell if an image is a single-element image or a full-bar image?</h3>&#13;
+<p>&#13;
+It measures the image.  If its height, divided by its width, is less than 1.0, then the Karma Plugin guesses that the image is a single-segment image.  Anything bigger must be a full-bar image.&#13;
+</p>&#13;
+<h3>Where do I put new rating bar images?</h3>&#13;
+<p>&#13;
+In the serendipity_event_karma/img/ directory.  The plugin will automatically detect the image the next time you try to configure it.  From your admin page, click "Configure Plugins", then click the "Karma" plugin.  In the Appearance section of the plugin, you'll find your new rating bar displayed in a table with all the other available bars.&#13;
+</p><h3>Can I use those smiley faces you have?</h3>&#13;
+<p>&#13;
+The nice thing about the new rating bars is that even people with rudimentary image editing skills (like me) can create anything they like.  I took a bunch of animated smileys from web bulletin boards and glued them together into a bar with the Gimp.  You can download the image below:&#13;
+</p>&#13;
+<!-- s9ymdb:619 --><img width="100" height="60" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/s9y/plugins/ratingsmiles.gif" alt="" />&#13;
+<p>&#13;
+If there's enough demand, I'd be happy to put it into a zip file or other format.&#13;
+</p>&#13;
+<h3>Wow, you really did a great job!  You deserve something for all this hard work!</h3>&#13;
+<p>&#13;
+You're too kind.  Really.  I do this for the fun of it; I don't need your money. <b><i>Wait a minute!  Yes I do!</i></b>  There are donation buttons at the top and bottom of the screen if you'd like to promote further Serendipity development.  Thanks so much!&#13;
+</p>&#13;
+<div style="text-align:center">&#13;
+  <form style="display:inline" class="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post">&#13;
+    <input type="hidden" name="cmd" value="_xclick" />&#13;
+    <input type="hidden" name="business" value="judebert@judebert.com" />&#13;
+    <input type="hidden" name="item_name" value="Serendipity Karma Plugin" />&#13;
+    <input type="hidden" name="no_shipping" value="1" />&#13;
+    <input type="hidden" name="cn" value="Comments" />&#13;
+    <input type="hidden" name="currency_code" value="USD" />&#13;
+    <input type="hidden" name="tax" value="0" />&#13;
+    <input type="hidden" name="lc" value="US" />&#13;
+    <input type="image" src="/progress/media/donate.png" border="0" name="submit" alt="Support Serendipity development at Judebert.com with your donation!" />&#13;
+  </form>&#13;
+</div> <!-- donatebox -->

@@ -1,0 +1,339 @@
+---
+layout: post
+status: draft
+title: Javascript Imageless Snow in Serendipity
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2008-11-17 13:10:00 UTC
+permalink: "/archives/297-Javascript-Imageless-Snow-in-Serendipity.html"
+categories:
+- Tutorials
+tags: []
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+It's that time of year again: everybody wants to bog their pages down and drive off visitors with festive, seasonal, snow!  &#13;
+</p><p>&#13;
+Over the protests of my colleagues and my own conscience, I helped out a Serendipity user who was trying to get a snow script to function properly.  I did a lot more work than I would usually do over something I don't intend to use for myself.  So I figured I'd better document it here.&#13;
+</p><p>&#13;
+If you're the webpage-snow kind of person, read on.  I'll explain how to make it snow on all pages, in one category, or just on a single page.&#13;
+</p><a id="extended"></a><style type="text/css">
+<![CDATA[
+dt {
+  font-weight: bold
+}
+dd {
+  margin-left: 2em;
+}
+]]>
+</style>&#13;
+<h2>The Snow Script</h2>&#13;
+<p>&#13;
+First, you'll need a snow script.  Apparently the gold standard for this kind of thing is <a href="http://www.hypergurl.com/snowmaker.html">http://www.hypergurl.com/snowmaker.html</a>, but I found some trouble with it.  Like it didn't work.&#13;
+</p><p>&#13;
+Luckily, I found <a href="http://www.java2s.com/Code/JavaScript/GUI-Components/Animationsnow.htm">a better imageless snow script that actually worked</a>.  But I really liked the asterisks in the first script. &#13;
+</p><p>&#13;
+So I combined them.  The new melange has the benefits of both scripts.  It makes snow that shows up on white backgrounds (unlike the second script).  The snow is a nice text item (unlike the second script).  And the snow not only works, it falls to the bottom of the screen even if you scroll your window (unlike the first script).  &#13;
+</p><p>&#13;
+Then I spent a bunch of time in optimization.  I precalculated all the random numbers and cosines.  I saved references to styles, instead of looking up the snow divs every time.  I can only test with Firefox, but I managed to get a simple text-only webpage to handle 35 snowflakes with a tiny, indeed unmeasurable, impact to performance.  &#13;
+</p><p>&#13;
+Finally, I made it [b]stop[/b].  Just click on any snowflake, and they'll all disappear and stop using up your CPU.  Okay, one will be left at the top of your screen; click on it to begin snowing again.  You control the weather: you're a god!  &#13;
+</p><p>&#13;
+All in all, I think it's the <a href="media/s9y/jsnow.js">optimal imageless JavaScript snow</a>.&#13;
+</p><p>&#13;
+What browsers does it work on?  Firefox, for sure.  There are some tests in there meant to help IE, Safari, and Opera users; I need someone to test them for me, though.&#13;
+</p>&#13;
+<h2>Let it snow already!</h2>&#13;
+<p>&#13;
+Right. <a href="media/s9y/jsnow.js">Download Judebert's optimal JavaScript text snow</a>, or copy the script from the printout at the end of this page.&#13;
+</p>&#13;
+<h3>Make it snow on all your Serendipity pages</h3>&#13;
+<ul>&#13;
+<li>Install the <a href="http://spartacus.s9y.org/cvs/additional_plugins/serendipity_event_page_nugget.zip">"HTML Nugget on Page" plugin</a>. <br /> If you've got SPARTACUS installed, just click "Install event plugin" from the Configure Plugins page.  Otherwise, download it using the link above, unzip it, and copy all the files to your plugins/ directory.  <b>Then</b> click the "Install event plugin" link like above.</li>&#13;
+<li>Set the plugin parameters.<dl>
+<dt>Title</dt>
+<dd style="margin-left: 20px;">Doesn't matter</dd>
+<dt>Nugget Placement</dt>
+<dd>Choose "End of thePage", so all your&#13;
+normal content is displayed before the script gets started.</dd>
+<dt>Choose Language</dt>
+<dd>All languages</dd>
+<dt>Content</dt>
+<dd>Paste the script in there; make sure it's surrounded by &lt;script&gt;&lt;/script&gt; tags.</dd>
+<dt>Perform Markup Transformations</dt>
+<dd>NO!  Selecting "Yes" will screw up the script.</dd>
+<dt>Where should the item be displayed?</dt>
+<dd>All times</dd>
+</dl>&#13;
+</li>&#13;
+<li>Revisit your weblog.  Snow!</li>&#13;
+</ul>&#13;
+<h3>Snow on front page only</h3>&#13;
+<p>Follow all the steps for making it snow on all your Serendipity pages.  There's only one differences in the configuration of the plugin:&#13;
+</p>&#13;
+<dl>
+<dt>Where should the item be displayed?</dt>
+<dd>Overview page only</dd>
+</dl>&#13;
+<p>&#13;
+This will cause snow on your category and archive pages, too.  If you really want it only on the frontpage, we'll have to do something rather more difficult: copy the script into your template's index.tpl, and surround it with the Smarty condition {if $frontpage}{/if}.  It's not all that difficult, really.  But before you make the effort, think about it: how often does anyone visit your category or archive pages?  And is it so bad if it's snowing there?&#13;
+</p>&#13;
+<h3>Snow on a single page</h3>&#13;
+<p>This is the technique I used for the snow on this page.  I didn't want it to snow on the front page, where the article summary is, so I used the "Extended Body" when I edited the article.&#13;
+</p>&#13;
+<ul>
+  <li>Paste the script at the bottom of the article, surrounded by &lt;script&gt;&lt;/script&gt; tags.</li>
+</ul>&#13;
+<p>&#13;
+Yes, really, that's all there is to it.  Most browsers will interpret the script, even if it's not in the head.&#13;
+</p><p>&#13;
+For you advanced users: save the file on your server somewhere, and refer to it with &lt;script type="text/javascript" src="path_to_script.js"&gt;&lt;/script&gt; so you can make updates easily, or put snow on more than one page without making your entries too big.&#13;
+&#13;
+</p><h2>The Source</h2>&#13;
+[code]//Snow - http://www.btinternet.com/~kurt.grigg/javascript&#13;
+// I actually found it at http://www.java2s.com/Code/JavaScript/GUI-Components/Animationsnow.htm&#13;
+&#13;
+// if ((document.getElementById) &amp;&amp;&#13;
+//  window.addEventListener || window.attachEvent) {&#13;
+// Then we can run the script; otherwise, don't!&#13;
+// }&#13;
+&#13;
+//Configure here.&#13;
+&#13;
+var numFlakes = 30;   //Number of flakes&#13;
+var timeout = 50; //setTimeout speed. Varies on different comps&#13;
+&#13;
+//End.&#13;
+&#13;
+// Controls snow loop&#13;
+var snowing = 1;&#13;
+var flakeY = [];&#13;
+var flakeX = [];&#13;
+var sink = [];&#13;
+var flakeStyle = [];&#13;
+var flakeSize = [];&#13;
+var drift = [];&#13;
+var theta = [];&#13;
+var viewheight, viewwidth;&#13;
+// The viewport is used to find boundaries.&#13;
+// When finding the screen size, Depending on the browser, this could be&#13;
+// unused, or contain innerHeight/Width, or contain clientHeight/Width.&#13;
+// When finding the viewport offset, this could contain&#13;
+// pageY/XOffset or scrollTop/Left.&#13;
+var viewport;&#13;
+var thedoc = document;&#13;
+var pix = "px";&#13;
+var domWw = (typeof window.innerWidth == "number");&#13;
+var domSy = (typeof window.pageYOffset == "number");&#13;
+// Precalculated tables, limits, and indeces&#13;
+var random = [];&#13;
+var rng = 0;&#13;
+var rngMax = 1000;&#13;
+var cosMax = 100;&#13;
+var cos = new Array(cosMax);&#13;
+&#13;
+&#13;
+function init() {&#13;
+  // Create the cosine table&#13;
+  cosFactor = (2 * Math.PI) / cosMax;&#13;
+  for (i = 0; i &lt; cosMax; i++) {&#13;
+    cos[i] = Math.cos(i * cosFactor);&#13;
+  }&#13;
+  out = '';&#13;
+  for (i = 0; i &lt; cosMax; i++) {&#13;
+    out += cos[i] + '\n';&#13;
+  }&#13;
+&#13;
+  // Create the random table&#13;
+  for (i = 0; i &lt; rngMax; i++) {&#13;
+    random[i] = Math.random();&#13;
+  }&#13;
+  rng = 0;&#13;
+&#13;
+  // Determine how to address the viewport&#13;
+  if (domWw) {&#13;
+    viewport = window;&#13;
+  } else {&#13;
+    if (thedoc.documentElement &amp;&amp;&#13;
+      typeof thedoc.documentElement.clientWidth == "number" &amp;&amp;&#13;
+      thedoc.documentElement.clientWidth != 0) {&#13;
+      viewport = thedoc.documentElement;&#13;
+    } else {&#13;
+      if (thedoc.body &amp;&amp;&#13;
+        typeof thedoc.body.clientWidth == "number")&#13;
+        viewport = thedoc.body;&#13;
+    }&#13;
+  }&#13;
+&#13;
+  // Create the flakes (only possible to add to body after document is loaded)&#13;
+  bdy = document.getElementsByTagName('body')[0];&#13;
+&#13;
+//  if (thedoc.documentElement.style &amp;&amp;&#13;
+//    typeof thedoc.documentElement.style.MozOpacity == "string") {&#13;
+//    numFlakes = 12;&#13;
+//  }&#13;
+&#13;
+  for (i = 0; i &lt; numFlakes; i++){&#13;
+    flakeSize[i] = Math.round(1 + randUpTo(1)) * 10;&#13;
+&#13;
+    var aFlake = document.createElement('div');&#13;
+    var stopLink = document.createElement('a');&#13;
+    stopLink.href = '#';&#13;
+    stopLink.style.color = 'white';&#13;
+    stopLink.style.textDecoration = 'none';&#13;
+    if (stopLink.attachEvent) {&#13;
+      stopLink.attachEvent('onclick', toggleSnow);&#13;
+    } else {&#13;
+      stopLink.addEventListener('click', toggleSnow, stopLink);&#13;
+    }&#13;
+    stopLink.appendChild(document.createTextNode('*'));&#13;
+    aFlake.appendChild(stopLink);&#13;
+    aFlake.id = 'flake' + i;&#13;
+    aFlake.style.position = 'absolute';&#13;
+    aFlake.style.top = '0px';&#13;
+    aFlake.style.left = '0px';&#13;
+    aFlake.style.width = flakeSize[i]+'px';&#13;
+    aFlake.style.height = flakeSize[i]+'px';&#13;
+    aFlake.style.color = 'white';&#13;
+    aFlake.style.fontSize = flakeSize[i]+'px';&#13;
+    bdy.appendChild(aFlake);&#13;
+    flakeStyle[i] = aFlake.style;&#13;
+  }&#13;
+&#13;
+  // Initialize flake positions&#13;
+  winsize();&#13;
+  for (i = 0; i &lt; numFlakes; i++){&#13;
+    startFlake(i);&#13;
+    flakeY[i] = randUpTo(-viewheight);&#13;
+  }&#13;
+&#13;
+  // Start the snowing&#13;
+  snow();&#13;
+}&#13;
+&#13;
+function toggleSnow() {&#13;
+  if (snowing) {&#13;
+   snowing  = 0;&#13;
+   for (i = 0; i &lt; numFlakes; i++) {&#13;
+     flakeY[i] -= viewheight;&#13;
+   }&#13;
+   flakeY[0] = 0;&#13;
+  } else {&#13;
+    snowing = 1;&#13;
+    snow();&#13;
+  }&#13;
+}&#13;
+&#13;
+function randUpTo(max) {&#13;
+  rng++;&#13;
+  if (rng &gt;= rngMax) {&#13;
+    rng = 0;&#13;
+  }&#13;
+  return random[rng] * max;&#13;
+}&#13;
+&#13;
+function startFlake(idx) {&#13;
+    flakeY[i] = -10;&#13;
+    flakeX[i] = Math.round(randUpTo(viewwidth));&#13;
+    theta[idx] = 0;&#13;
+    sink[idx] = (flakeSize[idx] / 10) + (randUpTo(1));&#13;
+    drift[idx] = Math.round(randUpTo(3)) + 1;&#13;
+}&#13;
+&#13;
+// Detemine the size of the document within the viewport&#13;
+function winsize(){&#13;
+  var realHeight,realWidth;&#13;
+  if (domWw){&#13;
+    if (thedoc.documentElement &amp;&amp; thedoc.defaultView &amp;&amp;&#13;
+      typeof thedoc.defaultView.scrollMaxY == "number"){&#13;
+      offHt = thedoc.documentElement.offsetHeight;&#13;
+      scrHt = thedoc.defaultView.scrollMaxY;&#13;
+      offWd = thedoc.documentElement.offsetWidth;&#13;
+      scrWd = thedoc.defaultView.scrollMaxX;&#13;
+      realHeight = offHt-scrHt;&#13;
+      realWidth = offWd-scrWd;&#13;
+    }&#13;
+    else{&#13;
+      realHeight = viewport.innerHeight;&#13;
+      realWidth = viewport.innerWidth;&#13;
+    }&#13;
+    viewheight = realHeight - 20;&#13;
+    viewwidth = realWidth - 20;&#13;
+  }&#13;
+  else{&#13;
+    viewheight = viewport.clientHeight - 20;&#13;
+    viewwidth = viewport.clientWidth - 20;&#13;
+  }&#13;
+}&#13;
+&#13;
+// Find the top offset of the viewport&#13;
+function viewTop() {&#13;
+  if (domSy) {&#13;
+    return viewport.pageYOffset;&#13;
+  } else {&#13;
+    return viewport.scrollTop;&#13;
+  }&#13;
+}&#13;
+&#13;
+// Find the left offset of the viewport&#13;
+function viewLeft() {&#13;
+  if (domSy) {&#13;
+    return viewport.pageXOffset;&#13;
+  } else {&#13;
+    return viewport.scrollLeft;&#13;
+  }&#13;
+}&#13;
+&#13;
+// Make the flakes sink and drift&#13;
+function snow(){&#13;
+  var newy,newx;&#13;
+&#13;
+  for (i = 0; i &lt; numFlakes; i++){&#13;
+    // Calculate new positions&#13;
+    newy = flakeY[i] + sink[i];&#13;
+    newx = flakeX[i] + sink[i] * cos[theta[i]];&#13;
+&#13;
+    // Check bounds&#13;
+    if (newx &gt;= viewwidth || newx &lt;= -20 || newy &gt;= viewheight) {&#13;
+      // Out of bounds: replace at top of screen with old size and new speed&#13;
+      startFlake(i);&#13;
+    } else {&#13;
+      flakeY[i] = newy;&#13;
+      flakeX[i] = newx;&#13;
+    }&#13;
+&#13;
+    // Move flake to new position&#13;
+    flakeStyle[i].top = flakeY[i] + viewTop() + pix;&#13;
+    flakeStyle[i].left = flakeX[i] + viewLeft() + pix;&#13;
+&#13;
+    // Prepare for next round&#13;
+    theta[i] = (theta[i] + drift[i]) % cosMax;&#13;
+  }&#13;
+  // Wait and call next step&#13;
+  if (snowing) {&#13;
+    setTimeout(snow,timeout);&#13;
+  }&#13;
+}&#13;
+&#13;
+&#13;
+// Initialize after loading, handle window scrolling and resizing&#13;
+if (window.addEventListener){&#13;
+  window.addEventListener("resize",winsize,false);&#13;
+  window.addEventListener("load",init,false);&#13;
+}&#13;
+else if (window.attachEvent){&#13;
+  window.attachEvent("onresize",winsize);&#13;
+  window.attachEvent("onload",init);&#13;
+}&#13;
+&#13;
+[/code]&#13;
+&#13;
+&#13;
+&#13;
+&#13;
+<script type="text/javascript" src="/progress/media/s9y/jsnow.js"></script>

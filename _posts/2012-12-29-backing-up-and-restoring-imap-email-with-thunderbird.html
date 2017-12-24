@@ -1,0 +1,71 @@
+---
+layout: post
+status: published
+published: true
+title: Backing Up and Restoring IMAP Email with Thunderbird
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2012-12-29 13:49:39 UTC
+permalink: "/progress/permalink/ThunderbirdBackup.html"
+redirect_from:
+- "/archives/441-Backing-Up-and-Restoring-IMAP-Email-with-Thunderbird.html"
+categories:
+- Tutorials
+tags:
+- email
+- howto
+- imap
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+When I changed web hosting, my emails couldn't be copied (curse you, PowWeb!).  I had to back them up myself.&#13;
+</p><p>&#13;
+I do most of my work on the web, so that I have the same data everywhere.  To back up the emails, I needed to copy them locally.  &#13;
+</p><p>&#13;
+I knew that Thunderbird keeps its emails in the Unix-standard mbox format, and I thought that might be helpful for restoring.  A quick survey of other email clients (a dying breed, by the way) didn't discover anything better, so I installed T-bird despite its impending end-of-life.&#13;
+</p><p>&#13;
+Backing up and restoring was surprisingly easy.  Here's how I did it.&#13;
+</p><a id="extended"></a><p>&#13;
+A quick word on email protocols.  POP3, the original email protocol, copied the messages from the server to the local machine.  This was fine, as long as you only wanted to access your email in one place.  If you wanted to access the messages in more than one place, you wound up with multiple copies of the same email.  So we invented IMAP, which is much more common today.  IMAP leaves the messages on the server, but copies some data to your local computer so reading and searching is faster.  IMAP also allows you to make folders on the server, which POP3 doesn't support. &#13;
+</p><p>&#13;
+I'm using IMAP for all my email accounts.  &#13;
+</p>&#13;
+<h3>Backing Up</h3>&#13;
+<p>&#13;
+To back up, simply tell Thunderbird to copy the emails from the server, then copy them somewhere local that doesn't get synchronized.  &#13;
+</p><p>&#13;
+Visit the Account Settings.  (I right-click the account in question and use the context menu.) Go to Synchronization &amp; Storage, and make sure that "Keep messages for this account on this computer" is checked.  This copies the mail from the server to the local computer.  In the "Disk Space" settings, indicate that you don't care about your computer's disk space at all: select "Synchronize all messages locally regardless of age" and "Don't delete any messages".&#13;
+</p><p>&#13;
+If only it were that easy.  Now you must also check the checkbox for each <b>folder</b> under the "Advanced" button of the "Message Synchronizing" tab.  It may be a lot of clicking, but since we're trying to make a backup... well, what did you expect?&#13;
+</p><p>&#13;
+Click "OK" all around and return to the main screen.  If it hasn't started synchronizing mail yet, click the account's "Read messages" or the "Get Mail" button.  It may take a while to download all that stuff.  The progress indicator was not reliable, in my opinion; I kept using "Get Mail" until mail retrieval was nearly instantaneous.  Heck, I closed Thunderbird and restarted a few times, just to make sure.&#13;
+</p><p>&#13;
+Now that all those emails are on your local computer, <b>you must copy them to a local folder</b>.  Trust me; we'll cover this under Restoring in just a second.  I like to create a folder structure like backups/year-month-day/account/ under Local Folders.  Then just drag the Inbox from the account into the appropriate folder in Local Folders/backup/ <i>while holding down the Ctrl key</i>.  You'll see a little plus sign on the folder as you drag it.  There's probably a context menu item for this, too.  Possibly Ctrl-C and Ctrl-V will work.  I dunno; I took the easy route and dragged it in.&#13;
+</p>&#13;
+<h3>Don't Connect Yet!</h3>&#13;
+<p>&#13;
+You might think that restoring would be a matter of connecting to the new server with the old account.  But oh, no: "synchronize" doesn't mean what you think it means.  &#13;
+</p><p>&#13;
+If you connect to the new server, Thunderbird will see that there are no emails there.  The server is the authority, so Thunderbird will happily synchronize by <i>deleting all your emails</i> so the local account matches the server account.&#13;
+</p><p>&#13;
+Don't panic; you copied them to a local folder.  Local folders don't get "synchronized".  I even put it in bold so you wouldn't miss it.  You did copy your emails to a local folder, right?  Right?&#13;
+</p><p>&#13;
+If not, don't panic.  Disconnect your network, start Thunderbird, and copy the emails to a local folder.  &#13;
+</p><p>&#13;
+If you've already connected to the new server, you're kinda stuck.  You might be able to do something by manually manipulating your Thunderbird profile, but that's beyond the scope of this post.  Check out MozillaZine for details.&#13;
+</p>&#13;
+<h3>Restoring</h3>&#13;
+<p>&#13;
+Once you've got a copy of your e-mails in your <b>Local Folders</b>, restoring is simple.  Just connect to the new server, panic when you see all your email is gone, and copy the mail from your Local Folder to you inbox.  &#13;
+</p><p>&#13;
+I do this in multiple steps: I use Ctrl-A in the Local Folders' inbox to select all those mails, then drag them <i>while holding down Ctrl</i> into the account's inbox.  (Again, Ctrl-C/Ctrl-V would proabably work, but I go for simplicity.)  It even keeps the right dates on the emails.  Then I copy the individual folders in the same way.&#13;
+</p>&#13;
+<h3>Done!</h3>&#13;
+<p>&#13;
+Simple enough, eh?  You don't need any extensions, you get all your emails, and it's easy to understand.  You can change IMAP servers and keep all your emails searchable and available from any computer.&#13;
+</p> 

@@ -1,0 +1,118 @@
+---
+layout: post
+status: published
+published: true
+title: 'Rating UML Editors: Dia'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2009-03-24 18:22:18 UTC
+permalink: "/archives/339-Rating-UML-Editors-Dia.html"
+categories:
+- Programming
+tags: []
+comments:
+- id: 670
+  author: Rajesh Yadav
+  author_email: rsjadhav26@gmail.com
+  author_url: http://www.easyunleditor.com
+  date: '1288271463'
+  content: You can also have a look at <a href="www.easyumleditor.com">EasyUML Editor</a>.
+    It is also a nice portal which can generate UML Diagrams from easy to use Textual
+    notations.
+- id: 674
+  author: Judebert
+  author_email: judebert@judebert.com
+  author_url: ''
+  date: '1289836796'
+  content: I did see that, but I'll have to look at it more closely sometime.  I admit
+    the idea is intriguing; almost like programming a UML diagram.
+- id: 1302
+  author: paul
+  author_email: leonpaul2@gmail.com
+  author_url: ''
+  date: '1340283492'
+  content: "I want to design some small database apps just for my personal use, so
+    want free tools.  I use a small Windows7 \r\n\r\nplatform, so nothing heavy-weight
+    like Eclipse.\r\n\r\nI was thinking to use HSQLDB and some article said it was
+    a good idea to use a UML tool called 'Dia' to do the \r\n\r\ntoplevel ERD design,
+    which would link into a tool called 'tedia2sql' to validate my design, and actually
+    build the \r\n\r\ndatabase in the target RDBMS.- i.e an small IDE.  Some hope
+    !\r\n\r\nAlthough Inkscape covered all my drawing needs until now, it has no UML
+    support, so as Dia had promise of the \r\n\r\nabove, I installed it and drew my
+    20+ table ERD.  But I was then unable to find a working tool to generate SQL \r\n\r\ncode
+    from the Dia file, or even validate the drawing was a correct ERD.  My 'ERD' currently
+    stands in isolation, \r\n\r\nunable to test or use. I have spent weeks searching
+    the web for alternatives, >95% UML articles are for non-SQL \r\n\r\ntargets. OMG,
+    the controlling body, states UML is tailored to the target system using 'Standard
+    Profiles', but \r\n\r\nhave not defined a Standard Profile for SQL !!  I imagine
+    lack of a common SQL Profile is a big hindrance using \r\n\r\nUML for db design.
+    \  \r\n\r\nI am a complete a newbie to UML modelling.  Last time I designed a
+    db, UML didnt exist, all I knew was simple 1:1, \r\n\r\n1:n, N;M relations, which
+    as I remember was sufficient. I gather only a very small subset of UML, and only
+    the \r\n\r\n'Class' diagram is needed to make a ERD. Dont think I need complexity
+    of ObjectOrientation, 3NF sufficient.\r\n\r\nObviously I would prefer NOT to have
+    to redraw my 20+ tables from scratch, but I see Dia has limited export \r\n\r\nformats,
+    its default being XML - no XMI.  It can export to SVG - which I tested works fine
+    in Inkscape - but I \r\n\r\nguess SVG contains no UML data, so maybe no use for
+    code generation ?  Dia can export to Visio format - is there a \r\n\r\nway I can
+    export to Visio, then re-export into XMI for importing into a better Editor ?\r\n
+    \r\nWhen I originally read the recomendation to use UML for the toplevel db design,
+    my expectation was to be able to \r\n\r\nvalidate the Class Diagram, then automatically
+    create the db in the target RDBMS - in my case HSQLDB.\r\n\r\nToday I came across
+    'Open modelsphere', and seeing from its user manual it had Validation, ODBC &
+    JDBC connections \r\n\r\nto at least Oracle, Informix, MySQL (couldn't see a 'Dataheet'
+    or 'Specification' on their site) having read their \r\n\r\nlink to 'Software
+    Review' was about to spend time evaluating it, when I thought to google more reviews
+    of it, and \r\n\r\ncame across your disparaging review dated 2009. \r\n\r\nI like
+    the requirements criteria you expressed, but I do need ERD-to-targetSQL, dont
+    need 'Sequence'.\r\n\r\nOpen Modelsphere has had 2 releases since then - which
+    I hope fix some of your criticisms.\r\n\r\nI imagine the market has changed in
+    last 3 years.  Any chance of you updating that review, and perhaps reviewing \r\n\r\nother
+    open source Design Tools that can complete more of the steps in progressing an
+    ERD to db build ?\r\n\r\nI thank you in advance for any assistance you can give."
+- id: 1303
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1340283689'
+  content: "Paul,\r\n\r\nI'm actually considering a new review format, which would
+    allow you to compare the entries based on your own criteria.  Of course, the review
+    would need to include the criteria you want to sort by; if I ever get around to
+    doing it, I'll be sure to include SQL workflow in the list.\r\n\r\nI'm afraid
+    I do all my SQL by hand, so I'm not familiar with any tools that take UML to SQL.
+    \ Sorry I couldn't help you."
+excerpt_separator: <a id="extended"></a>
+---
+<p><a class="serendipity_image_link" href="/progress/media/screenshots/dia.png"><!-- s9ymdb:899 --><img class="serendipity_image_left" width="110" height="97" style="float: left; border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/screenshots/dia.s9yThumb.png" alt="" /></a>&#13;
+I'm still <a href="/progress/archives/329-Rating-UML-Editors.html">looking for a UML editor that fits my criteria</a>, and I'm not stopping until I find one!  Today I tried <a href="http://projects.gnome.org/dia/">Dia</a>, another Open Source editor recommended by Ubuntu's package manager.  &#13;
+</p><p>&#13;
+Unfortunately, Dia is really a drawing program with UML objects, not a UML editor.  Let's look at the details.&#13;
+</p><a id="extended"></a><p>&#13;
+<u>Class and Sequence Diagrams:</u> <b>Poor.</b>  Class diagrams are simple to create and modify.  Sequence diagrams... not so much.  They have multiple problems that I'll go into in more detail; for now, let's just say that drawing class diagrams is fantastically easy, but sequence diagrams is rather difficult.&#13;
+</p><p>&#13;
+<u>Configurable Display:</u> <b>Very Good.</b>  You'd expect a drawing program to be configurable, and Dia is.  You can change colors to your heart's content, modify fonts and styles, and generally modify anything.  It goes a little deeper than that, though:  Dia's UML tools provide a myriad of options that modify your diagram in compliance with UML standards.&#13;
+</p><p>&#13;
+Of course, there are a lot of possibilities in the UML standards, and supporting them all takes a lot of dialog space.  Dia does a good job of hiding the complexity, mostly by using separate tabs for operations and attributes.  I think it could benefit from some context sensitivity, but I was never frustrated by creating a new element.&#13;
+</p><p>&#13;
+<u>Group Selection and Movement:</u> <b>Fair.</b>  In class diagrams, Dia provides outstanding group selection and movement.  In fact, it works just like a drawing tool.  Alignment is easy, too.  In sequence diagrams, things get a little harder.  Dia can't move the lifelines around as a group.  Stuff gets unstuck and has to be rerouted.  The process bars aren't resized when new method calls are made, and there's no attempt to keep the message lines straight.&#13;
+</p><p>&#13;
+<u>Infinite Undo:</u> <b>Outstanding!</b>  Dia seems to have an infinite undo queue.  I never ran into any problems with it.  &#13;
+</p><p>&#13;
+<u>Supports Synchronous, Asynchronous, and Reflexive Messages:</u> <b>Fail.</b>  There is no way to generate a reflexive message arrow.  Since Dia provides all the standard drawing tools, you might be able to fake it; I tried, but the arrow kept going the wrong way.  I need reflexive messages.&#13;
+</p><p>&#13;
+<u>Dynamic Document Size:</u> <b>Great.</b>  There was a moment when I thought I'd be hampered by page limits.  However, selecting past the viewport boundary quickly dispelled that idea.  After that, I had no trouble adding classes or lifelines past the boundary.&#13;
+</p><p>&#13;
+<u>Scrolling:</u> <b>Unsatisfactory.</b>  Dragging a selection past the boundaries causes Dia to scroll, but you're better off using the scrollbars.  Connecting message arrows to off-screen classes was a pain; there was no scrolling, so I had to either zoom out or make the connection in multiple steps.  Either way, there was no way to be certain that the line was actually straight.&#13;
+</p><p>&#13;
+<u>Shared Data Model:</u> <b>Fail.</b> Dia is just a drawing program, not a UML editor.  There is <em>NO DATA MODEL</em>.  While this makes creating quick diagrams easy, it makes maintenance a nightmare.  &#13;
+</p><p>&#13;
+<u>Supports Large Projects:</u> <b>Fail.</b>  Since there's no data model, there's no import capability.  There's also no consistency.  Your large project is nothing but a stack of diagrams, with no enforcement of consistency, uniqueness, or relatedness.  I suppose you could say that Dia supports large projects, since you can create all the diagrams you want.  But that's a little disingenuous, I think.&#13;
+</p><p>&#13;
+For niceties, Dia has the best alignment and spacing tools I've seen yet (although it doesn't have ArgoUML's "Broom").  The orthogonal inheritance lines were no problem, even when I stacked the dashed lines up.  Image saving was a breeze, and it saved only the portion of the diagram that was actually populated.  While I thought the styles were a little large and blocky, they're ideal for projecting to a room full of programmers during peer review: readable from the back.  And if I really didn't like it, I could've changed the styles.&#13;
+</p><p>&#13;
+<u>Final Verdict:</u>  Dia is a drawing tool, much as its name implies.  It has some nice UML elements, particularly with respect to class diagrams.  If I ever need to whip up a class diagram for somebody, I might reach for Dia.  But with its poor sequence diagram functionality and utter lack of a data model, I can't possibly use it for my serious work.&#13;
+</p>

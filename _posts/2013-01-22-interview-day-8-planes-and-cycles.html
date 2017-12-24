@@ -1,0 +1,77 @@
+---
+layout: post
+status: published
+published: true
+title: 'Interview Day 8: Planes and Cycles'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2013-01-22 23:49:00 UTC
+permalink: "/progress/permalink/Interview8.html"
+redirect_from:
+- "/archives/450-Interview-Day-8-Planes-and-Cycles.html"
+categories: []
+tags: []
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+Nice break.  Time to get back with it; I'm running out of time, and I'm sure there's stuff I don't remember.  &#13;
+</p><p>&#13;
+I finish studying up linked lists from <i>Programming Interviews Exposed</i>.  Everything is pretty straightforward, but this last problem gets me: you're given a linked list; either the last node points to null (the list is normal, and <i>acyclic</i>), or the last node points to one of the earlier nodes in the list, in which case it has no end and is <i>cyclic</i>.  Write an algorithm to determine which.  &#13;
+</p><p>&#13;
+I progressed very quickly to the obvious answer: visit each node, and check whether it points to any of the earlier nodes in the list.  No extra storage required, but it's O(n^2).  &#13;
+</p><p>&#13;
+The answer, it turns out, I never would have gotten by myself: visit all the nodes at different rates.  Have a slow pointer advancing one node at a time, and a fast pointer advancing two nodes at a time; if the fast pointer reaches an end, you're done, and you've only visited 1.5 times the nodes, which is O(n).  If the fast pointer ever reaches the slow pointer, you've discovered a cycle visiting only 3 times the nodes... which is O(n).  Of course, the author made an error that could result in a null pointer exception, and might accidentally skip the slow pointer the first time around, but those were easy to identify and rectify.  &#13;
+</p><p>&#13;
+The brain teaser, <a href="http://www.techinterview.org/post/487221758/crazy-guy-on-the-airplane">Crazy Guy on the Airplane from techinterview</a>, actually hammered home a rule of problem solving.&#13;
+</p><p>&#13;
+There are 100 passengers, numbered 1 through 100, boarding an airplane with 100 seats, also numbered 1 through 100.  They'll be boarding in numerical order, and they'll sit in their numbered seat if it's available; otherwise they'll sit in a random available seat.&#13;
+</p><p>&#13;
+Problem is, passenger #1 is crazy.  He randomly picks a seat, regardless of whether his seat is available.&#13;
+</p><p>&#13;
+What's the probability that passenger #100 will get to sit in his own seat?&#13;
+</p><a id="extended"></a><p>&#13;
+I proposed this brain teaser to my wife and kids while I tried to solve it.  We collaborated, came up with our best answer, and then discovered that the website didn't have a solution!  Luckily, it did have a link, which convinced us of the proper solution.&#13;
+</p><p>&#13;
+At first, we tried adding together probabilities: there's a 1/100 chance that passenger #1 will sit in seat #1, then everybody else sits in their own seat, including passenger #100.  That's 1%.  Then there's a 1/100 chance that passenger #1 will sit in seat #99, and when passenger #99 comes in, he'll have a 1/2 chance, picking between seat #1 and seat #100.  That's 50%, so now we've got a 51% chance of success.&#13;
+</p><p>&#13;
+Of course, adding probabilities doesn't work like that.&#13;
+</p><p>&#13;
+Melissa said that there were 100 factorial ways of arranging the passengers, and only 1 with passenger #100 in seat #100, so the probability was 1/100!.  I disagreed, pointing out that not all the arrangements were valid: the passengers before wherever-passenger-number-one-sits are in a predetermined order.  Additionally, I claimed that there are more ways for passenger #100 to get his seat.&#13;
+</p><p>&#13;
+My wife tried to pattern it to death.  We had already realized that, for passenger #100 to get his seat, someone else had to choose seat #1.  She said that passenger #1 had a 1/100 chance of sitting in that seat.  Then, if passenger #2 got a choice, she would have a 1/99 chance of sitting there.  Multiplying the probabilities together, that's 1/100 * 1/99 * 1/98 * 1/97 * etcetera etcetera, or 1/100!.  Melissa felt vindicated, but I figured that that only applies when everyone must make those exact decisions independently.  &#13;
+</p><p>&#13;
+We really needed the chance of passenger #1 picking his own seat, plus the chance of passenger #1 picking seat #2 times passenger #2 picking seat #1, etcetera.  1/100 + (1/100 * 1/99) + (1/100 * 1/98) + etcetera etcetra, which is 1/100 * (1 + 1/99 + 1/98...), which is very small.  But it discounts all the cases where more than two passengers make decisions.  And it's adding probabilities.&#13;
+</p><p>&#13;
+This led me to the understanding that, no matter how many times we make a random choice, it's the same as passenger #1 deciding to sit in the final randomly-chosen seat.  The arrangement of the passengers in between don't matter; it's the number of randomly chosen seats that matters.  That led me to adding the probabilities of success if passenger #1 chose seat #100 (0%), plus if he chose seat #2 (1/99!), plus if he chose seat #3 (1/98!), etc.  Of course, that's adding probabilities again.  But we all agreed I was on to something.&#13;
+</p><p>&#13;
+Well, we know we can multiply probabilities of failure occurring, then subtract from 1.  So we started multiplying again: 1/100 for passenger #1, 1/99 for passenger #2... ah, 1/100! for someone else to choose seat #100.  That's a very small number; if that's the probability of failure, then the probability of success is virtually guaranteed!&#13;
+</p><p>&#13;
+It just didn't feel right, though.  And sure enough, the forum convinced us we were wrong.&#13;
+</p>&#13;
+<hr style="margin:0.5em auto; width:50%" />&#13;
+<p>&#13;
+And here's where I learned one of the basics I used to teach to elementary school kids: <b>if the problem is too hard, try solving an easier problem</b>.&#13;
+</p><p>&#13;
+We had already examined the case where passenger #99 has to make the choice. At that point, only seat #1 and seat #100 are left; that's a 50% chance.  And that's just like only two people boarding the plane.&#13;
+</p><p>&#13;
+But what if there are <i>three</i> people?  Then they might be arranged 1-2-3, 2-1-3, 3-1-2, or 3-2-1.  1-3-2 and 2-3-1 are not possible, because if passenger #1 leaves seat #2 open, passenger #2 <i>will</i> sit there.  So there are 4 valid cases, and 2 of them have the last passenger in his seat.  That's 50%.&#13;
+</p><p>&#13;
+I'm starting to see a pattern here.&#13;
+</p><p>&#13;
+In fact, if you work out the patterns for 4 people, you get 50%.  5 people can have no more than 60 patterns, so you can even do that, if you feel like it.  It'll come out 50%.&#13;
+</p><p>&#13;
+So there's your answer: No matter how many people are boarding, the last passenger has a 50% chance.  It's easy to see when you <b>solve an easier problem</b>.&#13;
+</p><p>&#13;
+But there's an easier way to understand it.&#13;
+</p><p>&#13;
+During our earlier ruminations, we had already determined that if anyone else chooses seat #1, passenger #100 gets his seat.  And of course, if anyone randomly chooses to sit in seat #100, he's screwed.  That means that, no matter how many choices the passengers make, the only choice that makes any difference is between those two seats.  And the probability of picking either of the "hot seats" is exactly the same.  It's 1/100 for each seat if passenger #1 makes the important choice, and 1/99 if passenger #2 does it, but <i>it's always the same for both seats</i>.  &#13;
+</p><p>&#13;
+So naturally the end result is 50%.&#13;
+</p><p>&#13;
+Now I'm making a list of interview problem-solving techniques.  They include the stuff I taught the kids, like drawing a picture, finding a pattern, and of course, solving an easier problem!&#13;
+</p>

@@ -1,0 +1,41 @@
+---
+layout: post
+status: published
+published: true
+title: 'Interview Day 7: Palindrome Brain Teaser'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2013-01-21 22:12:04 UTC
+permalink: "/progress/permalink/Interview7.html"
+redirect_from:
+- "/archives/449-Interview-Day-7-Palindrome-Brain-Teaser.html"
+categories:
+- Activities
+tags:
+- interview
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+After so much coding, I decided to take it easy with a brain teaser.  <a href="http://www.techinterview.org/post/526332105/palindromes">I liked this techinterview palindrome puzzle.</a>  October 21, 2001 was a palindromic date, when written in MMDDYYYY format.  What was the latest palindromic date previous to that?&#13;
+</p><a id="extended"></a><p>&#13;
+Well, it certainly can't be anywhere in 2001, since the palindrome of the four-digit year makes up the four-digit month and day.&#13;
+</p><p>&#13;
+The previous year was 2000, which isn't usable because there is no month 00.  &#13;
+</p><p>&#13;
+The 1900s all yield a day of 91 (like 12911921), which is ridiculous.  Similarly, the 1800s all yield 81, the 1700s all yield 71... the biggest century before 2000 which could be a day of the month is 1300.  Since that's my most significant tuple, I'm looking for something like AB3113BA.&#13;
+</p><p>&#13;
+I could look for the biggest month, but that's putting the cart before the horse: I don't want the biggest month, I want the biggest <i>year</i>.  99 yields a ridiculous month.  21 yields December (12); that'll work, but is it the biggest year?&#13;
+</p><p>&#13;
+Nope; I could use month 03 and get 30.  That'll work all the way to 09, giving me 09311390.&#13;
+</p><p>&#13;
+But wait... was there a 31st of September?  (Counts knuckles...) Nope!  September is a 30-day month!  &#13;
+</p><p>&#13;
+Well, the next available year is 1380.  08 is August, which <b>does</b> have 31 days.  &#13;
+</p><p>&#13;
+So, 08/31/1380 was the last palindromic date before 10/02/2001.  Holy moley, 621 years!  That's quite a wait!&#13;
+</p>

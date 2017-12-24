@@ -1,0 +1,114 @@
+---
+layout: post
+status: published
+published: true
+title: Christmas Roundup Game
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2004-12-12 17:44:00 UTC
+permalink: "/progress/Roundup.html"
+redirect_from:
+- "/archives/51-Christmas-Roundup-Game.html"
+categories:
+- Java
+- Christmas Roundup
+tags: []
+comments:
+- id: 389
+  author: Don Chambers
+  author_email: don.chambers@optional-necessity.com
+  author_url: http://www.optional-necessity.com
+  date: '1226333360'
+  content: Very cute game Judebert!
+excerpt_separator: <a id="extended"></a>
+---
+<h2>How To Play</h2>&#13;
+Santa was so far behind schedule he was still reading the list <i>while he was driving the sleigh!</i>  He was so distracted he nearly crashed into an airplane!  He managed to steer out of the way, but he had to swerve so hard he spilled his bag of toys.&#13;
+<p>&#13;
+Only Santa can check his list, so he needs <b>you</b> to save all the toys he spilled.  When you surround a present with your magic silly string, it will be warped back to Santa's bag.  Surround more than one present at a time for extra points!  You must catch the presents before they hit the ground, or they'll break.  Luckily, some elves are waiting to catch any presents you miss, but if even one present breaks, Christmas will be ruined for some nice little boy or girl.&#13;
+&#13;
+<a id="extended"></a></p><p>&#13;
+</p><center>
+  <h3>Good Luck!</h3>
+</center>&#13;
+<center>&#13;
+<hr width="80%" />&#13;
+<applet archive="/progress/media/Roundup.jar" code="Roundup" width="640" height="480">&#13;
+</applet>&#13;
+<hr width="90%" />&#13;
+</center>&#13;
+<h2>Scoring</h2>&#13;
+250+: Santa (Old School gamer)&#13;
+<br />&#13;
+200+: Mrs. Claus (Gamer's wife)&#13;
+<br />&#13;
+170+: Elf (Gamer's 9-year-old daughter)&#13;
+<br />&#13;
+150+: Apprentice Elf (Gamer's 6-year old daughter)&#13;
+<br />&#13;
+&lt;150: New Recruit (Need more practice)&#13;
+<p>&#13;
+</p><h2>Tips</h2>&#13;
+<ul>&#13;
+  <li>You really only need to get the little dot in the upper-left corner of the gift (for now).  &#13;
+  </li>
+<li>You can't make your silly string lasso longer by moving faster.  An accurate, slow loop will catch presents more easily than a fast, sloppy one.&#13;
+  </li>
+<li>Capturing stragglers might let you capture a group later for a bonus.&#13;
+  </li>
+<li>You can leave slow-falling presents until last; faster-falling presents might catch up to make a bonus group.&#13;
+  </li>
+<li>Each level, your lasso gets longer, and you get an extra present falling.  Use the longer lasso to rack up bigger bonus groups!&#13;
+</li>
+</ul>&#13;
+<h2>Boring Stuff (unless you're a programmer)</h2>&#13;
+Determining whether a point is in a polygon is an old problem.  There are two accepted methods to solve it: winding number and crossing number.  The winding number tries to calculate how many times the polygon circles the point, so it's pretty slow; but it counts unusual cases correctly.  &#13;
+Crossing number counts how many times a line shooting from the point crosses the polygon; that's fast, and usually an axis is used, making the algorythm even faster.  It's less correct, though, especially in cases of polygons that cross themselves.&#13;
+<p>&#13;
+Christmas Roundup uses a hybrid algorythm.  It counts the number of times the polygon, winding clockwise, crosses an axis shooting out from the point.  I developed the method independently, but it turns out <a href="http://softsurfer.com/Archive/algorithm_0103/algorithm_0103.htm">others figured it out first.</a>  Their explanation is more detailed, but our methods are very similar.  I just decided to make it a game.&#13;
+</p><p>&#13;
+As you can see above, the method works.  I think it makes a reasonably entertaining game, similar to Atari's Quantum (an old vector arcade game that made you lasso atoms).  I'll bet that used a counting number, though.  And Santa was definitely not involved.&#13;
+</p><p>&#13;
+</p><h2>Crass Commercialism</h2>&#13;
+I do this kind of stuff because it's in my nature.  I'm still gonna keep doing it, even if I don't get loads of money.  But I'm doing all kinds of other neat stuff, too, and I could sure use the help.  If you like this, or one of my <a href="/index.html">other projects,</a> consider donating a small sum to keep my spirits up and further the advancement of civilization.&#13;
+<div class="donatebox">&#13;
+<form class="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post">&#13;
+<input type="hidden" name="cmd" value="_xclick" />&#13;
+<input type="hidden" name="business" value="judebert@judebert.com" />&#13;
+<input type="hidden" name="item_name" value="Palm Programs" />&#13;
+<input type="hidden" name="no_shipping" value="1" />&#13;
+<input type="hidden" name="amount" value="1.00" />&#13;
+<input type="hidden" name="cn" value="Comments" />&#13;
+<input type="hidden" name="currency_code" value="USD" />&#13;
+<input type="hidden" name="tax" value="0" />&#13;
+<input type="hidden" name="lc" value="US" />&#13;
+<input type="image" src="donate_1.gif" border="0" name="submit" alt="Donate one dollar" title="Donate one dollar" />&#13;
+</form>&#13;
+<form class="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post">&#13;
+<input type="hidden" name="cmd" value="_xclick" />&#13;
+<input type="hidden" name="business" value="judebert@judebert.com" />&#13;
+<input type="hidden" name="item_name" value="Palm Programs" />&#13;
+<input type="hidden" name="no_shipping" value="1" />&#13;
+<input type="hidden" name="amount" value="5.00" />&#13;
+<input type="hidden" name="cn" value="Comments" />&#13;
+<input type="hidden" name="currency_code" value="USD" />&#13;
+<input type="hidden" name="tax" value="0" />&#13;
+<input type="hidden" name="lc" value="US" />&#13;
+<input type="image" src="donate_5.gif" border="0" name="submit" alt="Donate five dollars" title="Donate five dollars" />&#13;
+</form>&#13;
+<form class="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post">&#13;
+<input type="hidden" name="cmd" value="_xclick" />&#13;
+<input type="hidden" name="business" value="judebert@judebert.com" />&#13;
+<input type="hidden" name="item_name" value="Palm Programs" />&#13;
+<input type="hidden" name="no_shipping" value="1" />&#13;
+<input type="hidden" name="cn" value="Comments" />&#13;
+<input type="hidden" name="currency_code" value="USD" />&#13;
+<input type="hidden" name="tax" value="0" />&#13;
+<input type="hidden" name="lc" value="US" />&#13;
+<input type="image" src="donate_other.gif" border="0" name="submit" alt="Choose an amount to donate" title="Choose an amount to donate" />&#13;
+</form>
+</div>

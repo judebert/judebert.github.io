@@ -1,0 +1,190 @@
+---
+layout: post
+status: published
+published: true
+title: Starting a Stealth X Server Display
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2007-08-02 17:15:54 UTC
+permalink: "/archives/158-Starting-a-Stealth-X-Server-Display.html"
+categories:
+- Tutorials
+tags: []
+comments:
+- id: 383
+  author: Mike
+  author_email: ''
+  author_url: ''
+  date: '1219945641'
+  content: "You do realize that using _standard_ VNC would create a new X server and
+    make it available remotely.  In other words, there's no reason to use the x11vnc
+    module, which was designed specifically for exporting the X:0 display.  And, since
+    the VNC-created X session is not connected to your video card, the kids couldn't
+    get to it with Ctrl-Alt-F<anything>.\r\n\r\nGetting your, \"accustomed desktop,\"
+    in the VNC session should be as easy as editing ~/.vnc/xstartup to call the scripts
+    you want (or linking that file to ~/.xinitrc or ~/.xsession or whatever you're
+    using).  Check out vncserver ( http://www.tightvnc.com/vncserver.1.html or http://www.realvnc.com/products/free/4.1/man/vncserver.html
+    ).\r\n\r\nNote, also, that Ctrl-Alt-Shift-F5 is equivalent to Ctrl-Alt-F17 on
+    a 12-function keyboard (the shift adds 12 to the printed numbers).  So, if your
+    system does as you imply--has only 5 vty's defined, so X:0 uses 6, and X chooses
+    a vty by using <max-non-X-vty>+<display number> (mine simply chooses the next
+    unused vty for any new X session), the kids could always use Ctrl-Alt-Shift-F5
+    to get to the display you created."
+- id: 385
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1220147713'
+  content: You're absolutely correct.  In fact, that prevents me from having to modify
+    the Xwrapper.config, too.  I've modified the article to reference your comment.  Thanks!
+- id: 687
+  author: Paul
+  author_email: ''
+  author_url: ''
+  date: '1295648589'
+  content: "Another option is linuxvnc, which exports any of the local ttys through
+    vnc. Then you can control say, tty1 (CTRL+Alt+F1), login, startx -- :10, CTRL+Z,
+    bg, disown, exit and continue in your SSH session.\r\n\r\nMike's is the first
+    thing I thought of when I read your requirements, but there are other reasons
+    for wanting to start a local X11 server remotely without restarting the [kxg]dm
+    service. Your write-up is exactly what I needed before I discovered the easier
+    linuxvnc."
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+Wow, did that ever bring out my Alpha Geek!  This just needs to be recorded as a HOWTO.  Too bad my style is so narrative.  :-O&#13;
+</p><p>&#13;
+All I wanted was to remotely start an X server that my kids couldn't get to.  I'm running Debian unstable, and I routinely use an ssh tunnel to connect to my home computer from anywhere: work, travel, friends' houses... I use x11vnc to export a real X display, providing all the comforts of home.&#13;
+</p><p>&#13;
+This time, the kids were already running a desktop of their own.  I could've reconfigured gdm to start multiple displays, but when I restarted, I'd probably kill their desktop.  I needed a way to start a new X server -- preferably using my standard X session, restoring my accustomed desktop -- on a display other than :0.  And hey, while we're at it, let's start it on something the kids can't get to with CTRL+ALT+(&lt;F6&gt; through &lt;F12&gt;) , like :10.&#13;
+</p><p>&#13;
+Thus began my descent into the Xwrapper.config, startx, and xauth...&#13;
+</p><a id="extended"></a><p><b><u>Note:</u></b> This information is out of date.  I do some pretty silly things trying to reach my objective.  <a href="#comments">The first comment, below, gives a much easier way to start a display your kids can't see.</a>  It even works without any modifications on my Debian system.&#13;
+</p>&#13;
+<h3>A Solution</h3>&#13;
+<p>&#13;
+First, the background.  We are talking about a Debian Lenny/Unstable system.  It's behind a firewall running Debian Etch/Stable/4.0.  From a remote site, I can <code>ssh -L 5900:lenny:5900 etch.dynip.org</code>, setting up a tunnel for VNC between the remote computer and the desktop, and providing a command line on the firewall.  From there I ssh to lenny to run my commands.  <b>The Quest:</b> start my X desktop on a display that can't be reached with the standard shortcut keys, then connect to it using VNC on the remote computer.  (Whew!)&#13;
+</p><p>&#13;
+Of course, every good quest begins with a Google search.  This revealed multiple possibilities; I chose to try manually starting the X display with startx.  The expected invocation was:&#13;
+</p><p>&#13;
+<code>startx -- :10</code>&#13;
+</p><p>&#13;
+This failed for me right away, with:&#13;
+</p><p>&#13;
+<quote>X: user not authorized to run the X server, aborting.</quote>&#13;
+</p><p>&#13;
+<a name="Xwrapper" id="Xwrapper"></a>&#13;
+More Googling, and I realize I need to change my Xwrapper.config, so instead of "allowed_users=console", it says "allowed_users=anybody".  Why?  Aren't I logged in to a console via ssh?  Yes, but with "screen" running, the X server can't really tell that I'm on a console, and I can't find anything on Google to fix that.  The Debian Way to fix this is with the following magic spell:&#13;
+</p><p>&#13;
+<code>dpkg-reconfigure x11-common</code>&#13;
+</p><p>&#13;
+(not xserver-common, as some sites led me to believe).  That requires root privileges, so either su or sudo, however your system is configured.  (Note to other geeks: you may think you can skip this and just <code>sudo startx</code>.  And you can, but then there's no way to connect to the resulting display that I can discover.)&#13;
+</p><p>&#13;
+That allowed me to call <code>X</code>.  But then came problem number two:&#13;
+</p><p>&#13;
+<quote>xauth:  error in locking authority file /home/lenny/.Xauthority</quote>&#13;
+</p><p>&#13;
+Followed by several repetitions of:&#13;
+</p><p>&#13;
+<quote>AUDIT: Thu Aug  2 13:52:50 2007: 4862 X: client 1 rejected from local host (uid 1000)&#13;
+<br />Xlib: connection to ":10.0" refused by server&#13;
+<br />Xlib: No protocol specified</quote>&#13;
+</p><p>&#13;
+This requires an additional ssh session to find and kill, since startx appears impervious to CTRL+C.  More Googling, with no exact answers.  I learn lots about X, though.  The Google results suggest that the xinit scripts are trying to start a client, but they're not <b>authorized</b> to connect.  The <code>startx</code> script is supposed to generate magic cookies and other authority files.  Looking there, I find what looks like a problem.  The XAUTHORITY variable, indicating which file the clients are supposed to find their magic cookie in, is set to $HOME/.Xauthority:&#13;
+</p><p>&#13;
+<code>&#13;
+if [ x"$XAUTHORITY" = x ]; then&#13;
+    XAUTHORITY=$HOME/.Xauthority&#13;
+    export XAUTHORITY&#13;
+fi&#13;
+<code>&#13;
+</code></code></p><p>&#13;
+...whereas the server is pointed at $HOME/.serverauth.&gt;ID&lt;:&#13;
+</p><p>&#13;
+<code>xserverauthfile=$HOME/.serverauth.$$&#13;
+serverargs=${serverargs}" -auth "${xserverauthfile}&#13;
+</code>&#13;
+</p><p>&#13;
+So, I change the <code>XAUTHORITY</code> variable to <code>$HOME/.serverauth.$$</code>, and my error messages go away!&#13;
+</p><p>&#13;
+Of course, the terminal is... occupied.  Nothing CTRL+Z followed quickly by <code>bg</code> doesn't fix.  Then I try to start x11vnc, to export my new display.  Enter problem number 3, buried in what looks like reams of output:&#13;
+</p><p>&#13;
+<quote>Xlib: connection to ":10.0" refused by server&#13;
+<br />Xlib: No protocol specified&#13;
+<br />&#13;
+<br />&#13;
+<br />02/08/2007 06:23:42 ***************************************&#13;
+<br />02/08/2007 06:23:42 \*\*\* XOpenDisplay failed (:10)&#13;
+<br />&#13;
+<br />\*\*\* x11vnc was unable to open the X DISPLAY: ":10", it cannot continue.&#13;
+<br />\*\*\* There may be "Xlib:" error messages above with details about the failure.&#13;
+</quote>&#13;
+&#13;
+</p><p>&#13;
+This is obviously another authority problem, I figure.  Looking at the <code>startx</code> script, I realize that its clients all have the <code>XAUTHORITY</code> set, but anything outside the script (like the original shell I'm using) <b>don't</b>.  I change my incantation slightly, setting the variable beforehand:&#13;
+</p><p>&#13;
+<code>XAUTHORITY=/home/lenny/.serverauth.10073 x11vnc -display :10 -rfbport 5900</code>&#13;
+</p><p>&#13;
+You may wonder what all that hand-waving means.  First, I set the <code>XAUTHORITY</code> variable to point at the correct file.  Then, I call <code>x11vnc</code>, to export my display.  I tell it which display to use with <code>-display :10</code>.  This would make it broadcast on port 5910, but since I haven't tunneled that port, I tell it to use 5900 instead with <code>-rfbport 5900</code>.&#13;
+</p><p>&#13;
+Finally, on my remote machine, I start my VNC viewer, point it at <code>localhost:5900</code>, and start using my new, stealthy desktop.  Bwaaaaah-hahahahaha!&#13;
+</p>&#13;
+<hr />&#13;
+<h3>A Better Solution</h3>&#13;
+<p>&#13;
+But wait!  I haven't filed a bug report on the <code>startx</code> script yet!  That's certainly my duty, as a beta-tester.  It's the easiest way to contribute to the community that provided me with all these Free tools.  &#13;
+</p><p>&#13;
+<b>That's</b> a big step.  I may call myself the Alpha Geek, but the people who put these things together are WAY smarter than me.  They're the Omega Geeks.  If I'm having problems, maybe it's not their code; maybe it's my limited understanding.&#13;
+</p><p>&#13;
+I examine the code again, read some more Google, and after suitable meditation, I reach enlightenment: the code checks my default authority file and uses the cookie there if it's available!  All I need to do create an <code>.Xauthority</code> in my home directory, with a cookie for each display I may need to use.  There are even tools to do it!&#13;
+</p><p>&#13;
+I return the <code>startx</code> script to normal.  Besides this benefit, I won't have to specify an <code>XAUTHORITY</code> for <code>x11vnc</code>, meaning I can automate things later on.&#13;
+</p>&#13;
+<h4>One-Time Steps</h4>&#13;
+<p>&#13;
+There are scripts online that can simplify this, but I like doing things interactively to learn.  I start by generating a nice random-number cookie with:&#13;
+</p><p>&#13;
+<code>dd if=/dev/urandom count=1 | md5sum</code>&#13;
+</p><p>&#13;
+Then I add a cookie for my display to my default authentication file:&#13;
+</p><p>&#13;
+<code>&#13;
+xauth add :10 . &lt;my cookie&gt;&#13;
+</code>&#13;
+</p><p>&#13;
+(I had an error about being unable to lock the <code>.Xauthority</code>, but I just deleted it and tried again.)&#13;
+</p><p>&#13;
+If you didn't <a href="#Xwrapper">reconfigure the Xwrapper.config</a> the first time around, do it now.  If it's not set to allowed_users="anybody", you won't be able to start X unless you're root, which causes other problems.&#13;
+</p>&#13;
+<h4>Standard Launch Sequence</h4>&#13;
+<p>&#13;
+Whenever I want to start my stealth display, I log in to my firewall and create the tunnel:&#13;
+</p><p>&#13;
+<code>ssh -l etch -L 5900:lenny:5900 etch.dynip.org</code>&#13;
+</p><p>&#13;
+From my firewall, I log on to my home computer:&#13;
+</p><p>&#13;
+<code>ssh -l lenny lenny</code>&#13;
+</p><p>&#13;
+On my home computer, I run <code>startx</code>, specifying a display that's in my <code>$HOME/.Xauthority</code>:&#13;
+</p><p>&#13;
+<code>startx -- :10 &amp;</code>&#13;
+</p><p>&#13;
+The little '&amp;' in there makes it run in the background, so I can continue to use the terminal.  (Otherwise I'd have to <code>ssh</code> in from a new window.)  After it quiets down, and I've decided it's started everything it needs, I start <code>x11vnc</code>.  This time, the cookie for the display is already in the default location, so I don't have to specify it:&#13;
+</p><p>&#13;
+<code>x11vnc -display :10 -rfbport 5900</code>&#13;
+</p><p>&#13;
+Finally, from my remote computer, I start my VNC viewer.  I tell it to open&#13;
+</p><p>&#13;
+<code>localhost:5900</code>&#13;
+</p><p>&#13;
+and I get a display of my home computer desktop.  (Some people may have to actually specify 127.0.0.1:5900.)  &#13;
+</p>&#13;
+<hr />&#13;
+<p>&#13;
+Now, if anybody knows how to avoid allowing anybody to open an X display, let me know.  I'd like to make this bulletproof.&#13;
+</p>

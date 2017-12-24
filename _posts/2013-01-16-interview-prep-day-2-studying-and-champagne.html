@@ -1,0 +1,202 @@
+---
+layout: post
+status: published
+published: true
+title: 'Interview Prep Day 2: Studying and Champagne '
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2013-01-16 11:50:00 UTC
+permalink: "/progress/permalink/Interview2.html"
+redirect_from:
+- "/archives/444-Interview-Prep-Day-2-Studying-and-Champagne.html"
+categories:
+- Programs
+- Java
+- Activities
+- Web Activities
+- Programming
+- The Attic
+tags:
+- alpha geek
+- interview
+- java
+- programming
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+Today I only studied a little bit.  I had too much other stuff to do.  But I did manage to find a <a href="http://www.geeksforgeeks.org/find-water-in-a-glass/">nice brain teaser from GeeksForGeeks.org</a>.&#13;
+</p><p>&#13;
+Imagine a champagne pyramid, but in only two dimensions.  Like this:&#13;
+</p><pre>&#13;
+Level 1:    1&#13;
+Level 2:   1 2&#13;
+Level 3:  1 2 3&#13;
+</pre><p>&#13;
+</p><p>&#13;
+Of course, we could have as many levels of this "pyramid" as we liked.&#13;
+</p><p>&#13;
+All the glasses are the same.  When you overfill Level 1 glass 1, the overflow goes half to the left (Level 2 glass 1) and half to the right (Level 2 glass 2).  Every time a glass is overfilled, half the overflow goes to the left and half to the right.&#13;
+</p><p>&#13;
+Find a method to tell me how much champagne is in any glass, when I tell you how much I poured into the top glass.&#13;
+</p><p>&#13;
+For instance, if I say I poured 4 glassfuls, and I want to know about  Level 3 glass 3, you'd tell me it had 0.25 glassfuls.&#13;
+</p>&#13;
+<a id="extended"></a><p>&#13;
+My middle daughter had some trouble with the overflow not spilling.  I told her to imagine that the glasses were actually pitchers, with spouts on either side.  It seemed to help.  We also decided to use "cup" instead of "glass", because it's also a unit of volume.  Better yet, it's shorter.&#13;
+</p><p>&#13;
+If you've got kids in any advanced algebra class, you start seeing Pascal's Triangle everywhere.  I can definitely see it here; it specifies the relative rate of filling for any cup.  But that doesn't help me much.  &#13;
+</p><p>&#13;
+For the first few minutes, I kept trying to use Pascal's Triangle.  I added numbers together, I tested all kinds of solutions... all dead ends.&#13;
+</p><p>&#13;
+Next I tried to solve an easier problem: how much water needed to be poured into the top before it started overflowing into any particular level of the pyramid?  Also non-helpful.&#13;
+</p><p>&#13;
+I eventually gave up on any mathematical answer.&#13;
+</p><p>&#13;
+Time to make a program.&#13;
+</p><p>&#13;
+My first, naive impulse was to make a tree.  You fill the first cup, allocate some new cups on the next level, assign them each half of the overflow, and go to the next node in a breadth-first iteration, continuing until you run out of water.&#13;
+</p><p>&#13;
+Okay, that would work, but it's too far.  You should actually stop as soon as you run out of water, or you've reached the level of your cup.&#13;
+</p><p>&#13;
+Regardless, it's a linear solution.  O(n) time complexity, with O(1) storage.  I think I can do better.&#13;
+</p><p>&#13;
+The tree structure is also a little complicated for this problem.  Even though it looks ideal -- that pyramid looks <b>just</b> like a tree -- I'll be asked to retrieve the cup by its level and index.  That's not ideal for a tree.&#13;
+</p><p>&#13;
+I decided to try a recursive algorithm, using <b>NO</b> storage.  To make that work, I'd step backwards from my cup, calling a "flow through" method for my left and right parents.  A call to a cup outside the bounds of the level would just return 0.  The call to the top cup just returns the total amount of water.  Every other call adds half of each parent's "flow through", minus the 1c required to fill the parent. (So, if 1.5c flows through one parent, I get half of 0.5c from him.)&#13;
+</p>[code]&#13;
+package pascalcups;&#13;
+&#13;
+/**&#13;
+ * Assuming a pyramid of cups, pour a given number of cupfuls of liquid into&#13;
+ * the topmost cup.  Find how much liquid is in any cup by its row and index.&#13;
+ * &#13;
+ * This method works, and it looks really efficient... but the debug output&#13;
+ * shows that at row 2, higher nodes can be visited multiple times.&#13;
+ * &#13;
+ * There must be a better way.&#13;
+ * &#13;
+ * @author judebert&#13;
+ *&#13;
+ */&#13;
+public class Attempt1 {&#13;
+	public static void main(String args[]) {&#13;
+		int row = -1;&#13;
+		int cup = -1;&#13;
+		double water = -1.0;&#13;
+		if (args.length &lt; 3) {&#13;
+			usage();&#13;
+			System.exit(-1);&#13;
+		}&#13;
+		try {&#13;
+			row = Integer.valueOf(args[0]);&#13;
+		} catch (NumberFormatException e) {&#13;
+			System.out.println("Error getting row of cup! " + e);&#13;
+			usage();&#13;
+			System.exit(-2);&#13;
+		}&#13;
+		try {&#13;
+			cup = Integer.valueOf(args[1]);&#13;
+		} catch (NumberFormatException e) {&#13;
+			System.out.println("Error getting index of cup! " + e);&#13;
+			usage();&#13;
+			System.exit(-3);&#13;
+		}&#13;
+		try {&#13;
+			water = Float.valueOf(args[2]);&#13;
+		} catch (NumberFormatException e) {&#13;
+			System.out.println("Error getting amount of water! " + e);&#13;
+			usage();&#13;
+			System.exit(-4);&#13;
+		}&#13;
+		if (row &lt; 0 || cup &lt; 0) {&#13;
+			System.out.println("Row and cup must be at least 0!");&#13;
+			System.exit(-5);&#13;
+		}&#13;
+		System.out.println("Finding water in cup " + cup + " in row " &#13;
+                  + row + " from pouring " + water + " cupfuls into top cup...");&#13;
+		double through = pouredInto(row, cup, water);&#13;
+		System.out.println("" + Math.min(1.0, through));&#13;
+	}&#13;
+	&#13;
+	private static void usage() {&#13;
+		System.out.println("This program finds the amount of liquid in a " &#13;
+                  + "particular cup in a pyramid.");&#13;
+		System.out.println("You must provide the row and index of the "&#13;
+                  + "cup, as well as the number of ");&#13;
+		System.out.println("cupfuls of water poured into the top cup.");&#13;
+		System.out.println("We're all programmers here: the top cup is "&#13;
+                  + "the 0th cup in the 0th row.");&#13;
+	}&#13;
+	&#13;
+	private static double pouredInto(int row, int cup, double total) {&#13;
+		double volume = 0.0;&#13;
+		// The top cup tries to hold all the water, and spills over&#13;
+		if (row == 0 &amp;&amp; cup == 0) {&#13;
+			System.out.println("I (0,0) got a total of " + total + " cupfuls.");&#13;
+			return total;&#13;
+		}&#13;
+		// Rather than error, just assume a 'virtual cup' that holds nothing&#13;
+		// Note that each row has (row + 1) cups, with (row) the highest index. &#13;
+		if (cup &lt; 0 || cup &gt; row) {&#13;
+			return 0.0;&#13;
+		}&#13;
+		// I get half the overflow of my parents.&#13;
+		double overflow = 0.0;&#13;
+		double left = pouredInto(row - 1, cup - 1, total);&#13;
+		if (left &gt; 1.0) {&#13;
+			overflow = (left - 1) / 2;&#13;
+			volume += overflow;&#13;
+			System.out.println("My left cup (" + (row - 1) + "," &#13;
+                          + (cup - 1) + ") contributed " + overflow + " cupfuls.");&#13;
+		}&#13;
+		double right = pouredInto(row - 1, cup, total);&#13;
+		if (right &gt; 1.0) {&#13;
+			overflow = (right - 1) / 2;&#13;
+			volume += overflow;&#13;
+			System.out.println("My right cup (" + (row - 1) + "," + cup &#13;
+                          + ") contributed " + overflow + " cupfuls.");&#13;
+		}&#13;
+		System.out.println("I (" + row + "," + cup + ") got a total of " &#13;
+                  + volume + " cupfuls.");&#13;
+		return volume;&#13;
+	}&#13;
+}&#13;
+[/code]<p>&#13;
+Well, that does get me zero storage.  Unless the stack counts -- which it does, so I really ought to remove that useless "total" parameter.  </p><p>&#13;
+So, no advantage in storage, and time complexity O(n^2) in the worst case -- because it visits some nodes more than once!  If my right parent is the same as another node's left parent, that parent is getting visited twice.  And that happens all the way up the tree.  Ick!&#13;
+</p><p>&#13;
+Well, that can be fixed.  I could use a 2D array for memoization.  I'd make the array, fill it with a sentinel value (-1 is my favorite), and before calculating a value I could check if there was already a value in the array and return it.&#13;
+</p><p>&#13;
+While in most languages, a 2D array would take up a lot of extra space, Java implements it as an array of Objects.  So my first level could have an array with 1 element, my second level an array with 2 elements, and so on.&#13;
+</p><p>&#13;
+That would reduce the time complexity, especially for very large numbers of cups.  I guess that makes it O(log n).  But I think I can do better.&#13;
+</p><p>&#13;
+Time to switch to a linear technique.  I'll still use a 2D array, and I'll create it dynamically as I go.  I'll loop through the levels, but I'll skip any cups that aren't involved in the calculation.&#13;
+</p><p>&#13;
+Not involved?  How can I tell?  Well, check this out:&#13;
+</p><pre>&#13;
+0:        A&#13;
+1:       B C&#13;
+2:      D E F&#13;
+3:     * G H *&#13;
+4:    * * I * *&#13;
+</pre><p>&#13;
+If I'm interested in Level 4, cup 2 (counting like a programmer!), then I don't need to worry about my neighbors.  They're not contributing to my water level.&#13;
+</p><p>&#13;
+In the next level up, I only need to worry about my parents, not their neighbors.  The difference in our level is 1; I only need to worry about the cup at my index and my index + 1.  &#13;
+</p><p>&#13;
+In the next level up, the level difference is 2.  I only need to worry about the cups at my index through my index + 2.  &#13;
+</p><p>&#13;
+So, as I pour the water through the levels, I've can determine the minimum and maximum cup for each level.  I can skip any cup that's not involved.&#13;
+</p><p>&#13;
+That reduces the number of calculations to <b>less</b> than the number of cups (or at least no more than the number of cups for small numbers, my worst case). I'm down to O(log n) time and O(n) space!  &#13;
+</p><p>&#13;
+Of course, I'd also quit early if I ran out of water.  (Sneaky, sneaky users!)  And I don't really need to keep around more than two levels of the array at a time (the one I'm filling and the one that's getting the overflow).  Hmmm... that sounds like a tree could be useful.  But I don't think there are any other optimizations to make.&#13;
+</p><p>&#13;
+Anybody got a better idea?  Let me know.  Especially if you can figure it out mathematically!&#13;
+</p>

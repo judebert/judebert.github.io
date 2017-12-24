@@ -1,0 +1,69 @@
+---
+layout: post
+status: published
+published: true
+title: Spammers Shut Down Judebert.com
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2007-08-24 00:59:04 UTC
+permalink: "/archives/167-Spammers-Shut-Down-Judebert.com.html"
+categories:
+- Web Activities
+tags: []
+comments:
+- id: 302
+  author: Cari
+  author_email: cari@aetheric-shade.org
+  author_url: http://www.aetheric-shade.org
+  date: '1187974266'
+  content: "I've been with Dreamhost for 2 years now and have had few problems with
+    them (mostly downtime but never for longer than a day). \r\n\r\nFirestorm (http://www.fsnhosting.com/)
+    is hosting that one of the TFers runs. I can't remember which TFer, but it looks
+    pretty decent.\r\n\r\nI keep hearing Lunarpages is pretty good too. \r\n\r\nIt's
+    messed up that your webhost won't even give you a chance to fix things. >:/"
+excerpt_separator: <a id="extended"></a>
+---
+<h4>Hosting Service No Help Whatsoever</h4>&#13;
+<p>&#13;
+I've gotta find a new hosting service.  For... well, EVER... the PowWeb MySQL servers have been slow.  Lately, I noticed even slower service and decided to do some debugging.  I enabled a Serendipity option that logs all SQL queries and their execution times to the SQL database.&#13;
+</p><p>&#13;
+I quickly discovered that I was getting deluged with trackback spam.  Each day I logged about 1700 trackbacks.  I'd love to think I was that popular, but I know better.  Besides, I've disabled trackbacks in the Spam Blocker.&#13;
+</p><p>&#13;
+I shut off the logging and started fooling with the comment.php and .htaccess files.  I would like to allow legitimate comments, but stop the crazy trackbacks.&#13;
+</p><p>&#13;
+Yesterday, PowWeb blamed their MySQL problems on me and deactivated my account.  They sent an email claiming that my index.php was being exploited.&#13;
+</p><p>&#13;
+Odd thing is, my webstat page (also provided by PowWeb) shows only 270 hits on index.php, for a total of 18K.  And trackbacks don't even hit index.php: they go straight through comment.php, which showed <b>27000</b> hits.&#13;
+</p><p>&#13;
+So I called their 24/7 support line.  What do I have to do to reactivate my account?  That's right, remove my index.php, the main page...&#13;
+</p><a id="extended"></a><p>&#13;
+The first guy waits on the phone until I rename the file, then reactivates my account.  I can't look at my stats until the site is back online, but he assures me that index.php is being exploited.&#13;
+</p><p>&#13;
+When I finally get to see my stats, I'm shocked.  I call back to ensure that putting my main page back won't get me banned for life or something.&#13;
+</p><p>&#13;
+The second guy listens to what I have to say, then puts me on hold.  He comes back and tells me that it's definitely the index.php.  He activates my account again, despite me telling him that it's already up and running.  He says that as soon as I upgrade Serendipity, it'll all be fixed.  &#13;
+</p><p>&#13;
+Yeah, right.  I told him I'm a developer, but he wouldn't listen.  I upgrade from 1.2beta4 to 1.2beta5, which makes no significant change in either the SQL or the index.php.  Then I start fooling with the comment.php and .htaccess again.&#13;
+</p><p>&#13;
+I make all trackbacks go to <a href="spam_fails.html">this spam warning</a>.  I'm not nearly that violent, but really... the chutzpah!  &#13;
+</p><p>&#13;
+Having solved the big problem that I can, I go to bed.  The next day, I call again.&#13;
+</p><p>&#13;
+I recap, then explain that as a developer, I'd like to see the logs indicating that my index.php is exploited so I can fix it.  I figure either the logs don't match, in which case I'd like the <b>right</b> ones so I can fix it, or they'll see that it was the comment.php after all and I can rest assured that my current solution is a good one.  Or, of course, this whole thing is a bad dream, and they'll fix the site or server that's <b>really</b> causing all the problems.&#13;
+</p><p>&#13;
+He puts me on hold.  He can't find the logs.  After 30 minutes, we've discovered that he doesn't have access to any logs.  He elevates it to a new level.  The lady I speak with understands what's going on and will email me the logs so I can do my debugging.&#13;
+</p><p>&#13;
+This evening, I get the following email (sanitized to protect the innocent):&#13;
+</p>&#13;
+<blockquote>&#13;
+In regards to ticket ####, pertaining to your logs request. Unfortunately, we do not have any logs for the script causing the overload. We only know that your script was being exploited and was overloading the Mysql and CGI servers. &#13;
+</blockquote>&#13;
+<p>&#13;
+Gee, thanks.  So, was I actually using up the CPU on the MySQL server, the Apache server, or both?  How did you determine that it was my index.php causing the problem?  What makes you think an upgrade will make it go away?&#13;
+</p><p>&#13;
+You know, perhaps a static IP and a fat pipe will be worth the hassle.  At least <b>I</b> can keep logs.&#13;
+</p>

@@ -1,0 +1,60 @@
+---
+layout: post
+status: published
+published: true
+title: Java Chain Reaction
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 1999-03-05 01:41:00 UTC
+permalink: "/progress/Chain.html"
+redirect_from:
+- "/archives/47-Java-Chain-Reaction.html"
+categories:
+- Java
+tags: []
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>Here's one of my first Java apps. It uses Bresenham's line-drawing algorithm to draw pieces of lines as particles and simulate a nuclear chain reaction.&#13;
+</p><a id="extended"></a><p>&#13;
+Below you should see a 100 by 100 window.  Within are atoms &#13;
+(the raised circles - Java draws horrible circles).  Soon a particle &#13;
+(small dot) should appear in the center, moving in a random direction.  &#13;
+Whenever it hits an atom, the atom undergoes fission, becoming four &#13;
+particles.  (The original particle is annihilated.)&#13;
+</p><p>&#13;
+</p><hr />&#13;
+<applet codebase="/progress" code="Chain.class" width="100" height="100">&#13;
+</applet>&#13;
+<hr />&#13;
+<p>&#13;
+The particles are interesting because they move using an implementation &#13;
+of Bresenham's line-drawing algorithm, rather than the standard &#13;
+velocity increments.&#13;
+</p><p>&#13;
+One benefit of using Bresenham's for particle movement is the automatic &#13;
+trails.  The velocity of a "Bresenham particle" is expressed as a number &#13;
+of pixels.  Each turn, the particle is stepped <i>velocity</i> times.  &#13;
+This allows each pixel to be drawn, resulting in a trail.  &#13;
+</p><p>&#13;
+Stemming from this is another advantage: better collision checking.  &#13;
+With the standard velocity increments, a particle whose velocity is &#13;
+larger than the width of an atom could step right over the atom and &#13;
+never collide with it.  A Bresenham particle actually calculates each &#13;
+intervening pixel, and so you can check at each step.&#13;
+</p><p>&#13;
+Finally, the direction of a Bresenham particle is not limited like &#13;
+a velocity particle with integer components.  A velocity particle can &#13;
+only travel at integer ratios depending on its max speed.  For &#13;
+instance, if the max speed of its X or Y velocity is 2, then there are &#13;
+only five directions it can go: x, y, x + y, x + 2y, and 2x + y.  &#13;
+(Note that 2x + 2y is the same as x + y.)  You could increase this &#13;
+to 18 directions by allowing it to go in negative directions.  &#13;
+However, a Bresenham particle simply begins at a point and goes in the &#13;
+direction of some arbitrary point, limiting its angles depending only &#13;
+on the pixel width and height of the screen.&#13;
+</p><p></p>

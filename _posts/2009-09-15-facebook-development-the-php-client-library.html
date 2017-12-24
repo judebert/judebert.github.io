@@ -1,0 +1,142 @@
+---
+layout: post
+status: published
+published: true
+title: 'Facebook Development: The PHP Client Library'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2009-09-15 10:32:24 UTC
+permalink: "/progress/facebook/PHP-Client-Library.html"
+redirect_from:
+- "/archives/366-Facebook-Development-The-PHP-Client-Library.html"
+categories:
+- Tutorials
+tags:
+- facebook
+- iframe
+- php
+- programming
+- sessions
+comments:
+- id: 516
+  author: Shawn
+  author_email: shawn_chong@hotmail.com
+  author_url: e-mate.com.tw
+  date: '1254241345'
+  content: "SO TRUE MY FRIEND!\r\n\r\nGood blog!"
+- id: 517
+  author: Judebert.com
+  author_email: ''
+  author_url: http://judebert.com/progress/archives/367-Facebook-Development-PHP-FBML-Skeleton.html
+  date: '1254395585'
+  content: ' As I said before, I''ve had some trouble with PHP Facebook development..
+    This time, I couldn''t get a user ID because the user came from a non-Facebook
+    page. An application''s drawing page is called it''s "canvas page". It''s the
+    starting point for the '
+- id: 521
+  author: Daniel
+  author_email: ''
+  author_url: ''
+  date: '1255025870'
+  content: "Thanks,\r\nNice walk through of the trials I've been put through over
+    the last 2 weeks.\r\n\r\nI think the fb policy is to deliberately deter coders."
+- id: 592
+  author: Michal
+  author_email: narja@volny.cz
+  author_url: ''
+  date: '1263334278'
+  content: This is so true! Been struggling with the same issue. How about parameters
+    of these methods? Mostly all of them are passed by the client class, right? But
+    what if i need to use optional parameters? Is there any documentation on this?
+    How am i supposed to find out their order, do i need to possess some kind of special
+    gift? Like API creators mind-reading? Is there any other way besides looking into
+    the core script?
+- id: 596
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1265130635'
+  content: The only way I've found is to experiment.  Annoying but true.
+- id: 615
+  author: jeje
+  author_email: kshapata@hotmail.com
+  author_url: ''
+  date: '1272377688'
+  content: Thanks for that eye openner about the PHP Library, I was thinking that
+    there is something wrong with me, jut to realise that everything is wrong with
+    Facebook.
+- id: 626
+  author: Erick
+  author_email: d_erik@yahoo.com
+  author_url: ''
+  date: '1275185367'
+  content: Well said. Even though this is old it still rings true. It kinda sucks
+    that I read it after most of the same things that happened to you happened to
+    me, but still it was an eye opener.
+- id: 652
+  author: MG
+  author_email: manu@gambhir.net
+  author_url: ''
+  date: '1282710433'
+  content: How did you fix the continuous reloading issue? Some of my app's users
+    get it intermittently.
+- id: 654
+  author: Judebert
+  author_email: judebert@judebert.com
+  author_url: ''
+  date: '1283161210'
+  content: I changed the redirection URL to point to the app's info page, as I recall.  It's
+    suboptimal, because it requires an extra click from the user; but it's better
+    than constantly reloading.
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+I'm doing some Facebook development, using the PHP client library.  I've been absolutely boggled by the lack of documentation.  I mean, maybe I'm just missing it, but... nothing for the PHP client library <b>at all</b>.  And the way they treat some development issues as trivial reminds me of professors leaving the really difficult problems as "an exercise for the student".&#13;
+</p><p>&#13;
+So I'm going to document my problems and solutions here on my website.  I assume you're already familiar with web development in general, so you should have a good grasp of HTML and whatever client you're using.  I'm a PHP programmer, so that's what I'll deal with first.&#13;
+</p><a id="extended"></a><h3>IFrames, AJAX, and Sessions</h3>&#13;
+<p>&#13;
+As an experienced web developer, you might already have an application on your website that you'd like to make available for Facebook users.  <a href="http://wiki.developers.facebook.com/index.php/Choosing_between_an_FBML_or_IFrame_Application">Facebook's documentation</a> implies that it's easy to make your existing application work in an iframe.  &#13;
+</p><p>&#13;
+You, oh experienced one, have just swallowed the hook.  Don't be ashamed: I did it, too, and I've got 20 years of development experience under my belt.  (As well as an extra 100 pounds of "management potential".)  &#13;
+</p><p>&#13;
+I spent a month creating a web-based puzzle game.  I used HTML, JavaScript, and JQuery to rapidly develop effects and make AJAX easy.  I figured Facebook would give me the leaderboards and social interaction I needed to make it truly outstanding.&#13;
+</p><p>&#13;
+But when I tried to integrate with Facebook, I ran face-first into a wall.  The method I copied from the example code requiring the user to add my app caused continuous reloading.  When I got rid of that, my "hint" and "done" buttons stopped working.  &#13;
+</p><p>&#13;
+The problem was that my AJAX calls for those weren't passing along any session data.  The Facebook documentation said I should use the Facebook session id, modified to comply with PHP naming requirements.  That didn't help, so I started debug-printing the variables.  That caused massive parser errors, but with the help of Firebug I discovered the true problem: cookies weren't being passed along.&#13;
+</p><p>&#13;
+More delving in the Facebook Developer's Wiki indicated this was a common problem.  The Facebook stuff worked on the page load because Facebook passes its required data as GET parameters to the iframe.  It also claims to modify your links to add them (as GET parameters).  But third-party cookies don't get passed, so my app had no way to keep track of the session.&#13;
+</p><p>&#13;
+<b>MORE</b> delving in the wiki and the forum indicated that AJAX calls in an iframe <a href="http://wiki.developers.facebook.com/index.php/Your_callback_page_and_you">"may present the developer with validation and authorization issues".</a>  (Exercise for the student.)  One Facebook developer stated on the forums, "I find that most applications don't really need sessions."  Well, puzzle applications do, just to keep track of board state.  (Okay, they don't really <i>require</i> sessions; but nobody wants to pass all the entire board history around with every click.)&#13;
+</p><p>&#13;
+There's a simple solution, of course: just add the original Facebook parameters to every AJAX call.  No biggie.&#13;
+</p><p>&#13;
+Unless you're worried about security.  Finding those GET parameters is simple as pie.  Copying them to another page is no big deal (especially with GreaseMonkey floating about).  Add these together, and you've got instant identity theft: anyone can play the game as anyone else.&#13;
+</p><p>&#13;
+The best solutions involve fingerprinting (which often rules out AOL users and others behind a proxy) and one-time tokens (which has its own problems).  &#13;
+</p><p>&#13;
+<b><u>The Moral</u></b>: IFrames are only really useful for sessionless apps, apps that don't use AJAX, or apps that don't care about security.  If you've got something actually <i>useful</i>, Facebook integration will be a challenge.&#13;
+</p>&#13;
+<h3>PHP development</h3>&#13;
+<p>&#13;
+Undaunted (like an idiot), I came up with an idea that required no session.  It leveraged the social power of Facebook: wouldn't work without it, in fact.  Better yet, there was a clear path to making money!  &#13;
+</p><p>&#13;
+Unfortunately, I ran into immediate problems with the PHP client library.  Namely, there was no documentation.&#13;
+</p><p>&#13;
+The sample apps showed how to use <code>require_login()</code>.  But I didn't want to force users to add my app; I wanted to leverage <b>all</b> the Facebook users, as much as possible.  Finding the <code>get_loggedin_user()</code> and <code>get_canvas_user()</code> functions was more difficult, requiring a peek through the library source code.  Figuring out how to <i>use</i> them required combing through the forums for a little while.&#13;
+</p><p>&#13;
+Then there came the big problem: how do you access the <a href="http://wiki.developers.facebook.com/index.php/API">Facebook API</a> from PHP?&#13;
+</p><p>&#13;
+Some trial-and-error didn't help much.  I searched the forums and found some sample code, but I wanted a reference.  I was almost resigned to diving into the library code again when I suddenly realized the pattern: use the api_client field of your Facebook instance and call the function with an underscore instead of a dot.  So, if your instance of Facebook is $fb, friends.get becomes $fb-&gt;api_client-&gt;friends_get(), users.getInfo becomes $fb-&gt;api_client-&gt;users_getInfo(), and so on.&#13;
+</p><p>&#13;
+I really wish someone had written that down somewhere obvious and visible.&#13;
+</p><p>&#13;
+<b><u>The Moral</u></b>: There is no documentation for the Facebook PHP client library, but you can derive the functions you need.&#13;
+</p><p>&#13;
+Maybe one day I'll write up a quick tutorial.  Or a good example program.  Maybe Mastermind or something.&#13;
+</p>

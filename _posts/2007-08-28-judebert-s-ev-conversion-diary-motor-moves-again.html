@@ -1,0 +1,56 @@
+---
+layout: post
+status: published
+published: true
+title: 'Judebert''s EV Conversion Diary: Motor Moves Again'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2007-08-28 13:34:23 UTC
+permalink: "/progress/EV/Motor-Moves-Again.html"
+redirect_from:
+- "/archives/168-Judeberts-EV-Conversion-Diary-Motor-Moves-Again.html"
+categories:
+- EV Conversion Diary
+tags:
+- electric vehicles
+- ev
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+When we decided that my controller was blown, Nathan and I were plainly demoralized.  After I went through the five stages of grief, I did what any reasonable person would do: I griped about it online.&#13;
+</p><p>&#13;
+Luckily, my griping is pretty descriptive, and I griped to <a href="http://www.evdl.org/">the brightest bunch of EV enthusiasts you could ask for: the EV Discussion List</a>.  Two of them found my problem immediately, although it took a second post to convince me.&#13;
+</p><a id="extended"></a><p>&#13;
+When we couldn't find the Curtis 1231C manual, we resorted to the hardcopy 1221B manual instead.  We figured the troubleshooting steps would be similar, and they are.  The first two steps are quite clear: check for pack voltage between the pack's B+ and the controller's B-, and then the controller's B+ and its B-.  We found 144V and passed.&#13;
+</p><p>&#13;
+The next instruction was more vague: test for voltage at the KSI (Key Switch Input).  I tested from KSI to the auxiliary battery negative, since it's just a line running through the key and the pedal microswitch.  I found 12V and passed.&#13;
+</p><p>&#13;
+Then you're supposed to check the potentiometer for 0 - 5000 Ohms.  Connected to the controller, I found no resistance.  Disconnected, everything worked as properly (although I confused things by reading the 5V DC scale, and thought it was going from 5KOhms to 4KOhms.  After we disassembled everything, I discovered my error; the potentiometer was reading perfectly).  We passed.&#13;
+</p><p>&#13;
+Next you measure voltage on the potentiometer.  It's supposed to go from 2V to 7V.  I found 0V.  The solution was "bad potentiometer".  That clearly wasn't the case, so we passed and moved on.  All the other stuff indicated "bad controller".&#13;
+</p><p>&#13;
+The EVDL can be a rough bunch, but usually they reserve that for the willfully ignorant or disrespectful.  I received multiple helpful suggestions within a few hours.  Two people shared a particular concern: how did I get 12V on KSI?  They thought it should be full pack voltage, 144V.  One of them even said that the Curtis only has a reference to the pack ground, anyway.&#13;
+</p><p>&#13;
+I found the <a href="http://cafeelectric.com/curtis/Curtis_manual.pdf">Curtis 1231C manual online</a>.  It does show full pack, routed through a relay.  I never had any such relay.  It also says:&#13;
+</p>&#13;
+<blockquote>&#13;
+The controller KSI is used to turn the controller on and off. KSI is turned on by connecting it to battery B+. Any positive voltage greater than about 8 volts will turn on the controller, but usually the full vehicle battery voltage is used.&#13;
+</blockquote>&#13;
+<p>&#13;
+Additionally, the car worked before this disassembly/reassembly, and I had only used 12V direct from the accessory battery.  &#13;
+</p><p>&#13;
+When I mentioned this, John reiterated that the Curtis has <b>no other ground</b> than pack ground.  If it worked before, I must have had a ground loop fault somewhere, connecting the 12V system to the pack ground.  &#13;
+</p><p>&#13;
+The more I thought about it, the more sense this made.  Scary that I may have had 144V going to the car chassis at some point, but sensible.  I wrapped the ignition key wire with electrical tape and jumpered the B+ to the KSI with a small lead.  &#13;
+</p><p>&#13;
+As you may have guessed from the entry title, the motor moved.  Somehow I had hooked it up backwards (<a href="/progress/EV/Birth-Backwards-Blood.html">again</a>), but it moved.  The Curtis low-load squeal has never been so welcome.&#13;
+</p><p>&#13;
+Nathan was ecstatic when I called.  Neither of us expected anything like this.  I've got to reassemble the potbox, reverse the motor rotation, and waterproof the bottom of the engine compartment, but then Silent E will be roadworthy. There are lots of little things I need to do, too: I need to wrap all the little wires in conduit, so they don't fray and short; I need to retest and possibly redesign the air conditioning; and I'd like to run the KSI through a relay connected to both the key switch and the pedal microswitch.  Lots of little things.&#13;
+</p><p>&#13;
+But it works!  The EVDL saved me at least $500 and weeks of downtime.  I'll be rolling again soom!&#13;
+</p>

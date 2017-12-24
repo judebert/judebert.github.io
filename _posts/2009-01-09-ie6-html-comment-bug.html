@@ -1,0 +1,166 @@
+---
+layout: post
+status: published
+published: true
+title: IE6 HTML Comment Bug
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2009-01-09 15:55:09 UTC
+permalink: "/progress/permalink/IE6-comment-bug.html"
+redirect_from:
+- "/archives/311-IE6-HTML-Comment-Bug.html"
+categories:
+- Web Activities
+tags:
+- bugs
+- comment bug
+- css
+- ie6
+comments:
+- id: 405
+  author: evwannabe
+  author_email: harlan3@hotmail.com
+  author_url: ''
+  date: '1231704098'
+  content: "This seems to be yet another IE6 bug (IE6 duplicate characters bug).  The
+    link below has a couple of work arounds for this issue.\r\n\r\nhttp://www.positioniseverything.net/explorer/dup-characters.html\r\n\r\nEither
+    a css style property of display: inline; in the div preceding the comment, or
+    applying this as a style for all floating divs seems to fix the issue.  The other
+    option is to use the <!--[if !IE]> syntax which is quite hideous IMO."
+- id: 406
+  author: Big John
+  author_email: cssjunkie@frontiernet.net
+  author_url: http://positioniseverything.net
+  date: '1231708850'
+  content: Nice catch, Judebert! Just goes to prove that the IE engine is well and
+    truly infested with demons.  Oy...
+- id: 407
+  author: Big John
+  author_email: cssjunkie@frontiernet.net
+  author_url: http://positioniseverything.net
+  date: '1231709370'
+  content: 'I tried display: inline; in various combinations with buggy comments and
+    I only got more breakage. Can you describe or show how you fixed this bug with
+    that declaration?'
+- id: 408
+  author: evwannabe
+  author_email: harlan3@hotmail.com
+  author_url: ''
+  date: '1231714843'
+  content: "In Judebert's example, [url=http://judebert.com/examples/comment_bug/comment_bug.html]IE6
+    comment bug example page[/url] change line 61 to the following:\r\n\r\n[code]<DIV
+    style=\"display: inline;\" class=br><!-- hello -->[/code]\r\n\r\nThe addition
+    of this CSS property actually takes care of a few buggy issues in IE6, so it is
+    recommended to apply this to all floating divs instead of defining it each time
+    before a comment occurs as I did above.\r\n\r\nThe alternative is to use the following
+    syntax:\r\n[code]<!--[if !IE]>[/code]\r\n\r\nwhich is not very pleasing to the
+    eye IMHO."
+- id: 409
+  author: evwannabe
+  author_email: harlan3@hotmail.com
+  author_url: ''
+  date: '1231716953'
+  content: "It is a little tough to get HTML source code to show up properly as you
+    can see from the blank code line above :)  You can download a screen shot of the
+    modification to Judebert's example at:\r\n\r\n[url=http://fileupload.filetac.com/file/8f4a44e1092b3694bbaacc8e79b9d61760b8c01b[/url]\r\n\r\nLine
+    61 contains the green cursor box."
+- id: 410
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1231884779'
+  content: Thanks for the screenshot.  I'll have to figure out why HTML snippets aren't
+    working; I definitely want people to be able to leave technical comments!
+- id: 411
+  author: Big John
+  author_email: cssjunkie@frontiernet.net
+  author_url: http://positioniseverything.net
+  date: '1231885204'
+  content: I'd still like to know how that display fix is working, 'cause I can't
+    make it work at all.
+- id: 412
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1231885542'
+  content: Actually, I got the same results with the outside container absolutely
+    positioned, and with only one example.  It's possible it's the same bug, though;
+    perhaps IE uses the same code for relatively-positioned and floated elements.
+- id: 413
+  author: Big John
+  author_email: cssjunkie@frontiernet.net
+  author_url: http://positioniseverything.net
+  date: '1232071250'
+  content: I don't think that the outer div is involved in the bug at all, regardless
+    of how it's handled. It's the rel-shifted divs that are screwing up.
+- id: 463
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/progress/
+  date: '1240332173'
+  content: "I just installed the \"HTML in comments\" plugin.  You should now be able
+    to quote html source in the comment field, just by typing it in.\r\n\r\nNote that
+    <b>, <i>, <a>, and the rest won't actually work; they'll just be displayed instead
+    of stripped."
+- id: 504
+  author: radyo dinle
+  author_email: uoshare@yahoo.com
+  author_url: http://www.radyoservisi.com
+  date: '1248813784'
+  content: perhaps IE uses the same code for relatively-positioned and floated elements.
+    ??
+- id: 586
+  author: Brendan Purst
+  author_email: bpurst@mailinator.com
+  author_url: ''
+  date: '1262034217'
+  content: It seems to me like IE8, while fixing this particular bug, has introduced
+    many more. What a shame. Firefox for me.
+- id: 604
+  author: Michael Ray
+  author_email: kramazeek@yahoo.com
+  author_url: ''
+  date: '1268821112'
+  content: I actually got this same bug while working on a three floated column layout.
+    The layout uses no browser specific rules nor any positioning. The column layout
+    consists of three left floated divs each proceeded and followed by an html comment.
+    As soon as I removed the comments the extra characters magically went away. Off
+    topic, anyone know a really easy way to make floats not wrap on window resize?
+    Is it possible to get a pixel perfect three column (any)percentage width layout
+    in IE6? Sorry for going off topic and thanks for the post!
+- id: 896
+  author: bouly
+  author_email: lindalabacci@yahoo.co.uk
+  author_url: http://acheter-or.rmc.fr/
+  date: '1318518837'
+  content: You are right, IE is the hell for everybody want to create a website. Hopefully,
+    they are going to change this with the new version.
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+While hacking on CSS image borders for a new site, I discovered yet another IE6 bug.  (I know, you didn't think any more could fit.  Haven't we expended our quota already?)&#13;
+</p><p>&#13;
+In short: <b>HTML comments mess up IE6 layout for relatively position containers</b>.  Yup. &#13;
+</p><a id="extended"></a><p>&#13;
+I searched Google to see if <a href="http://lists.evolt.org/archive/Week-of-Mon-20010827/056409.html">other people had problems with IE6 HTML comments</a>, but I didn't find anything specific, so I'm demonstrating it for the good of webdesignerkind.&#13;
+</p><p>&#13;
+I was actually trying to understand <a href="http://positioniseverything.net/articles/dropshadows2.html">Position Is Everything's "Four Sided PNG Drop Shadows"</a> layout and extend it for IE6.  After all, the December statistics for browser share show that 20% of visitors use it; I figured I'd use a dithered PNG-8 for them.&#13;
+</p><p>&#13;
+I built the HTML (substituting my own class names), assigning each div an arbitrary color so I could tell them apart.  Then I started commenting pieces out to see how they affected the size of their containing div.  With each step, I verified my understanding with Firefox.  When I was done, I sent the final page to BrowerShots to see if IE6 had a problem with the layout or just the PNGs.  Here's what FireFox had showed me:<br />&#13;
+<!-- s9ymdb:867 --><img class="serendipity_image_center" width="699" height="174" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/howto/comment_bug_ff.png" alt="" />&#13;
+</p><p>&#13;
+Here's what the IE6 screenshot looked like:&#13;
+<!-- s9ymdb:869 --><img class="serendipity_image_center" width="709" height="174" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/howto/comment_bug_ie6.png" alt="" />&#13;
+</p><p>&#13;
+I obviously couldn't experiment with BrowserShots, and I couldn't install IE6 because I run Linux.  Luckily, my friend <a href="http://www.optional-necessity.com/">Don Chambers came to the rescue</a>.  With a IM and a little patience, we discovered that <em>the HTML comments I had left in the page were messing up the display of the relative divs</em>.&#13;
+</p><p>&#13;
+Just when you thought it couldn't get any worse: best practices mess up your layout.&#13;
+</p><p>&#13;
+I'm obviously not privy to IE6 source code, but looking at it from a programmer's point of view, I'd say that IE6 sets the comments to visibility:hidden to prevent their display, and the relatively positioned divs inherit the setting. But that's just a guess.  I verified that removing the comments from the HTML repairs the layout.&#13;
+</p><p>&#13;
+If you have IE6 (upgrade if you can), you can see the <a href="/examples/comment_bug/comment_bug.html">IE6 comment bug example page</a> and verify it for yourself.  Feel free to download the file and abuse it any way you like.&#13;
+</p>

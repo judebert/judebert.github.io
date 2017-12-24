@@ -1,0 +1,49 @@
+---
+layout: post
+status: draft
+title: How To Program Your Phone With J2ME
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2007-10-12 18:24:33 UTC
+permalink: "/archives/180-How-To-Program-Your-Phone-With-J2ME.html"
+categories:
+- Tutorials
+tags: []
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+I'm redesigning Contraction Timer to work on mobile phones.  I'm also extending its functionality, since I'll be working with my favorite language, Java (instead of a restricted C).  It'll be like a whole new program, which I intend to call Baby Timer.&#13;
+</p><p>&#13;
+But first, I'm figuring out how to program a phone.  I started with <a href="http://www.devarticles.com/c/a/Java/Getting-Started-with-J2ME/">this fine tutorial on writing J2ME MIDlets</a>.  But I still need to make many decisions.  Any information I find will be documented here.&#13;
+</p><a id="extended"></a><p>&#13;
+I'll start with a quick definition.  The Java on phones has three parts: J2ME, CIDC, and MIDP.  MIDP is the API programmers use to get real work done.  J2ME and CIDC are more low-level stuff, which I hopefully will never have to touch.&#13;
+</p><p>&#13;
+Since mobile screens are so confined, I'll need to make some design changes.  I won't have space for the two giant buttons I currently use for Contraction Timer.  This is a problem, since I felt really confined even with the comparatively large Palm screen.  Worse yet, I want to extend Contraction Timer to count kicks, nursing times and sides, and more.&#13;
+</p><p>&#13;
+Luckily, only one thing needs to be counted at a time.  If we're counting kicks, we don't need to count contractions or nursing times.  So I can dedicate a button to counting one of whatever's being counted right now.&#13;
+</p><p>&#13;
+That's the big advantage to programming cell phones: lots of buttons.  Not much screen space, but lots of buttons.&#13;
+</p><p>&#13;
+MIDP isn't designed to put clickable buttons on the screen like Java.  Instead, you define all the buttons you want to have, and MIDP assigns them to phone keys for you.  Every phone can do it differently.  MIDP <i>does</i> let you assign priorities to the buttons, though.  That way, if you need three buttons, but there are only two keys on the phone, the phone knows which one to put on a key by itself, and which ones to throw into a menu.&#13;
+</p><p>&#13;
+<a href="http://java.sun.com/javame/reference/apis/jsr037/javax/microedition/lcdui/Canvas.html">MIDP provides low-level access to key presses through the Canvas class.</a>  I don't think BabyTimer will need that, but if it does, I'll be looking at getGameAction() and overriding Canvas.keyPressed().&#13;
+</p><p>&#13;
+So, let's take a look at BabyTimer's requirements.  For now, I want three modes in BabyTimer: a Kick Counter, a Contraction Timer, and a Nursing Log.&#13;
+</p><p>&#13;
+When the Kick Counter is active, the mother will press a button to record a kick; the Kick Counter will display the time for each kick and the time required for 10 kicks (expected to be under an hour).  The Kick Counter may allow the mother to add information to the kicks, such as intensity or location.&#13;
+</p><p>&#13;
+When the Contraction Timer is active, the labor coach will press a button record the beginning and end of a contraction; the Contraction Timer will display the frequency and duration of the contrations.  The Contraction Timer will allow the labor coach to add information to any contraction, such as a text message or a medical event; these will be included in the display as icons.  The Contraction Timer will also allow medical events that aren't connected to a contraction.  On devices with enough screen space, the Contraction Timer will display the time of each contraction as well.  &#13;
+</p><p>&#13;
+When the Nursing Log is active, the mother will press a button to record the beginning and end of a feeding; the Nursing Log will display the side of the most recent feeding and the duration and side of all feedings.  The Nursing Log will allow the mother to add notes, amounts (for mothers who are pumping) and events to each feeding (such as biting, pain, proper latch-on, etc).  On devices with enough screen space, the Nursing Log will display the time and amount of each feeding as well.&#13;
+</p><p>&#13;
+When no mode is active, BabyTimer will present a screen allowing the user to select a mode.  This selection screen will be accessible from all other modes.&#13;
+</p><p>&#13;
+When BabyTimer starts, it will display an about screen including information on where to donate funds for BabyTimer's continued development.  (After all, I worked hard on this, and the upstanding parents of the world will naturally want to reward me.)  The about screen will be accessible from all other modes.  On startup, the about screen will disappear after two seconds, and BabyTimer will return to the most recently used mode or the selection screen.&#13;
+</p><p>&#13;
+<b>Whew.</b>  I think that should about do it.  I can get fancy later if I want to.&#13;
+</p>

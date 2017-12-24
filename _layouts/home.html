@@ -1,0 +1,31 @@
+---
+layout: default
+title: Judebert.com
+---
+
+<div class="home">
+
+  <h1 class="page-heading">Judebert's Progress Report</h1>
+  
+  {{ content }}
+
+  <ul class="post-list">
+    {% for post in site.posts %}
+      <li>
+        {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+
+        <a class="post-link" href="{{ post.url | relative_url }}"><h2>{{ post.title | escape }}</h2></a>
+        <h3>{{ post.excerpt.size }} excerpt characters</h3>
+        {% if post.excerpt != nil && post.excerpt.size > 0 %}
+        <p><a href="{{ post.url | relative_url }}#extended">Continue reading "{{ post.title | escape }}"</a></p>
+        {% else %}
+        {{ post.content }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
+
+</div>

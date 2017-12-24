@@ -1,0 +1,112 @@
+---
+layout: post
+status: published
+published: true
+title: 'Android PIM: Evernote'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2011-07-12 11:14:00 UTC
+permalink: "/progress/permalink/reviews/Evernote.html"
+redirect_from:
+- "/archives/402-Android-PIM-Evernote.html"
+categories:
+- Madness
+- Method
+tags:
+- android
+- pim
+- review
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+I'm on <a href="/progress/permalink/AndroidNoteApps.html">a quest to find the best PIM notepad app for Android phones</a>.  If reviews are any indication, <a href="http://www.evernote.com/about/download/android.php">Evernote</a> just might take the crown from <a href="/progress/permalink/reviews/Catch.html">Catch</a>.  &#13;
+</p><p>&#13;
+Evernote is free, as is its web service, "Evernote Web".  However, you have to pay for premium services.  I'm too cheap to pay for a premium account.  I'm using version 3.0.2(public).  &#13;
+</p><p>&#13;
+Well, let's get started checking out the important points!&#13;
+</p><a id="extended"></a><ul>&#13;
+<li>
+<b><u>Text Entry</u></b>: Poor.&#13;
+<p>&#13;
+Evernote uses its own text entry widget.  That should get around the Android long-text bug.  Unfortunately, Evernote also requires an active Internet connection, just like <a href="/progress/permalink/reviews/Docs.html">Docs</a>.  That means longer loading times.&#13;
+</p>
+<p>&#13;
+As it turns out, the widget is actually the Android widget for text notes, and for HTML it's a custom widget that pops up the Android widget for any paragraph you tap.  In short, the bug is still there, and it's made just that much more difficult and confusing for HTML.    &#13;
+</p>  &#13;
+</li>&#13;
+<li>
+<b><u>Data Synchronization</u></b>: Good.&#13;
+<p>&#13;
+Okay, so <b><i>yet another</i></b> online service I need to sign up for.  Fine.  Fine!  I promised not to count off any points for that.  &#13;
+</p>
+<p>&#13;
+Evernote solves the concurrent modification problem by forcing an active Internet connection, so your notes can never get out of sync.  Unless you're using a Premium account, in which case you can have local, non-synced notes.  Then it puts any conflicting notes into a conflict folder, so you can resolve them yourself.&#13;
+</p>
+<p>&#13;
+Not the best solution, but it does technically cover the synchronization requirement.&#13;
+</p>&#13;
+</li>&#13;
+<li>
+<b><u>Search Integration</u></b>: Fail!&#13;
+<p>&#13;
+I was encouraged by the presence of a "Evernote" entry in my Searchable Items setting.  But oddly, Evernote couldn't find words in the body <i>or title</i> of notes.  Perhaps it only searches local notebooks?  In that case, it's <b>another premium feature</b>.  I'm not paying just to find out.&#13;
+</p>&#13;
+</li>&#13;
+<li>
+<b><u>Import/Export</u></b>: Fail!&#13;
+<p>&#13;
+Like other web service interfaces, the Evernote app itself has no import or export capabilities.  But its web service does.&#13;
+</p>
+<p>&#13;
+Or does it?  The only thing I can import from is Google Notebook.  That was canceled in <b>THE BEGINNING OF 2009!</b> Really, it can't import from anything but a two-years-dead online service, in <i>Atom</i> format?  Is this because I won't pay you $5 a month?&#13;
+</p>
+<p>&#13;
+Well, luckily, I've got a Google Notebook account.  And a few notes.  At least I can try it out, see how different it is from CSV, or Google Doc's HTML export... OMG MY BRAIN!  I'll have to program for hours to make a converter for this!  Make it stop, <b>make it <i>STOP</i>!</b>&#13;
+</p>
+<p>&#13;
+Just for the heck of it, I imported my old Google Notebook, to see if the import even <b>works</b>.  It did, and then told me I could import Delicious bookmarks, too.  I looked through the rest of the support knowledge base, and apparently you can import HTML documents.  Hey, Google Docs exports HTML documents!  But this only works with the desktop version of Evernote, which isn't available for Linux.  &#13;
+</p>
+<p>&#13;
+I couldn't find any way to export, either.  This whole experience has been one gigantic time-sink of FAIL.&#13;
+</p>&#13;
+</li>&#13;
+<li>
+<b><u>Data Hierarchy</u></b>: Good.&#13;
+<p>&#13;
+Evernote has two separate data hierarchies: notebooks and tags.  Either method would have fulfilled the basic requirement.  While a note can be in a notebook and have a tag, you can't filter that way; you can either see all the notes in a notebook regardless of tags, or all the notes with a tag, regardless of what notebook they're in.&#13;
+</p>
+<p>&#13;
+You can put multiple tags on a single note, which is a plus.  Evernote even solves the tag proliferation problem: you're forced to use a tag chooser that auto-completes for you.  You can <b>force</b> a misspelled tag, or plural and singular versions of a tag, but the tag chooser helps you to avoid that.  Tags with spaces in the name are also supported.  &#13;
+</p>
+<p>&#13;
+In the app, tags are not hierarchical. Apparently that's reserved for the desktop applications, which -- as I've groused before -- don't support Linux.&#13;
+</p>&#13;
+</li>&#13;
+<li>
+<b><u>Data Integration</u></b>: Fair.&#13;
+<p>&#13;
+Evernote makes URLs clickable in the view mode, and signifies this in the usual way: underlined blue text.  Phone numbers are also clickable, but are not signified in any way.  Until you click on them; <b>then</b> they get a green outline and start up the phone app.  Stealthy.&#13;
+</p>
+<p>&#13;
+At least it didn't turn my programmer-formatted date into a stealth clickable phone number.  Still, this is the minimum required, and it's not even done well.  &#13;
+</p>&#13;
+</li>&#13;
+<li>
+<b><u>App Integration</u></b>: Missing.&#13;
+<p>&#13;
+It's a little hard to tell, actually.  Evernote <b>has</b> an API, but so far as I can tell it's not meant to be used with the Android app.  I didn't find a list of apps that interoperate with it, either.  Until someone shows me otherwise, I'm going to have to assume par for the course: missing app integration.&#13;
+</p>&#13;
+</li>&#13;
+</ul>&#13;
+<p>&#13;
+Evernote is very clean looking, and it's supposed to have a bunch of really cool features.  Being able to use it from anywhere is great, but it's not unique: Catch does that too.  Evernote also attaches sound, pictures, and other media... like a lot of other notepad apps.  And like them, I really don't care.  I just want to take notes.&#13;
+</p><p>&#13;
+The one feature I could see as a game-changer is the automatic OCR.  Apparently, you can take a picture of text, send it to Evernote, and they'll convert it to a text note.  It's even supposed to work with handwriting!  That could be a big advantage when copying notes from other sources, like a sticky note or a whiteboard.&#13;
+</p><p>&#13;
+Unfortunately, considering the load of fail I've been through so far, I can't say OCR will close the gap.  I'm so frustrated I just want this thing off my phone.  As far as <abbr title="Personal Information Management">PIM</abbr> is concerned, I have to rate Evernote as a fail. &#13;
+</p>

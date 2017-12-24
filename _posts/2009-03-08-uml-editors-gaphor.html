@@ -1,0 +1,128 @@
+---
+layout: post
+status: published
+published: true
+title: 'UML Editors: Gaphor'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2009-03-08 12:07:00 UTC
+permalink: "/archives/332-UML-Editors-Gaphor.html"
+categories:
+- Programming
+tags:
+- review
+- uml
+comments:
+- id: 489
+  author: chris
+  author_email: notapplicable@yahoo.com
+  author_url: ''
+  date: '1246212457'
+  content: "Hi Judebert,\r\n\r\ndid you give  open modelsphere a try ? It looks quite
+    good. \r\n\r\ncheers \r\nchris"
+- id: 490
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1246286494'
+  content: Never heard of it.  I'll be moving to a new project soon, and I'll need
+    UML tools again; I'll put it on the list to look at.
+- id: 501
+  author: Arjan Molenaar
+  author_email: gaphor@gmail.com
+  author_url: ''
+  date: '1248699860'
+  content: "Hi Judebert,\r\n\r\nPitty your a bit disappointed in Gaphor. A lot of
+    your complaints are about sequence diagrams. This is a relatively young feature
+    and therefore it needs some polishing still (fair).\r\n\r\n_It doesn't give you
+    a dialog to enter attributes, ..._\r\n\r\nWe've omitted dialogs on purpose as
+    they have a tendency to provide all sorts of configuration that doesn't show up
+    in the diagram. That's nice if you want to do code (java/python/basic) generation.
+    (see my opinion on code generation below).\r\n\r\n_... but why should I have to
+    add an aggregation diamond?_\r\n\r\nThe diamond shows the kind of aggregation
+    on the end (none, shared or composite). They're not special\r\nassociation types,
+    but rather properties of the association ends. And yes, Gaphor allows you to have
+    diamonds on both sides (not very useful ;) ).\r\n\r\nYour point on the shared
+    data model is totally right. There is far less sharing than I'd like to see. \r\n\r\nAnd
+    as far as code generation goes: I think generating code from UML models is not
+    very useful. You can generate some boilerplate, yes, but in the end you want to
+    do some roundtrip development. My personal opinion is that Gaphor (or model driven
+    design in general) works best when the tooling (in this case Gaphor) is used to
+    *configure* your application (e.g. create models to wire Spring classes or generate
+    some sort of XML as configuration for a state engine).\r\n\r\nRegards,\r\n\r\nArjan"
+- id: 502
+  author: Judebert
+  author_email: ''
+  author_url: http://judebert.com/
+  date: '1248786489'
+  content: "Nice to hear from you, Arjan!\r\n\r\nI'm not too happy with code generation,
+    either.  If you've got a good design, the code tends to flow naturally.  Besides,
+    diagrams shouldn't be complete enough to generate code; they should be just enough
+    for the coders to understand what's needed.\r\n\r\nOn the other hand, import is
+    important to me.  I'm dealing with a large project, and I don't want to hand-craft
+    diagram objects for every core class I need to use.\r\n\r\nMy problem with aggregation
+    diamonds isn't what they represent; it's that I couldn't create one at all!  I
+    tried to model aggregation but couldn't.  It sounds like Gaphor actually supports
+    them, but I couldn't figure out how.  If you can tell me, I'll be happy to revise
+    the review."
+- id: 555
+  author: Adam Boduch
+  author_email: ''
+  author_url: http://www.boduch.ca
+  date: '1258727040'
+  content: I think most, if not all open source UML tools are incomplete in one regard
+    or another.  I also think Gaphor still has the most potential of all the open
+    source UML tools because of the flexibility offered.  I especially like the extension
+    framework.
+- id: 689
+  author: Kjell HedstrÃ¶m
+  author_email: kjellhedstrom@yahoo.com
+  author_url: ''
+  date: '1295815035'
+  content: "It would be nice to hear HOW to do such things as aggregation diamonds
+    in Gaphor. Just playing around with it didn't solve it for me. Then I found this
+    blog and decided to go with another tool.... It sounds like Judebert did a good
+    job of testing it... and his blog readers (i.e. me :) are still waiting for Arjan's
+    answer\r\n\r\n/ Regards Kjell"
+excerpt_separator: <a id="extended"></a>
+---
+<a class="serendipity_image_link" href="/progress/media/screenshots/gaphor.png">
+<!-- s9ymdb:891 -->
+  <img class="serendipity_image_left" width="110" height="86" style="float: left; border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/screenshots/gaphor.s9yThumb.png" alt="" />
+</a><p>&#13;
+<a href="/progress/archives/329-Rating-UML-Editors.html">I'm still rating UML editors.  Last time, </a><a href="/progress/archives/331-UML-Editors-BOUML.html">BOUML failed to impress me</a>.  This time, I'm trying <a href="http://gaphor.devjavu.com/">Gaphor</a>.&#13;
+</p><p>&#13;
+I thought Gaphor would be terrific, since it's a Python/GTK project, and therefore native to my system (Ubuntu/Gnome).  Should be easy to modify, too.  And the home page looks good!&#13;
+</p><p>&#13;
+But Gaphor failed miserably for my purposes.  Let's see why.&#13;
+</p><a id="extended"></a><p>&#13;
+<u>Supports Class and Sequence Diagrams:</u> <b>Poor.</b>  Technically, Gaphor "supports" <b>any</b> diagram.  In fact, it makes no restriction about what kind of elements you put on a diagram.  Mix your classes with your lifelines, go right ahead!  &#13;
+</p><p>&#13;
+But that's not why I rated Gaphor "Poor" for diagram support.  Rather, it's because there's no aggregation indicator for class diagrams.  That's right, you can say "is-a" but not "has-a".  On its website, Gaphor has a tutorial for adding your own elements... but why should I have to add an aggregation diamond?&#13;
+</p><p>&#13;
+<u>Configurable Display:</u> <b>Fair.</b> Gaphor didn't allow me to change colors -- perhaps that's hidden somewhere, but after the aggregation debacle I wasn't willing to look for too long.  It also wouldn't let me move the labels for the message lines on my sequence diagrams, which means they're going to get crowded or overlap other elements in inconvenient ways.  However, it supports UML syntax for everything.  You can also use non-UML labels for your message lines, so that's REALLY configurable. &#13;
+</p><p>&#13;
+Unfortunately, you have to do everything by hand.  It doesn't give you a dialog to enter attributes, or auto-complete types that are already in your data model.  That's still the ultimate in configurability, but it's not a big help to usability.&#13;
+</p><p>&#13;
+<u>Group Selection and Movement:</u> <b>Poor.</b> While this works with classes and their associations, it doesn't work on calls.  When I suddenly realize I've left out the initialization call, I can't move everything down and insert the new call.  That's annoying.&#13;
+</p><p>&#13;
+<u>Infinite Undo:</u> <b>Perfect!</b>  It even separates the undo actions by diagram.  Of course, with the poor selection support, you're going to need this feature.  A lot.&#13;
+</p><p>&#13;
+<u>Supports Synchronous, Asynchronous, and Reflexive Messages:</u> <b>Poor.</b> You have to bend the reflexive line around on your own.  There's no support for orthogonality, so it gets crooked.  The asynchronous line is represented a little differently than I'm accustomed to, but that's a minor detail.  I'm an old geezer (in software reference frame), so there's probably a newer UML specification that I haven't upgraded to.  As long as I can get my thoughts across, I'm good.&#13;
+</p><p>&#13;
+<u>Dynamic Document Size:</u> <b>Poor.</b>  I didn't have to play around with page sizes, but the document only resizes when you place something that overlaps the edges.  Then you have to use the scrollbars, move it over the edge, and set it down again.  It can take a while to expand the document to the dimensions you need.&#13;
+</p><p>&#13;
+<u>Scrolling:</u> <b>Poor.</b>  When stretching a sequence line from one end to the other, the view doesn't automatically scroll.  However, you <i>can</i> set the end down, use the scrollbars, and move the end where you need to go.  (Repeat if you still haven't scrolled all the way to your destination.)&#13;
+</p><p>&#13;
+<u>Shared Data Model:</u> <b>Fail.</b> Although any classes you define are shown in the sidebar, there's no way to reuse those same classes in the sequence diagram.  This is not "shared".  The message line wouldn't auto-complete the message name, and the only way to add a new operation from the sequence diagram was to open a class diagram!  This is the essence of UML modeling, in my opinion; without a shared data model, all you've got is just a structured drawing program with some useful primitives.&#13;
+</p><p>&#13;
+<u>Supports Large Projects:</u> Sure, why not?  <b>Fail.</b>  The only import available is from Python, and I don't have a large Python codebase to test it on.  But without a shared data model, all you're doing is drawing pictures; make 'em as big as you want!&#13;
+</p><p>&#13;
+Gaphor didn't even support any extras to recommend it.  There was no support for alignment, spacing, or distribution of elements; the only import was from Python; and it doesn't do code generation.  &#13;
+</p><p>&#13;
+Perhaps if you're doing something in Python, Gaphor will work for you.  But it's severely crippled for my uses.&#13;
+</p>

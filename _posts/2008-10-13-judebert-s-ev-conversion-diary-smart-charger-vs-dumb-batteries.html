@@ -1,0 +1,88 @@
+---
+layout: post
+status: published
+published: true
+title: 'Judebert''s EV Conversion Diary: Smart Charger vs. Dumb Batteries'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2008-10-13 14:23:00 UTC
+permalink: "/progress/EV/Smart-Charger-vs-Dumb-Batteries.html"
+redirect_from:
+- "/archives/284-Judeberts-EV-Conversion-Diary-Smart-Charger-vs.-Dumb-Batteries.html"
+categories:
+- EV
+- EV Conversion Diary
+tags:
+- batteries
+- charging
+- electric vehicles
+- ev
+- recharge
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+Because I built for reliability, I invested about $2000 in a battery management system (BMS).  It includes a "smart" charger (the PFC-20) and regulators that monitor the state of each battery, communicating with the charger when unusual conditions occur.  This system keeps the charger from damaging the batteries with improper charging (especially overcharging).&#13;
+</p><p>&#13;
+But everything needs to be set up and calibrated to work properly.  And I'm having problems accomplishing that.&#13;
+</p><p>&#13;
+Maybe it's because of a dumb operator, but I'm blaming it on dumb batteries.  Read the rest of this (very long) entry to see what I've been doing for the past three months now.&#13;
+</p><a id="extended"></a><p>&#13;
+<a href="/progress/EV/Battericide.html">It all started when I let them drain to 6V each.</a>  That's worse-than-dead.  And I didn't have time to charge them individually, providing TLC and customized charging regimens to determine and fix each battery's problem; instead I just bulk-charged them in series <i>very, very, slowly</i>.  &#13;
+</p><p>&#13;
+Two of them were unrecoverable.  I charged the other 10 until their regulators were all blinking and I stuffed them back in the car and started driving.  They showed wildly different voltages (they were "unbalanced"), but <a href="/progress/EV/Without-a-Net.html">my time was up</a>, and I figured they'd even out with regular use.&#13;
+</p><p>&#13;
+They're Optima Yellow tops, and their "resting voltage" (the voltage they stay at after they're fully charged and have been sitting for an hour or so) is supposed to be 13.2V; since I've got 10 of them, that should be 132V.  My resting voltage was around 128V.  Their "acceptance voltage" (the highest voltage they reach while charging, and where they should stay while the last trickles of electricity are stuffed in)  is supposed to be 14.7V; I had never seen them get above 142V.  &#13;
+</p><p>&#13;
+I consulted the EVDL and got three recommendations:&#13;
+</p><ul>&#13;
+<li>Try a desulfating pulse charger.</li>&#13;
+<li>Drain 'em hard, charge 'em hard.</li>&#13;
+<li>Charge each battery at high voltage, low current.</li>&#13;
+</ul><p>&#13;
+The desulfating pulse charger was acknowledged as an unknown quality, even by the people who recommended it.  Everyone's heard great stories, but nobody has any hard data.  I decided to pass that up until I get really desperate.&#13;
+</p><p>&#13;
+I can drain them pretty hard, but by design, my charger only outputs 20A max.  From the outlets I have available, I can only reach 15A, and then I'm tripping breakers.  The hardest charge I could reliably produce was 14A.&#13;
+</p><p>&#13;
+High voltage and low current can be done with a light bulb.  It's a very nice cheap resistor, and only allows about 1A to pass through.  That's not enough to make the batteries start venting, which is what kills them off.  But I never have more than two days to recharge, so I can't take care of the batteries individually; I have to charge them all together in series.  My regulators keep the voltage from getting too high; they've got an "equalize" mode, which kicks it up a little, but they don't realize what I'm trying to do.  I'd have to disable them somehow to get a consistent high voltage for the whole pack.&#13;
+</p><p>&#13;
+So I ran a sort of melange of the whole thing.  I'd drive hard, providing high current drains.  At least that was fun!  I was careful never to let them get below 105V, even under acceleration.  I'd finish off around 125V resting voltage, then I'd plug them in at 14A or so with the regulators all attached and working.  &#13;
+</p><p>&#13;
+When the first battery hit full, its regulator would shunt up to 2A of current through its resistor.  Of course, that dropped the voltage on the battery, so the regulator would quickly switch back to normal, which would raise the voltage, so it would start shunting... rinse, lather, repeat.  The regulator would appear to blink, and the cycling produces a kind of pulsing.  &#13;
+</p><p>&#13;
+When enough regulators were blinking, the charger would start reducing the current, providing the high-voltage low-current charging.  When any regulator got too hot, it would shut down the charger altogether while it cooled off.&#13;
+</p><p>   &#13;
+Because the acceptance voltage was too high to reach, they'd charge as long as I kept the car plugged in.  It was a waste of electricity, but it got all the batteries to the full point, according to the regulators.  You see, they turn red when the battery goes below 10.5V.  Since I don't have a bypass on my contactors, whenever I turn the car on the controller's capacitors <b>eat up</b> current, pulling the voltage down.  All the batteries go below 10.5, even if it's only for an instant.  So every time I turned on the car, I turned all the regulators red, and by the time I came back for the next drive the charger had pulled them all up to green again.&#13;
+</p><p>&#13;
+Unfortunately, it wasn't helping.  After a week, I was still only resting at a little under 128.5V or so.  &#13;
+</p><p>&#13;
+I tried an equalization charge.  That allowed the batteries to charge at a higher voltage.  To avoid gassing, I restricted it to 1A.  That got my resting voltage to a solid 128.5V, but the batteries were still showing voltages as different as 0.5V. &#13;
+</p><p>&#13;
+I tried another equalization charge, with no noticeable effect.&#13;
+</p><p>&#13;
+After about two weeks, I decided to try a deep discharge.  I did my usual commute, then drove around the neighborhood until my voltage at stop signs was about 121V.  Then I charged as usual.&#13;
+</p><p>&#13;
+That got me to a little under 129V. &#13;
+</p><p>&#13;
+I had another deep discharge later, when I had to do an extra errand.  I wound up around 50% SOC.  Over the course of four weeks, that happened about four times.  Each time, I'd charge at 14A or so.  Eventually I was up to a pretty solid 129V.&#13;
+</p><p>&#13;
+I figured that was as high as I was going to get.  I must have damaged the batteries too badly to get any more.  It was enough for my daily commute, so I wouldn't have to replace the batteries yet.  I continued with weekly equalization charges, though.&#13;
+</p><p>&#13;
+Then one day, I forgot that I had left the regulators in equalize mode.  Luckily, I charged at only 5A.  But the batteries actually made it up to the acceptance voltage and cut off on their own!  And when it was done, I was at a resting voltage of 130V!&#13;
+</p><p>&#13;
+There was no sulfur smell, so I figured the regulators must have trimmed the charger back before any gassing occurred. I tried it one more time, with only 3A.  I got up to almost 131V, although it drains off pretty quickly.  &#13;
+</p><p>&#13;
+That was pretty close to 132V, so I decided to stop wasting electricity and adjust the charger for their actual acceptance voltage.  It was much lower than I expected: around 137V.  But at the end, the resting voltage was still 131V.&#13;
+</p><p>&#13;
+I kept that up for a week.  The E-meter seemed to be reporting increased energy usage; the trip that normally took me to 75% State-Of-Charge (SOC) now took me to 70% or even 60%.  But what <i>really</i> concerned me was that none of the batteries was blinking.&#13;
+</p><p>&#13;
+I slowly adjusted the acceptance voltage up.  I've gotten it to the point now where only one or two batteries doesn't blink.  The E-meter still thinks I'm using more energy than before, though.&#13;
+</p><p>&#13;
+The weird thing now is that <i>it's never the same batteries that don't get full</i>.  There are three suspects, and it's a cinch that one of them will still be red when I come out for my drive.  But which one?  I can never tell until I look.  &#13;
+</p><p>&#13;
+Dumb batteries.&#13;
+</p>

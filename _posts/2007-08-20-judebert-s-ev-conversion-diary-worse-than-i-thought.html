@@ -1,0 +1,97 @@
+---
+layout: post
+status: published
+published: true
+title: 'Judebert''s EV Conversion Diary: Worse Than I Thought'
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2007-08-20 13:45:11 UTC
+permalink: "/archives/166-Judeberts-EV-Conversion-Diary-Worse-Than-I-Thought.html"
+categories:
+- EV Conversion Diary
+tags:
+- electric vehicles
+- ev
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p>&#13;
+I spent Sunday working on the car.  I got everything rewired and checked; I even used my new access holes.  Nathan was impressed: in his own words, "I thought this would be a tough job, but all I had to do was reconnect a vacuum hose."   :-) &#13;
+</p><p>&#13;
+But the car just won't work.  And I'm nearly dead from all the stooping and lifting in a hot garage.  &#13;
+</p><a id="extended"></a><p>&#13;
+We borrowed a fan from a friend, so that helped with the heat.  And Erica insisted on putting up the canopy so the garage would be more shady.  So the heat wasn't so bad.&#13;
+</p>&#13;
+<figure class="figure_left" style="width: 110px">
+<!-- mdb='569' -->
+  <a href="/progress/media/EV/converter_connections.jpg">
+    <img src="/progress/media/EV/converter_connections.s9yThumb.jpg" width="110" height="73" alt="" />
+  </a>
+  <figcaption>Todd PC30: I understand the connections at the top and the bottom, but what's that in the middle?<br /><a href="/progress/media/EV/converter_connections_big.jpg" target="_blank">(2160x1440)</a></figcaption>
+</figure>&#13;
+<p>&#13;
+I started the day by reconnecting the rest of the wires.  I made a guess insofar as the DC/DC converter (a Todd PC30) was concerned, because I couldn't find any papers for it in my collection or online.  It's pretty obvious where the high-voltage (HV) and 12v lines go, but what are all those extra connectors for?&#13;
+</p><p>&#13;
+Everything else was pretty well-labeled.  There are two wires labeled "Heat Relay", but I know that the one coming out of the firewall is connected to the heater.  I wish I knew where the other one goes, but having it disconnected won't hurt anything.  I was stalling, hoping that Nathan would arrive and see both wires and verify I'd connected the right one before I covered it up with the front batteries, but eventually I ran out of other things to do.&#13;
+</p><p>&#13;
+The front batteries require a particular insertion and connection sequence, because space is so limited.  The #12 (leftmost) battery must be inserted into the rack last, and it needs to have its positive cable connected.  Otherwise, there will be no way to tighten it.  The #9 battery (the frontmost) must be last of all, and the #10 positive post must be connected before #9 is inserted.  Same thing; otherwise no way to tighten the number 10 connector.  You've also got to have all the cables routed correctly, or you'll wind up scraping the insulation off.&#13;
+</p><p>&#13;
+I discovered all that through trial and error, of course.  And moving batteries around, and retrial, and more error.  In fact, I dropped the #12 battery at one point.  Stupid of me to expect it to sit on the bumper, but at least I had the sense not to try and cushion its fall with my foot.  There was no apparent damage, thankfully.&#13;
+</p><p>&#13;
+I triple-checked all my connections while the HV safety switch was off.  I found that I'd reversed the wires on one inaccessible battery's regulator, but the new access hole was large enough for me to fit my hand in and correct them.  I also found a few loose connections, which I tightened.&#13;
+</p><p>&#13;
+Nathan showed up about this time.  He found a loose vacuum connection and fixed it.  He had no idea what the second "Heat Relay" wire was for, but he remembered that the one coming out of the firewall went to the heater switch.  After a few minutes of rechecking, we went through the ignition sequence, mostly to make sure I hadn't hooked the motor up in reverse.&#13;
+</p><p>&#13;
+Nothing happened.  &#13;
+</p><p>&#13;
+We checked all the connections again, and everything was tight.  Nathan thought the problem might be the main contactor, so we tested voltage across its terminals: 0v.  Obviously, something was wrong with the contactor.  My family was arriving for the monthly Sunday get-together, so we killed the power at the safety switch and kicked off to go spend some family time.  I'd spent from 0730 to 1300 in the garage.&#13;
+</p><p>&#13;
+My Dad was a ham radio operator.  We described what we'd been doing, and when we told him about the 0v contactor, he said, "Good."  It took me a few moments to realize what he meant: you don't measure voltage, you actually measure voltage <b>difference</b>.  I would certainly hope that the contactor would pass the entire current with no measurable voltage drop, duh.  I needed to measure something else.&#13;
+</p><p>&#13;
+After the party, around 1800, we decided to go figure out what the problem was.  We turned everything on again.  The car hadn't magically fixed itself.  (I was hoping.)  We decided that testing the voltage at the controller itself would tell us the real deal.  We found 150v.  The contactors were working as expected.&#13;
+</p>&#13;
+<figure class="figure_left" style="width: 73px">
+<!-- mdb='567' -->
+  <a href="/progress/media/EV/controller_top.jpg">
+    <img src="/progress/media/EV/controller_top.s9yThumb.jpg" width="73" height="110" alt="" />
+  </a>
+  <figcaption>The Curtis 1231C Controller<br /><a href="/progress/media/EV/controller_top_big.jpg" target="_blank">(2160x1440)</a></figcaption>
+</figure>&#13;
+<figure class="figure_left" style="width: 110px">
+<!-- mdb='565' -->
+  <a href="/progress/media/EV/controller_connections.jpg">
+    <img src="/progress/media/EV/controller_connections.s9yThumb.jpg" width="110" height="73" alt="" />
+  </a>
+  <figcaption>Curtis connections: the topmost small connection is KSI<br /><a href="/progress/media/EV/controller_connections_big.jpg" target="_blank">(2160x1440)</a></figcaption>
+</figure>&#13;
+<p>&#13;
+We spent a while figuring out the inputs to the Curtis, a 1231C-8601.  The problem was that the only documentation we've got is for a Curtis 1221B.  The keyswitch input was correct, as far as we could tell; one part of diagram notes that the microswitch should be NC, so we assumed that we should see power when the pot was "off", and lose power just when the pot started providing some signal.&#13;
+</p><p>&#13;
+We moved on to the pot itself.  We measured its resistance as 5K - 4K ohms.  It's supposed to be 0 - 5K.  Nathan disassembled it while I got the replacement from our earlier shenanigans.  It measured 5K - 4K, too.&#13;
+</p><p>&#13;
+Turned out we were reading the meter wrong.  The original pot was just fine.  We reassembled everything, but left it disconnected from the pedal so we could try manually manipulating the motor.  I accidentally brushed the keyswitch against the aluminum base of the controller, drawing some sparks and blowing a fuse.  (I wish I didn't keep earning the monicker "Spark Lad".)  Foul, personal clumsiness; 5 yards and 15 minutes delay.  &#13;
+</p><p>&#13;
+We tried the keyswitch on, then off.  We tried resistance from 0 - 5K, and 5K - 0.  Nothing would move the motor.  &#13;
+</p><p>&#13;
+Finally, we resorted to the troubleshooting checklist.  The HV inputs were as expected.  The keyswitch voltage was as expected, although they wanted us to test a second connector we didn't have.  (The solution was "acid or dirt on terminal", which wasn't the case, so we moved on.)  The potentiometer output was weird: we got no readings while it was connected to the controller.  Disconnected, it worked fine.  We assumed they wanted it tested disconnected, since otherwise we'd be measuring the resistance of the controller's internal circuitry.  We continued to the voltage on the potentiometer inputs, and found our first problem: we saw 0v, no matter how we tested.  The checklist said it should go from 2v to 7v.  Hmmm.  The solution was "bad potentiometer", but we'd tested it pretty thoroughly.  We moved on.&#13;
+</p><p>&#13;
+We tested the motor voltage.  0v.  Well, that explains why it's not working: no power going to the motor.  What's the solution?  &#13;
+</p><p>&#13;
+"Bad Controller."  Bad controller?  Oh, no.  Nathan comments, "You don't suppose when the motor blew, the controller went, too?"  Oh, no, oh no oh no oh no.  I can't get around a bad controller.  I can't jury-rig something to get to school tomorrow.  I'm going to miss my deadline.&#13;
+</p><p>&#13;
+We desperately try to imagine something else it could be while we reassemble the rest of the suspension.  The car is now perfectly ready, with the minor execption of the fact that it <b>WON'T MOVE</b>.  &#13;
+</p><p>&#13;
+We can't think of anything else.  My Curtis is blown.  I propose replacing it, and Nathan quips, "What would be left from the original Ohmsmobile?  A few pieces of wire?"  Well, yes; those, an E-Meter, and the DC/DC converter.  And a couple of accessories, like the shunt, breaker, and one of the main contactors.  Little stuff that's absolutely critical.  I'm not so sure about $1500 worth of little stuff, but it's more than just the wires.&#13;
+</p><p>&#13;
+When I break the news to Erica, I think she realizes just how depressing all this is.  She says, "Hey, we can buy that better controller now."  She's talking about a Zilla 1K, which I covet.  "But it's $1500," I protest.  She replies, "Well, we've already spent so much money on the car..."&#13;
+</p><p>&#13;
+She's sweet.  I find out that the Zilla has gone up to $2K.  But repairing the Curtis will cost $700, and getting a new one would be $1500.  Gag.&#13;
+</p><p>&#13;
+I intend to ask the EVDL to help.  Maybe someone can come and confirm that the controller is shot.  Maybe someone will have a backup I can borrow.  &#13;
+</p><p>&#13;
+Ugh.  This is much worse than I thought.&#13;
+</p>

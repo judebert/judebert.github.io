@@ -1,0 +1,100 @@
+---
+layout: post
+status: published
+published: true
+title: Using SSL in Java, Part 2
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2012-03-09 14:15:39 UTC
+permalink: "/progress/permalink/SSL2.html"
+redirect_from:
+- "/archives/425-Using-SSL-in-Java,-Part-2.html"
+categories:
+- Tutorials
+tags:
+- java
+- programming
+- ssl
+comments:
+- id: 1290
+  author: Judebert.com
+  author_email: ''
+  author_url: http://judebert.com/progress/archives/424-Using-SSL-in-Java,-Part-1.html
+  date: '1331310834'
+  content: " Working (as I do) with secure equipment, it was inevitable that I'd eventually
+    have to connect to a server using SSL. I didn't even get to write my own code;
+    I had to use a Java client library that was provided to me. The programmers of
+    my client li"
+excerpt_separator: <a id="extended"></a>
+---
+<p><a href="/progress/permalink/SSL1.html">In part 1, I explained how key-based SSL authentication works.</a>  In part 2, I intend to explain how to implement a certificate authorized SSL connection in Java.&#13;
+</p><p>&#13;
+If you haven't read part 1 yet, you might want to check it out.  I'll still be here when you get back.&#13;
+</p><a id="extended"></a><h3>Dealing with Certificates</h3>&#13;
+<p>&#13;
+Before you can use keys for secure identification, obviously you need to get a key pair.  You request one from a Certificate Authority, of course... if you've got enough money to pay for it.&#13;
+</p><p>&#13;
+At this point, you might be asking yourself why the CA is a <b>Certificate</b> Authority instead of a <b>Key</b> Authority.  It's simple, really: the keys they hand you include not only the key itself, but some additional information -- how long the key is valid, who the key belongs to, which CA issued it, a checksum signed with the CA's own key to verify that the whole package of information is real, and so on.  All together, this information is called a "certificate".&#13;
+</p><p>&#13;
+From this point on, I'll use the terms "key" and "certificate" interchangeably.  If I need to talk about the actual key contained in a certificate, I'll explicitly tell you so.&#13;
+</p><p>&#13;
+Java comes with a handy keyword management tool, imaginatively named "keytool".  It works from the command prompt (all you Windows users will be more likely to recognize this as the "Terminal Window" or "cmd.exe").  &#13;
+</p><p>&#13;
+Keytool allows you to generate your own certificates.  Most of the times that you need to program SSL sockets, the customer will hand you the certificates, but when you need to generate your own, here's how:&#13;
+</p>[code]&#13;
+keytool -genkeypair -keystore keystore.jks -alias keyname&#13;
+[/code]<p>&#13;
+When you type this, you should substitute your own file for keystore.jks, and whatever you want to name your key for keyname.  You'll be prompted for the password and other information.&#13;
+</p><p>&#13;
+Both the public and private key are stored in the keystore.  Obviously, this is not what you want to hand out to other people.  Here's how to extract just the certificate containing the public key:&#13;
+</p>[code]&#13;
+keytool -export -alias keyname -file keyname.crt&#13;
+[/code]<p>&#13;
+Again, substitute something reasonable for keyname.  The file "keyname.crt" will now contain your public key in a certificate (hence the ".crt" extension); you can give it to anyone, and they can use it to authenticate future information from you.&#13;
+</p><p>&#13;
+If you're lucky, you get a certificate repository from the customer.  This is also known as a "truststore".  It <i>stores</i> the public key certificates of the servers you can <i>trust</i>.  Clever, no?&#13;
+</p><p>&#13;
+If you're not lucky, you just get a certificate.  No sweat; you just need to create your own truststore containing the certificate:&#13;
+</p>[code]&#13;
+keytool -importcert -file keyname.crt -keystore truststore.jks&#13;
+[/code]<p>&#13;
+Of course, you'll need to substitute appropriate files for keyname.crt and truststore.jks.  The truststore will be created, if it does not already exist.  You'll be prompted for passwords and such.&#13;
+</p><p>&#13;
+Of course, if you ever want to list what's in a keystore (handy for testing passwords), here's the command:&#13;
+</p>[code]&#13;
+keytool -list -v -keystore keystore.jks&#13;
+[/code]&#13;
+<h3>Dealing with SSL</h3>&#13;
+<p>&#13;
+Now that you're got a keystore with the server's public key certificate, you need to tell Java about it.  This couldn't be easier!  You just need to define two Java properties.  Although you can use the "-D" switch on the command line, I'll do it here in Java:&#13;
+</p>[code]&#13;
+System.setProperty("javax.net.ssl.trustStore", truststorePath);&#13;
+System.setProperty("javax.net.ssl.trustStorePassword", truststorePass);&#13;
+[/code]<p>&#13;
+Here I assume you've already read the truststore filename into truststorePath, and you've read the password into truststorePass.  They could come from an XML configuration file, the command line, or wherever; the point is, your application has some way of figuring them out, and this is how you tell Java what they are.&#13;
+</p><p>&#13;
+Now you can feel free to create your SSL socket: &#13;
+</p>[code]&#13;
+Socket socket = SSLSocketFactory.getDefault().createSocket(server, port);&#13;
+[/code]<p>&#13;
+Java will automatically authenticate the server using the certificates in your truststore.&#13;
+</p><p>&#13;
+If you want to create your own SSL server, you'll need to create your own key pair, as above.  You give the exported public certificate to anyone who wants to connect to your server.  You keep the original certificate yourself, and put it in the keystore (as opposed to the truststore).  The properties are the same, except that they use "key" instead of "trust".  Then you use the SSLServerSocketFactory instead of the SSLSocketFactory:&#13;
+</p>[code]&#13;
+System.setProperty("javax.net.ssl.keyStore", keystorePath);&#13;
+System.setProperty("javax.net.ssl.keyStorePassword", keystorePass);&#13;
+SSLServerSocket serverSocket = SSLServerSocketFactory.getDefault().createServerSocket(9999);&#13;
+SSLSocket workSocket = (SSLSocket) serverSocket.accept();&#13;
+[/code]&#13;
+<h3>Conclusion</h3>&#13;
+<p>&#13;
+Of course, there are other ways to do this.  Jetty has its own method of specifying keystores, and other HTTP frameworks probably do, too.  However, just setting the Java properties mentioned here will take care of any certificate problems you have.&#13;
+</p><p>&#13;
+If there's enough interest, we can talk about creating your own trust managers -- this allows you to use your own criteria for whether to allow an SSL connection to continue.  You can make them as strong or as weak as you like, even allowing <b>any</b> connection to succeed.  &#13;
+</p><p>&#13;
+This article is long enough already.  I hope it's been as helpful to you as it was to me!&#13;
+</p>

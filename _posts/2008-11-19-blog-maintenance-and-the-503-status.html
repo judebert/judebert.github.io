@@ -1,0 +1,79 @@
+---
+layout: post
+status: published
+published: true
+title: Blog Maintenance and the 503 Status
+author:
+  display_name: Judebert
+  login: judebert
+  email: judebert@judebert.com
+author_login: judebert
+author_email: judebert@judebert.com
+date: 2008-11-19 15:20:11 UTC
+permalink: "/archives/299-Blog-Maintenance-and-the-503-Status.html"
+categories:
+- Tutorials
+tags:
+- apache
+- htaccess
+- serendipity
+comments: []
+excerpt_separator: <a id="extended"></a>
+---
+<p><a href="http://www.optional-necessity.com/">Don</a> wanted a way to block access to his blog while he was fiddling with it.  He found <a href="http://www.askapache.com/htaccess/503-service-temporarily-unavailable.html">information about the 503 code</a> online.  &#13;
+</p><p>&#13;
+Of course, they want to return different codes for search engines and for users.  We figured we wanted to return the same thing for users and search engines; after all "Service Unavailable" is the actual status, regardless of who's visiting.  The only exception should be the blog maintainer.&#13;
+</p><p>&#13;
+Here's the .htaccess we worked out:&#13;
+</p>&#13;
+[code]&#13;
+RewriteEngine On&#13;
+RewriteBase /serendipity&#13;
+# Allow blog maintainer back in&#13;
+RewriteCond %{REMOTE_HOST} !^your\.IP\.address\.here&#13;
+# Don't loop forever&#13;
+RewriteCond %{REQUEST_URI} !^/503\.php&#13;
+RewriteRule .* 503.php [L]&#13;
+[/code]&#13;
+<p>And here's the 503.php file I like:</p>&#13;
+[code]<?php header('HTTP/1.1 503 Service Temporarily Unavailable');
+header('Status: 503 Service Temporarily Unavailable');
+header('Retry-After: 3600');
+header('X-Powered-By:');
+??>&#13;
+&#13;
+<title>Get Off My E-Lawn!</title>&#13;
+&#13;
+<h1>Get Off My E-Lawn!</h1>&#13;
+<p>&#13;
+I'm busy maintaining the site.  Please don't step on the grass.&#13;
+</p><p>&#13;
+I should be ready for visitors again in under an hour.&#13;
+</p>&#13;
+&#13;
+[/code]&#13;
+<p>&#13;
+We use a PHP file so that we can set the header, and so we can include a retry period for search engines.&#13;
+</p><p>&#13;
+If you're one of the few whose server allows [R=503] in the .htaccess, there's an even easier way outlined in the article details.&#13;
+</p><a id="extended"></a><p>I didn't really want to have a separate document for my maintenance, and I especially didn't want to run PHP just to output the appropriate header.  Unfortunately, my server doesn't allow [R=503] in my .htaccess files.  If yours does, and you have mod_headers installed, you might try this, instead:&#13;
+</p>&#13;
+[code]&#13;
+RewriteEngine On&#13;
+RewriteBase /serendipity&#13;
+ErrorDocument 503 "Down for maintenance.  Check again in an hour.&#13;
+ &#13;
+# Allow blog maintainer back in&#13;
+RewriteCond %{REMOTE_ADDR} !^your\.IP\.address\.here&#13;
+# Set environment variable&#13;
+RewriteRule .* - [E=maintenance:1]&#13;
+# Add retry timeout if maintenance mode is enabled&#13;
+Header always set Retry-After "7200" env=maintenance&#13;
+ &#13;
+# Redirect with 503 if maintenance mode is enabled&#13;
+RewriteCond %{ENV:maintenance} 1&#13;
+RewriteRule .* - [R=503,L]&#13;
+[/code]&#13;
+<p>&#13;
+That's nicely and fully contained in the .htaccess... if you can get it.&#13;
+</p>
