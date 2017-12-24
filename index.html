@@ -1,1 +1,57 @@
-Copy blog here
+---
+layout: default
+title: Judebert.com
+---
+
+<div class="home">
+
+  <ul class="post-list">
+    {% for post in paginator.posts %}
+      <li>
+        {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+
+        <a class="post-link" href="{{ post.url | relative_url }}"><h2>{{ post.title | escape }}</h2></a>
+        {%- if post.excerpt != nil and post.excerpt.size > 0 -%}
+        {{ post.excerpt }}
+        <p><a href="{{ post.url | relative_url }}#extended">Continue reading "{{ post.title | escape }}"</a></p>
+        {%- else -%}
+        {{ post.content }}
+        {%- endif -%}
+        {%- if post.comments.size > 0 -%}
+        <p><a href="{{ post.url | relative_url }}#comments">({{ post.comments.size }} comments)</a></p>
+        {%- endif -%}
+        </h2>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if paginator.total_pages > 1 %}
+    <div class="pagination">
+      {% if paginator.previous_page %}
+        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}" title="Previous page">&laquo;</a>
+      {% else %}
+        <span title="No previous page">&laquo;</span>
+      {% endif %}
+
+      {% for page in (1..paginator.total_pages) %}
+        {% if page == paginator.page %}
+          <em>{{ page }}</em>
+        {% elsif page == 1 %}
+          <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}" title="First page">{{ page }}</a>
+        {% else %}
+          <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}" title="Page {{ page }}">{{ page }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path }}" class="next">&raquo;</a>
+      {% else %}
+        <span class="next">&raquo;</span>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
+
+</div>

@@ -1,0 +1,48 @@
+theme: minima
+title: Judebert's Progress Report
+header_pages: 
+  - {title: News, url: /index.html}
+  - {title: Electric Car, url: /progress/EV/EV.html}
+  - {title: Contraction Timer, url: /progress/palm/ctimer/ctimer.html}
+  - {title: About Judebert, url: /progress/about.html}
+paginate: 5
+paginate_path: "/progress/archives/P:num"
+excerpt_separator: ''
+exclude: 
+  - judebert_progress.sql
+  - judebert_racefit.sql
+  - judebert_swot.sql
+  - judebert_theysay.sql
+  - Gemfile
+  - Gemfile.lock
+  - index.html.old
+  - judeberts.lst
+  - images.txt
+collections:
+  categorized:
+    output: true
+    permalink: /posts/categorized/:name
+  tagged:
+    output: true
+    permalink: /posts/tagged/:name
+plugins:
+# GitHub Pages defaults
+#  - jekyll-gist
+#  - jekyll-github-metadata
+  - jekyll-paginate
+#  - jekyll-relative-links
+#  - jekyll-optional-front-matter
+#  - jekyll-readme-index
+#  - jekyll-default-layout
+  - jekyll-titles-from-headings
+# GitHub optionals
+  - jekyll-redirect-from
+#  - jekyll-feed
+#  - jekyll-seo-tag
+#  - jekyll-sitemap
+#  - jekyll-avatar
+#  - jemoji
+#  - jekyll-mentions
+#  - jekyll-include-cache
+  
+
