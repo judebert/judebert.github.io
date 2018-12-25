@@ -1,0 +1,176 @@
+---
+---
+
+@import "{{ site.theme }}";
+$color-text: #666666;
+$color-data: #586BAA;
+$color-contrast: #CC0000;
+$color-border: #FEDA8D;
+$color-link: #479AC6;
+
+// Override some important stuff
+.wrapper {
+  max-width: 100%;
+  padding: 0;
+}
+
+.site-header {
+  border: none;
+}
+
+.site-nav .page-link:not(:last-child) {
+  margin-right: 0;
+}
+
+// Criterion
+
+body {
+    background: #FFFFFF url(criterion/img/criterion_body.png) repeat-x;
+    font: normal small "Trebuchet MS", Arial, Helvetica, sans-serif;
+    color: $color-text;
+}
+
+header,
+main,
+footer {
+    width: 95%;
+    margin: 0 auto;
+}
+
+nav {
+    height: 90px;
+    margin: 0 auto;
+    padding: 0;
+    padding-top: 25px;
+    float: left;
+}
+
+nav .trigger .currentpage .page-link {
+    height: 36px;
+    margin-top: -4px;
+    background-image: url(../assets/criterion/img/criterion_tabactive.png);
+    background: #ddd;
+    border: 1px solid #479AC6;
+    border-bottom: none;
+    font-weight: bold;
+    color: $color-link;
+}
+
+nav .trigger .page-link {
+    display: block;
+    float: left;
+    height: 32px;
+    margin: 0;
+    margin-left: 1px;
+    padding: 13px 25px 0 25px;
+    background: #FFFFFF url(../assets/criterion/img/criterion_tab.png) repeat-x;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    color: #586BAA;
+}
+
+  
+.figure-left {
+  float: left;
+}
+
+.figure-center,
+.figure-left,
+.figure-right {
+  border: 1px solid #ddd;
+  background-color: #efefef;
+  padding: 0;
+  text-align: center;
+  margin: 0 10px 5px 0;
+}
+
+.figure-left figcaption {
+  border-top: 1px solid #ddd;
+  margin: 0;
+  padding: 1%;
+  clear: both;
+  font-size: 80%;
+  text-align: center;
+}
+
+.serendipity_imageComment_left {
+  float: left;
+  margin: 0 10px 5px 0;
+}
+
+.serendipity_imageComment_center,
+.serendipity_imageComment_left,
+.serendipity_imageComment_right {
+  border: 1px solid #ddd;
+  background-color: #efefef;
+  padding: 0;
+  text-align: center;
+}
+
+.serendipity_imageComment_img,
+.serendipity_imageComment_img img {
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-align: center;
+}
+
+.serendipity_image_left {
+  padding: 0 5px 0 0 !important;
+  float: left;
+}
+
+.serendipity_imageComment_txt {
+  border-top: 1px solid #ddd;
+  margin: 0;
+  padding: 1%;
+  clear: both;
+  font-size: 80%;
+  text-align: center;
+}
+
+a {
+  color: $color-link;
+}
+
+a:hover {
+  text-decoration: none;
+  color: $color-link;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+h1 { font-size: 1.6em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.4em; }
+h4 { font-size: 1.3em; }
+h5 { font-size: 1.2em; }
+h6 { font-size: 1.1em; }
+
+.site-title, 
+.site-title:visited {
+  color: $color-link;
+  text-transform: lowercase;
+  text-decoration: none;
+  font-style: italic;
+}
+
+.post-meta span {
+  color: $color-data;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.post-title {
+  text-decoration: none;
+}
+
+.post-entry {
+  padding: 20px 20px 10px 20px;
+  background: url(../assets/criterion/img/criterion_entry.png) repeat-x;
+  line-height: 150%;
+}
+
+

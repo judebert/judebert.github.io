@@ -3,25 +3,38 @@ layout: default
 title: Judebert.com
 ---
 
+<!--
+  Normally you'd expect this to be a home _layout, but 
+  pagination only works in index.html files.
+-->
+
 <div class="home">
 
   <ul class="post-list">
     {% for post in paginator.posts %}
       <li>
         {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-
-        <a class="post-link" href="{{ post.url | relative_url }}"><h2>{{ post.title | escape }}</h2></a>
-        {%- if post.excerpt != nil and post.excerpt.size > 0 -%}
-        {{ post.excerpt }}
-        <p><a href="{{ post.url | relative_url }}#extended">Continue reading "{{ post.title | escape }}"</a></p>
-        {%- else -%}
-        {{ post.content }}
-        {%- endif -%}
-        {%- if post.comments.size > 0 -%}
-        <p><a href="{{ post.url | relative_url }}#comments">({{ post.comments.size }} comments)</a></p>
-        {%- endif -%}
-        </h2>
+        <div class="post-meta">
+          <span>{{ post.date | date: date_format }}</span>
+          <a class="post-link" href="{{ post.url | relative_url }}">
+            <h3 class="post-title">{{ post.title | escape }}</h3>
+          </a>
+        </div>
+        <div class="post-entry">
+          <div class="entry-body">
+          {%- if post.excerpt != nil and post.excerpt.size > 0 -%}
+            {{ post.excerpt }}
+            <p><a href="{{ post.url | relative_url }}#extended">Continue reading "{{ post.title | escape }}"</a></p>
+          {%- else -%}
+            {{ post.content }}
+          {%- endif -%}
+          </div>
+          {%- if post.comments.size > 0 -%}
+          <div class="entry-comments">
+            <p><a href="{{ post.url | relative_url }}#comments">({{ post.comments.size }} comments)</a></p>
+          </div>
+          {%- endif -%}
+        </div>
       </li>
     {% endfor %}
   </ul>
