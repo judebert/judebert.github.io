@@ -106,7 +106,7 @@ comments:
   content: Why didnâ€™t I find this post earlier? Keep up the good work!
 excerpt_separator: <a id="extended"></a>
 ---
-<figure class="figure_left" style="width: 110px">
+<figure class="figure-left" style="width: 110px">
 <!-- mdb='698' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step17.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step17.s9yThumb.png" width="110" height="98" alt="" />
@@ -134,7 +134,7 @@ I downloaded and unarchived criterion to get its CSS and images.  That also gave
 </p><p>&#13;
 Next I wanted a sample of Serendipity's HTML to apply the CSS to.  It's possible there's a standard, typical blog load that designers use; I couldn't find it.  I wanted something reasonably representative, but I didn't want to mess up my live website. &#13;
 </p>&#13;
-<figure class="figure_left" style="width: 110px">
+<figure class="figure-left" style="width: 110px">
 <!-- mdb='681' -->
   <a href="/progress/media/s9y/templates/criterion/ss-original.png">
     <img src="/progress/media/s9y/templates/criterion/ss-original.s9yThumb.png" width="110" height="98" alt="" />
@@ -146,7 +146,7 @@ Luckily, Serendipity is dirt simple to install.  I created a test blog in a subd
 </p><p>&#13;
 Then I saved the web page to a local directory as judebert.html.  FireFox saved the images and CSS locally, too.  That way I knew I wouldn't be hitting my website and using up bandwidth every time I wanted to test a change.  Unfortunately, it didn't retrieve all the images referenced in the CSS.  That wasn't so bad, as the screenshot shows; the only CSS image was the custom header.&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='682' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step1.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step1.s9yThumb.png" width="110" height="99" alt="" />
@@ -163,7 +163,7 @@ Next I opened the source and started looking for the CSS.  Bulletproof included 
 <p>&#13;
 I removed the link entirely, just to see what Bulletproof looked like without any colorset.  As you can see, it's pretty basic.  What you can't see is that it's as cross-platform compatible as possible.  All I have to do is shift it around and style it.&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='683' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step2.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step2.s9yThumb.png" width="110" height="98" alt="" />
@@ -176,7 +176,7 @@ I copied the criterion stylesheet, which was called default.css, into the judebe
 <code>&#13;
         &lt;link rel="stylesheet" type="text/css" href="judebert_files/criterion_style.css"&gt;<br />&#13;
 </code><br />&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='684' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step3.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step3.s9yThumb.png" width="110" height="98" alt="" />
@@ -196,7 +196,7 @@ The criterion CSS used generic names, like "img06.gif", for their images.  I wan
 </p><p>&#13;
 So images/img05.gif was reformatted from the criterion directory as judebert_files/img/criterion_sbtitle.png, and img06.gif became criterion_sbcontent.png.  A quick reload showed that I had styled sidebars!&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='685' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step4.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step4.s9yThumb.png" width="110" height="98" alt="" />
@@ -207,7 +207,7 @@ So images/img05.gif was reformatted from the criterion directory as judebert_fil
 <p>&#13;
 But the entries were still way down low, below the sidebars.  This is where <a href="https://addons.mozilla.org/en-US/firefox/addon/1843">Firebug, a fantastic web-development tool</a>, saved my project.  Without it, I certainly would have gone crazy and given up.  With it, I just goofed around with a few things until I discovered that assigning a width to #content in criterion_style.css bumped the entries below the sidebar.  I commented out that line, and it was fixed!&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='686' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step5.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step5.s9yThumb.png" width="110" height="98" alt="" />
@@ -221,7 +221,7 @@ The only odd thing there for the post class was that its paragraphs, blockquotes
 </p><p>&#13;
 And at the end of a reload, I was getting happy!&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='687' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step6.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step6.s9yThumb.png" width="110" height="98" alt="" />
@@ -234,7 +234,7 @@ Continuing down the stylesheet, I found <code>#header</code>.  But I couldn't fi
 </p><p>&#13;
 Next up, the moment I had been waiting for: <code>#menu</code>!  I checked the criterion HTML to verify that these were, in fact, the tabs.  In the BP source, the tabs are <code>#sitenav</code>.  The structures were identical, too: unordered lists.  Changing the class selector was all that was required there.  Then I took care of the images, converting img02.gif to criterion_tab.png, img03.gif to criterion_tabhover.png, and img04.gif to criterion_tabactive.png. &#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='688' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step7.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step7.s9yThumb.png" width="110" height="98" alt="" />
@@ -247,7 +247,7 @@ While I now had tabs, there was some sort of serious problem: the first tab was 
 </p><p>&#13;
 Since that style didn't appear in criterion_style.css, I created it, setting the padding to 0.  I had tabs!  With a hover effect, no less!  (You can just see some of the Firebug menu in the screenshot.)&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='689' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step8.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step8.s9yThumb.png" width="110" height="98" alt="" />
@@ -258,7 +258,7 @@ Since that style didn't appear in criterion_style.css, I created it, setting the
 <p>&#13;
 Next up in the stylesheet was <code>#logo</code>.  This corresponded almost exactly with <code>#serendipity_banner</code>. That was a quick search-and-replace, without even any images to worry about.  Neat what you can do with CSS, isn't it? &#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='690' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step9.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step9.s9yThumb.png" width="110" height="98" alt="" />
@@ -271,7 +271,7 @@ Continuing along, I found <code>#content</code>.  This is where I commented out 
 </p><p>&#13;
 Since I couldn't find a perfect match for structure, I tried to find a match in functionality.  The content div pretty much set the width of the page for criterion; in BP, the closest thing is <code>#wrapper</code>.  So I changed #content to #wrapper and restored the <code>width: 740px;</code> line I had commented out earlier.&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='691' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step10.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step10.s9yThumb.png" width="110" height="98" alt="" />
@@ -293,7 +293,7 @@ The next useful style was for <code>#sidebar</code>.  Anybody could tell that wa
 </p><p>&#13;
 Then came a bunch of criterion-specific styles, like the login box, text entry fields, the updates box, and the partners box.  I deleted these.  That was plenty for one edit, so I saved and had a look at my progress.&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='692' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step11.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step11.s9yThumb.png" width="110" height="98" alt="" />
@@ -306,7 +306,7 @@ The next style was <code>#footer</code>, which matched BP in structure and name.
 </p><p>&#13;
 There were some more styles specific to criterion afterwards, so I deleted them.  That led me to the end of the file, and a feeling of accomplishment.&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='693' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step12.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step12.s9yThumb.png" width="110" height="98" alt="" />
@@ -320,7 +320,7 @@ But wait!  There's something missing: the background from the top of the page!  
 </p><p>&#13;
 I figured this must be on the body, so I searched my stylesheet for the body tag.  Sure enough, I had forgotten to port an image.  I changed img01.gif to criterion_body.png and got my crosshatch.&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='694' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step13.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step13.s9yThumb.png" width="110" height="98" alt="" />
@@ -335,7 +335,7 @@ I found that base.css was applying <code>display:inline;</code> to the list, whi
 </p><p>&#13;
 I added <code>padding:0</code> to the sitenav style, and <code>display:block</code> to <code>#sitenav ul</code>.&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='695' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step14.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step14.s9yThumb.png" width="110" height="98" alt="" />
@@ -354,7 +354,7 @@ That told me something else, too: <code>#sitenav .active a</code> from criterion
 <p>&#13;
 I also think the font is a bit small.  Sure enough, BP sets the font size to 80% on #wrapper.  I put that back to 100%.&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='696' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step15.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step15.s9yThumb.png" width="110" height="98" alt="" />
@@ -433,7 +433,7 @@ border: 1px solid #479ac6 !important;<br />&#13;
 }<br />&#13;
 </code>&#13;
 </p>&#13;
-<figure class="figure_center" style="width: 110px">
+<figure class="figure-center" style="width: 110px">
 <!-- mdb='697' -->
   <a href="/progress/media/s9y/templates/criterion/ss-step16.png">
     <img src="/progress/media/s9y/templates/criterion/ss-step16.s9yThumb.png" width="110" height="98" alt="" />

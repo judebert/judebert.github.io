@@ -1,0 +1,18 @@
+<footer class="site-footer" role="banner">
+
+  <div class="wrapper">
+    <div class="credit-line">
+      <a href="https://templated.co/criterion">criterion</a> <a href="http://creativecommons.org/licenses/by/2.5/">CC BY</a> <a href="https://templated.co/">TEMPLATED</a>
+    </div>
+    {% if site.header_pages %}
+    <nav class="site-nav">
+      <div class="trigger">
+        {% for link in site.header_pages %}
+          <a class="page-link" href="{{ link.url | relative_url }}">{{ link.title | escape }}</a>
+        {% endfor %}
+      </div>
+    </nav>
+    {% endif %}
+  </div>
+
+</footer>

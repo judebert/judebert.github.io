@@ -15,10 +15,10 @@ title: Judebert.com
       <li>
         {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
         <div class="post-meta">
-          <span>{{ post.date | date: date_format }}</span>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            <h3 class="post-title">{{ post.title | escape }}</h3>
-          </a>
+          <span class="post-date">{{ post.date | date: date_format }}</span>
+          <h3 class="post-title">
+            <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          </h3>
         </div>
         <div class="post-entry">
           <div class="entry-body">
