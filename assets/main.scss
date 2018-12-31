@@ -241,6 +241,16 @@ figcaption {
   background: url(criterion/img/criterion_sbcontent.png) repeat-x;
 }
 
+.sidebar-item-content #categories-list ul {
+  list-style: none;
+  margin-left: 10px;
+}
+
+.sidebar-item-content #categories-list li {
+  list-style: none;
+  margin-left: 10px;
+}
+
 .post-header {
   margin: 20px auto;
   width: 100%;
