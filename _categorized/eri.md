@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Eri"
+title: Posts with category "Eri"
 tag: Eri
 slug: eri
 categories: [Eri]
+permalink: /progress/category/eri
 robots: noindex
 ---

@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Tutorials"
+title: Posts with category "Tutorials"
 tag: Tutorials
 slug: tutorials
 categories: [Tutorials]
+permalink: /progress/category/tutorials
 robots: noindex
 ---

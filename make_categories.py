@@ -1,18 +1,12 @@
 #!/usr/bin/env python
 import re
-
-'''
-tag_generator.py
-
-Copyright 2017 Long Qian
-Contact: lqian8@jhu.edu
-
-This script creates tags for your Jekyll blog hosted by Github page.
-No plugins required.
-'''
+import yaml
 
 import glob
 import os
+
+post_dir = '_posts/'
+category_dir = '_categorized/'
 
 hierarchy = {}
 hierarchy['Madness'] = ['Lunatic Ravings', 'News', 'Submissions']
@@ -56,60 +50,35 @@ category_tags = {}
 for key in hierarchy:
   category_tags[key] = ', '.join(normalize_tags(key))
 
-
-post_dir = '_posts/'
-tag_dir = '_categorized/'
-
 filenames = glob.glob(post_dir + '*html')
 
-total_tags = []
+all_post_categories = []
 for filename in filenames:
     f = open(filename, 'r')
-    inyaml = False
-    intaglist = False
-    file_tags = []
-    for line in f:
-        if inyaml:
-            candidate = line.strip()
-            if intaglist:
-              if candidate.startswith('-'):
-                  file_tags.append(re.sub('^\s*-\s*', '', candidate))
-              else:
-                  intaglist = False
-                  inyaml = False
-                  break
-            elif candidate.startswith('categories:'):
-              intaglist = True
-              if '[' in candidate and '[]' not in candidate:
-                print "Edge case category in ", filename, ": ", candidate
-        if line.strip() == '---':
-            if not inyaml:
-                inyaml = True
-            else:
-                inyaml = False
-                break
+    docs = yaml.safe_load_all(f)
+    post_data = next(docs)
+    file_categories = post_data['categories']
+    all_post_categories.extend(file_categories)
     f.close()
-    if len(file_tags) > 1:
-      print filename, " has ", len(file_tags), " categories: ", file_tags
-    total_tags.extend(file_tags)
-total_tags = set(total_tags)
+all_post_categories = set(all_post_categories)
 
-old_tags = glob.glob(tag_dir + '*.md')
-for tag in old_tags:
-    os.remove(tag)
+old_category_files = glob.glob(category_dir + '*.md')
+for category_file in old_category_files:
+    os.remove(category_file)
 
-for tag in total_tags:
-    slug = re.sub('[-\s]+', '-', tag).strip().lower()
-    tag_filename = tag_dir + slug + '.md'
-    f = open(tag_filename, 'a')
-    write_str = """---
+for cat in all_post_categories:
+    slug = re.sub('[-\s]+', '-', cat).strip().lower()
+    cat_filename = category_dir + slug + '.md'
+    f = open(cat_filename, 'a')
+    write_str = '''---
 layout: categorypage
-title: Posts in category "%s"
-tag: %s
-slug: %s
-categories: [%s]
+title: Posts with category "{cat}"
+tag: {cat}
+slug: {slug}
+categories: [{children}]
+permalink: /progress/category/{slug}
 robots: noindex
----""" % (tag, tag, slug, category_tags[tag])
+---'''.format(cat=cat, slug=slug, children=category_tags[cat])
     f.write(write_str)
     f.close()
-print("Tags generated, count", total_tags.__len__())
+print("Category pages generated, count", all_post_categories.__len__())

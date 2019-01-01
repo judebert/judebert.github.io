@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Contraction Timer"
+title: Posts with category "Contraction Timer"
 tag: Contraction Timer
 slug: contraction-timer
 categories: [Contraction Timer]
+permalink: /progress/category/contraction-timer
 robots: noindex
 ---

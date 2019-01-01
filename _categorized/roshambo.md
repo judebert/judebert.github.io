@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Roshambo"
+title: Posts with category "Roshambo"
 tag: Roshambo
 slug: roshambo
 categories: [Roshambo]
+permalink: /progress/category/roshambo
 robots: noindex
 ---

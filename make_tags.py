@@ -2,10 +2,6 @@
 import re
 import yaml
 
-'''
-tag_generator.py
-'''
-
 import glob
 import os
 

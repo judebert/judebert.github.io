@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Pawns"
+title: Posts with category "Pawns"
 tag: Pawns
 slug: pawns
 categories: [Pawns]
+permalink: /progress/category/pawns
 robots: noindex
 ---

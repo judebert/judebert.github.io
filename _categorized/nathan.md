@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Nathan"
+title: Posts with category "Nathan"
 tag: Nathan
 slug: nathan
 categories: [Nathan]
+permalink: /progress/category/nathan
 robots: noindex
 ---

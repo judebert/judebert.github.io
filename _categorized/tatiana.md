@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Tatiana"
+title: Posts with category "Tatiana"
 tag: Tatiana
 slug: tatiana
 categories: [Tatiana]
+permalink: /progress/category/tatiana
 robots: noindex
 ---

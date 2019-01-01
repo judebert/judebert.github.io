@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Palm"
+title: Posts with category "Palm"
 tag: Palm
 slug: palm
 categories: [Palm, Contraction Timer, Roshambo]
+permalink: /progress/category/palm
 robots: noindex
 ---

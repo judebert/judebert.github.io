@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Civilization"
+title: Posts with category "Civilization"
 tag: Civilization
 slug: civilization
 categories: [Civilization]
+permalink: /progress/category/civilization
 robots: noindex
 ---

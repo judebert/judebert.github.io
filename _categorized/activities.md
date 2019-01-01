@@ -1,8 +1,9 @@
 ---
 layout: categorypage
-title: Posts in category "Activities"
+title: Posts with category "Activities"
 tag: Activities
 slug: activities
 categories: [Activities, Web Activities]
+permalink: /progress/category/activities
 robots: noindex
 ---

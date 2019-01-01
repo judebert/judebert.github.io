@@ -3,7 +3,8 @@ layout: page
 ---
 This page shows all posts in the categories "{{ page.categories | join: ', ' }}".
 <ul>
-{%- for post in site.posts %}
+{%- assign chronoposts = site.posts | reverse -%}
+{%- for post in chronoposts -%}
   {%- assign taken = false -%}
   {%- for cat in post.categories -%}
     {%- if taken != true -%}
