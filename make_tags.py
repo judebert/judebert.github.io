@@ -1,14 +1,9 @@
 #!/usr/bin/env python
 import re
+import yaml
 
 '''
 tag_generator.py
-
-Copyright 2017 Long Qian
-Contact: lqian8@jhu.edu
-
-This script creates tags for your Jekyll blog hosted by Github page.
-No plugins required.
 '''
 
 import glob
@@ -22,38 +17,29 @@ filenames = glob.glob(post_dir + '*html')
 total_tags = []
 for filename in filenames:
     f = open(filename, 'r')
-    inyaml = False
-    intaglist = False
-    for line in f:
-        if inyaml:
-            candidate = line.strip()
-            if intaglist:
-              if candidate.startswith('-'):
-                  total_tags.append(re.sub('^\s*-\s*', '', candidate).lower())
-              else:
-                  intaglist = False
-                  inyaml = False
-                  break
-            elif candidate.startswith('tags:'):
-                intaglist = True
-        if line.strip() == '---':
-            if not inyaml:
-                inyaml = True
-            else:
-                inyaml = False
-                break
+    docs = yaml.safe_load_all(f)
+    post_info = next(docs)
+    total_tags.extend(post_info['tags'])
     f.close()
 total_tags = set(total_tags)
 
-old_tags = glob.glob(tag_dir + '*.md')
-for tag in old_tags:
-    os.remove(tag)
+existing_tagfiles = glob.glob(tag_dir + '*.md')
+for tagfile in existing_tagfiles:
+    os.remove(tagfile)
 
 for tag in total_tags:
     slug = re.sub('[-\s]+', '-', tag).strip().lower()
     tag_filename = tag_dir + slug + '.md'
     f = open(tag_filename, 'a')
-    write_str = '---\nlayout: tagpage\ntitle: Posts tagged \"' + tag + '\"\ntag: ' + tag + '\nslug: ' + slug + '\nrobots: noindex\n---\n'
-    f.write(write_str)
+    front_matter = '''---
+layout: tagpage
+title: Posts tagged "{tag}"
+tag: {tag}
+slug: {slug}
+robots: noindex
+permalink: /progress/tag/{slug}
+---
+'''.format(tag=tag, slug=slug)
+    f.write(front_matter)
     f.close()
 print("Tags generated, count", total_tags.__len__())
