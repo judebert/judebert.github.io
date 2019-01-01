@@ -19,9 +19,88 @@ layout: default
     {{ content }}
   </div>
 
-  {%- if site.disqus.shortname -%}
-    {%- include disqus_comments.html -%}
-  {%- endif -%}
+  <div class="post-footer">
+    {%- if site.disqus.shortname -%}
+      {%- include disqus_comments.html -%}
+    {%- endif -%}
+
+    <nav class="post-categories">
+      <div class="related-title">
+      {%- if page.categories == false or page.categories.size == 0 -%}
+        This page has not been categorized.
+      {%- else -%}
+        Related posts by categories
+      </div>
+        {%- for cat in page.categories -%}
+          {%- assign prevpost = nil -%}
+          {%- assign nextpost = nil -%}
+          {%- for post in site.categories[cat] -%}
+            {%- if post.url == page.url -%}
+              {%- if forloop.last == false -%}
+                {%- assign nextpost = site.categories[cat][forloop.index] -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- assign prevpost = post -%}
+            {%- endif -%}
+          {%- endfor -%}
+      <div class="related-links">
+          {%- assign slug = cat | slugify -%}
+          {%- assign cat_url = "/progress/category/" | append: slug -%}
+          {%- if prevpost -%}
+        <a class="related-prev" href="{{ prevpost.url | relative }}">&larr; {{ prevpost.title }}</a>
+          {%- else -%}
+        <span class="related-prev no-post">&larrb; This is the first post</span>
+          {%- endif -%}
+         &bull; <a class="related-all" href="{{ cat_url }}">All {{ site.categories[cat] | size }} in {{ cat }}</a> &bull; 
+          {%- if nextpost -%}
+        <a class="related-next" href="{{ nextpost.url | relative }}">{{ nextpost.title }} &rarr;</a>
+          {%- else -%}
+        <span class="related-next no-link">This is the last post &rarrb;</a>
+          {%- endif -%}
+      </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </nav>
+    <nav class="post-tags">
+      <div class="related-title">
+      {%- if page.tags == false or page.tags.size == 0 -%}
+        This post has not been tagged.
+      {%- else -%}
+        Related posts by tags
+      </div>
+        {%- for tag in page.tags -%}
+          {%- assign prevpost = nil -%}
+          {%- assign nextpost = nil -%}
+          {%- for post in site.tags[tag] -%}
+            {%- if post.url == page.url -%}
+              {%- if forloop.last == false -%}
+                {%- assign nextpost = site.tags[tag][forloop.index] -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- assign prevpost = post -%}
+            {%- endif -%}
+          {%- endfor -%}
+      <div class="related">
+          {%- assign slug = tag | slugify -%}
+          {%- assign tag_url = "/progress/tag/" | append: slug -%}
+          {%- if prevpost -%}
+        <a class="related-prev" href="{{ prevpost.url | relative }}">&larr; {{ prevpost.title }}</a>
+          {%- else -%}
+        <span class="related-prev no-post">&larrb; This is the first post</span>
+          {%- endif -%}
+         &bull; <a class="related-all" href="{{ tag_url }}">All {{ site.tags[tag] | size }} in {{ tag }}</a> &bull; 
+          {%- if nextpost -%}
+        <a class="related-next" href="{{ nextpost.url | relative }}">{{ nextpost.title }} &rarr;</a>
+          {%- else -%}
+        <span class="related-next no-link">This is the last post &rarrb;</a>
+          {%- endif -%}
+      </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </nav>
+  </div>
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
