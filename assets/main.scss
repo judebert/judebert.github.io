@@ -46,7 +46,7 @@ body {
   font: normal small "Trebuchet MS", Arial, Helvetica, sans-serif;
   color: $color-text;
   display: grid;
-  grid-template-columns: [left-side] 25% [center-side] auto [right-side] 25% [end-side];
+  grid-template-columns: [left-side] 25% [center-side] 1fr [right-side] 25% [end-side];
   /* grid-template-rows: [header-row] 10% [center-row] auto [footer-row] 10% [end-row]; */
   grid-template-areas:
     "header header header"
