@@ -1,0 +1,121 @@
+/* Background is full bar */
+.rating,
+.rating a:hover,
+.rating .current
+{
+  background: url(jude-demo-star-2.png) left;
+}
+.rating
+{
+  position: relative;
+  width: 125px; /* 5 stars width */
+  height: 25px; /* 1 star height */
+  overflow: hidden;
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  background-position: top left;
+}
+.rating li
+{
+  display: inline;
+}
+.rating a,
+.rating .current
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-indent: -9000px;
+  height: 25px; /* 1 star height */
+  line-height: 25px; /* 1 star height */
+  outline: none;
+  overflow: hidden;
+  border: none;
+  /* I replaced the pixel-width with an em-width, but must set font size in px */
+  font-size: 25px; /* 1 star width */
+}
+/* Show stars when hovered */
+.rating a:hover
+{
+  background-position: left bottom;
+}
+/* Set each section to the appropriate width, stacking so leftmost is topmost */
+.rating a.rate1
+{
+  width: 20%;
+  z-index: 6;
+}
+.rating a.rate2
+{
+  width:40%;
+  z-index: 5;
+}
+.rating a.rate3
+{
+  width:60%;
+  z-index: 4;
+}
+.rating a.rate4
+{
+  width:80%;
+  z-index: 3;
+}
+.rating a.rate5
+{
+  width:100%;
+  z-index: 2;
+}
+.rating .current
+{
+  z-index: 1;
+  background-position: left center;
+}
+/* Overrides for smiley bar */
+.ratingsmile
+{
+  width: 100px; 
+  height: 20px; 
+}
+.ratingsmile,
+.ratingsmile a:hover,
+.ratingsmile .current
+{
+  background-image: url(ratingsmiles.gif);
+  line-height: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+/* Overrides for rainbow bar */
+/*
+.ratingbow
+{
+  width: 100px; 
+  height: 20px; 
+}
+*/
+.ratingbow,
+.ratingbow a:hover,
+.ratingbow .current
+{
+  background-image: url(rainbow-bar-1.png);
+  /*
+  line-height: 20px;
+  height: 20px;
+  font-size: 20px;
+  */
+}
+/* Overrides for alternate color */
+.ratingbar2,
+.ratingbar2 a:hover,
+.ratingbar2 .current
+{
+  background-image: url(jude-demo-star-1.gif);
+}
+/* Overrides for glowing */
+.glowing,
+.glowing a:hover,
+.glowing .current
+{
+  background-image: url(glowing.png);
+}
