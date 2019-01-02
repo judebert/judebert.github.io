@@ -251,6 +251,28 @@ figcaption {
   margin-left: 10px;
 }
 
+.collapsible-list input {
+  display: none;
+}
+
+.collapsible-list input:checked ~ ul {
+  display: block;
+}
+
+.collapsible-list input ~ ul {
+  display: none;
+}
+
+.collapsible-list label {
+  cursor: pointer;
+  color: $theme-base;
+}
+
+.archive-list ul {
+  list-style-type: none;
+}
+
+
 .post-header {
   margin: 20px auto;
   width: 100%;

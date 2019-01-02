@@ -3,9 +3,11 @@
   <div class="wrapper">
 
     <div class="sidebar">
-      <div class="sidebar-item">
+      <div id="sidebar-archives" class="sidebar-item">
         <h4 class="sidebar-item-title">Archives</h4>
-        <div class="sidebar-item-content">Hard to generate a calendar... months will have to do.</div>
+        <div class="sidebar-item-content">
+          {%- include archive_list.html -%}
+        </div>
         <div class="sidebar-item-footer"></div>
       </div>
       <div class="sidebar-item">

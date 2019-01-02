@@ -1,0 +1,74 @@
+        <div class="archive-list collapsible-list">
+          {%- assign prev_year = nil -%}
+          {%- assign prev_month = nil -%}
+          {%- assign prev_day = nil -%}
+
+          <ul class="archive-list collapsible-list by-year">
+          {%- assign posts_ascending = site.posts | reverse -%}
+          {%- for post in posts_ascending -%}
+            {%- assign year = post.date | date: "%Y" -%}
+            {%- assign month = post.date | date: "%B" -%}
+            {%- assign day = post.date | date: "%d %A" -%}
+            {%- assign id = post.date | date: "%s" -%}
+
+            {%- if year != prev_year %}
+              {%- if prev_day != nil -%}
+                      </ul>
+                    </li>
+              {%- endif -%}
+              {%- if prev_month != nil -%}
+                  </ul>
+                </li>
+              {%- endif -%}
+              {%- if prev_year != nil -%}
+              </ul>
+            </li>
+              {%- endif -%}
+            <li>
+              <input type="checkbox" id="year-{{ id }}"/>
+              <label for="year-{{ id }}">{{ year }}</label>
+              <ul class="archive-list collapsible-list by-month">
+              {%- assign prev_month = nil -%}
+              {%- assign prev_day = nil -%}
+            {%- endif -%}
+            {%- assign prev_year = year -%}
+
+            {%- if month != prev_month -%}
+              {%- if prev_day != nil -%}
+                      </ul>
+                    </li>
+              {%- endif -%}
+              {%- if prev_month != nil -%}
+                  </ul>
+                </li>
+              {%- endif -%}
+                <li>
+                  <input type="checkbox" id="month-{{ id }}"/>
+                  <label for="month-{{ id }}">{{ month }}</label>
+                  <ul class="archive-list collapsible-list by-day">
+              {%- assign prev_day = nil -%}
+            {%- endif -%}
+            {%- assign prev_month = month -%}
+
+            {%- if day != prev_day -%}
+              {%- if prev_day != nil -%}
+                      </ul>
+                    </li>
+              {%- endif -%}
+                    <li>
+                      <input type="checkbox" id="day-{{ id }}"/>
+                      <label for="day-{{ id }}">{{ day }}</label>
+                      <ul class="archive-list collapsible-list by-post">
+            {%- endif -%}
+                        <li><a href="{{ post.url | relative }}">{{ post.title }}</a></li>
+            {%- assign prev_day = day -%}
+
+          {%- endfor -%}
+                      </ul> <!-- last post of this day -->
+                    </li> <!-- last day -->
+                  </ul> <!-- of this month -->
+                </li> <!-- last month -->
+              </ul> <!-- of this year -->
+            </li> <!-- last year -->
+          </ul> <!-- of this sidebar -->
+        </div>
