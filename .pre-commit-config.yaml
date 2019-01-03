@@ -1,0 +1,9 @@
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.1.0 # Use the ref you want to point at
+  hooks:
+  - id: check-added-large-files
+    args: ['--maxkb=1000']
+  - id: check-case-conflict
+  - id: check-yaml
+    args: ['--allow-multiple-documents']
+  - id: check-docstring-first
