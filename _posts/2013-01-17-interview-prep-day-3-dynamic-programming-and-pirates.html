@@ -23,59 +23,59 @@ tags:
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-Today's studying involved "Dynamic Programming" and "Backtracking", which really turned out to be different names for little tricks I've used before in recursion.  I'm going to have to look at them again, just to make sure I've got it straight, in case I get asked.  I don't want to look like an idiot because I don't know something's name.&#13;
-</p><p>&#13;
-Especially if I use it all the time.&#13;
-</p><p>&#13;
-Anyway.  I know why you're really here: today I tried <a href="http://www.techinterview.org/post/526325766/pirates">a brainteaser from techinterview about pirates</a>. It ARRRR-ta be a lot of fun.&#13;
-</p><p>&#13;
-Five pirates have captured a booty of 100 gold pieces.  As you know, pirates use a seniority system when it comes to making decisions; in this case, the most senior pirate is pirate #5 and the least senior is pirate #1 (n00b).  &#13;
-</p><p>&#13;
-You also know, of course, that pirates are <b>greedy</b>.  And <b>bloodthirsty</b>.  What sets this group of pirates apart, though, is how intelligent they are.  &#13;
-</p><p>&#13;
-By which I mean that they're <i>really</i> smart (not noteworthy in the opposite direction).&#13;
-</p><p>&#13;
-Their method of dividing the 100 coins will be in keeping with pirate greed, violence, and seniority.  The most senior pirate will propose a division of booty.  <b>All</b> the pirates will vote to accept or reject the proposal.  If <b>at least 50%</b> approve, the booty is divided according to the proposal.  Otherwise, the propose-er walks the plank, and the <b>new</b> most senior pirate makes a new proposal.&#13;
-</p><p>&#13;
-Of course, having such massive brainpower, the most senior pirate makes a proposal that is automatically accepted.  What was it?&#13;
-</p><a id="extended"></a><p>&#13;
-When I told my kids about this one, they immediately got hung up on the seniority numbers.  They wanted the #1 pirate to be the Pirate King.  I told them that the numbers are how many days they've been on the job, and that helped sort them out.&#13;
-</p><p>&#13;
-I originally expected this would degenerate into even shares.  Then I started thinking: pirate #5 needs to make a better proposal than pirate #4 would, if he ever got the chance.  That means more to #4 than he would get if he was splitting it up.  And since #4 would have to make a better proposal to #3 than if <i>he</i> was doing the splitting... it suddenly looked like the n00b was going to get a lot of GP.&#13;
-</p><p>&#13;
-But that was wrong way to think about it.  After all, #5 doesn't really need #4's vote.  He just needs three votes, and one of them can be his own.  He just needs to convince <i>2 more pirates</i> to accept his proposal.&#13;
-</p><p>&#13;
-Let's think about backwards.&#13;
-</p><p>&#13;
-If there were only one pirate, he's the Captain.  He gets it all.  Yawn.&#13;
-</p><p>&#13;
-If there were only two pirates, the Captain gets it all, because he's guaranteed one vote, and that's all that's required for 50% with two pirates.  Being greedy, he'll propose 100 gold for himself, none for the new guy.  It's good to be the King.  &#13;
-</p><p>&#13;
-But if there are three pirates, the Captain can't get it all.  He needs to win over at least one other pirate.  He can't win over pirate #2: that black-hearted swaggart wants him dead, so he can take all the gold.  But pirate #1 knows that if he doesn't accept pirate #3's proposal, he'll get nothing, because pirate #2 will be the Captain and take it all.&#13;
-</p><p>&#13;
-So all pirate #3 has to do is offer one doubloon to pirate #1.  He can take 99 for himself.  That gets him the necessary two votes.&#13;
-</p><p>&#13;
-But what if there are four pirates?  The Captain still only needs two votes, so he still only needs to win over one other pirate.  Pirate #3 wants him dead, so that's not going to work.  Pirate #1 wants him dead, because he knows he'll get at least one gold from pirate #3.  &#13;
-</p><p>&#13;
-He could offer pirate #1 <b>two</b> GP, and take 98 for himself.  But can he do any better?&#13;
-</p><p>&#13;
-Sure he can.  His greedy guts realize that if he walks the plank, pirate #2 gets nothing when pirate #3 divvies up the loot.  So he can offer just one piece of eight to pirate #2 and secure his vote.  That leaves 99 for him.&#13;
-</p><p>&#13;
-Now we come to pirate #5.  Can he get away with 99 gold for himself?  He needs two more votes, as mentioned earlier.  That's going to mean at least two shiny coins.  And who should he give them to?  Obviously not pirate #4: that traitorous dog would like nothing better than to see him swimming with the sharks, so he can have it all to himself.  And pirate #2 is no better: he'll at least get one coin from pirate #4, so he'll need too much convincing.&#13;
-</p><p>&#13;
-But pirates #1 and #3 know that, if the Captain goes down, they'll get nothing from the first mate.  So one gold apiece will buy their votes.&#13;
-</p><p>&#13;
-Putting it all into a nice chart, we see the pattern pretty obviously.&#13;
-</p><pre>&#13;
- 1   2   3   4   5&#13;
-100&#13;
- 0  100 &#13;
- 1   0  99 &#13;
- 0   1   0  99&#13;
- 1   0   1   0  98&#13;
-</pre><p>&#13;
-Odd-numbered Captains have to give 1 coin to every other odd-numbered pirate, and get to keep the rest.  Even-numbered captains have to give 1 coin to every even-numbered pirate, and get to keep the rest.&#13;
-</p><p>&#13;
-So it's easy to see what proposal a Captain should make, regardless of how many pirates there are.  Also, somebody better propose a new method of splitting the booty, or there's gonna be mutiny!&#13;
+<p>
+Today's studying involved "Dynamic Programming" and "Backtracking", which really turned out to be different names for little tricks I've used before in recursion.  I'm going to have to look at them again, just to make sure I've got it straight, in case I get asked.  I don't want to look like an idiot because I don't know something's name.
+</p><p>
+Especially if I use it all the time.
+</p><p>
+Anyway.  I know why you're really here: today I tried <a href="http://www.techinterview.org/post/526325766/pirates">a brainteaser from techinterview about pirates</a>. It ARRRR-ta be a lot of fun.
+</p><p>
+Five pirates have captured a booty of 100 gold pieces.  As you know, pirates use a seniority system when it comes to making decisions; in this case, the most senior pirate is pirate #5 and the least senior is pirate #1 (n00b).  
+</p><p>
+You also know, of course, that pirates are <b>greedy</b>.  And <b>bloodthirsty</b>.  What sets this group of pirates apart, though, is how intelligent they are.  
+</p><p>
+By which I mean that they're <i>really</i> smart (not noteworthy in the opposite direction).
+</p><p>
+Their method of dividing the 100 coins will be in keeping with pirate greed, violence, and seniority.  The most senior pirate will propose a division of booty.  <b>All</b> the pirates will vote to accept or reject the proposal.  If <b>at least 50%</b> approve, the booty is divided according to the proposal.  Otherwise, the propose-er walks the plank, and the <b>new</b> most senior pirate makes a new proposal.
+</p><p>
+Of course, having such massive brainpower, the most senior pirate makes a proposal that is automatically accepted.  What was it?
+</p><a id="extended"></a><p>
+When I told my kids about this one, they immediately got hung up on the seniority numbers.  They wanted the #1 pirate to be the Pirate King.  I told them that the numbers are how many days they've been on the job, and that helped sort them out.
+</p><p>
+I originally expected this would degenerate into even shares.  Then I started thinking: pirate #5 needs to make a better proposal than pirate #4 would, if he ever got the chance.  That means more to #4 than he would get if he was splitting it up.  And since #4 would have to make a better proposal to #3 than if <i>he</i> was doing the splitting... it suddenly looked like the n00b was going to get a lot of GP.
+</p><p>
+But that was wrong way to think about it.  After all, #5 doesn't really need #4's vote.  He just needs three votes, and one of them can be his own.  He just needs to convince <i>2 more pirates</i> to accept his proposal.
+</p><p>
+Let's think about backwards.
+</p><p>
+If there were only one pirate, he's the Captain.  He gets it all.  Yawn.
+</p><p>
+If there were only two pirates, the Captain gets it all, because he's guaranteed one vote, and that's all that's required for 50% with two pirates.  Being greedy, he'll propose 100 gold for himself, none for the new guy.  It's good to be the King.  
+</p><p>
+But if there are three pirates, the Captain can't get it all.  He needs to win over at least one other pirate.  He can't win over pirate #2: that black-hearted swaggart wants him dead, so he can take all the gold.  But pirate #1 knows that if he doesn't accept pirate #3's proposal, he'll get nothing, because pirate #2 will be the Captain and take it all.
+</p><p>
+So all pirate #3 has to do is offer one doubloon to pirate #1.  He can take 99 for himself.  That gets him the necessary two votes.
+</p><p>
+But what if there are four pirates?  The Captain still only needs two votes, so he still only needs to win over one other pirate.  Pirate #3 wants him dead, so that's not going to work.  Pirate #1 wants him dead, because he knows he'll get at least one gold from pirate #3.  
+</p><p>
+He could offer pirate #1 <b>two</b> GP, and take 98 for himself.  But can he do any better?
+</p><p>
+Sure he can.  His greedy guts realize that if he walks the plank, pirate #2 gets nothing when pirate #3 divvies up the loot.  So he can offer just one piece of eight to pirate #2 and secure his vote.  That leaves 99 for him.
+</p><p>
+Now we come to pirate #5.  Can he get away with 99 gold for himself?  He needs two more votes, as mentioned earlier.  That's going to mean at least two shiny coins.  And who should he give them to?  Obviously not pirate #4: that traitorous dog would like nothing better than to see him swimming with the sharks, so he can have it all to himself.  And pirate #2 is no better: he'll at least get one coin from pirate #4, so he'll need too much convincing.
+</p><p>
+But pirates #1 and #3 know that, if the Captain goes down, they'll get nothing from the first mate.  So one gold apiece will buy their votes.
+</p><p>
+Putting it all into a nice chart, we see the pattern pretty obviously.
+</p><pre>
+ 1   2   3   4   5
+100
+ 0  100 
+ 1   0  99 
+ 0   1   0  99
+ 1   0   1   0  98
+</pre><p>
+Odd-numbered Captains have to give 1 coin to every other odd-numbered pirate, and get to keep the rest.  Even-numbered captains have to give 1 coin to every even-numbered pirate, and get to keep the rest.
+</p><p>
+So it's easy to see what proposal a Captain should make, regardless of how many pirates there are.  Also, somebody better propose a new method of splitting the booty, or there's gonna be mutiny!
 </p>

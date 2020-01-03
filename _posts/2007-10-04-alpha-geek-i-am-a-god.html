@@ -17,42 +17,42 @@ tags: []
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>Yes, my wife actually said that.  For geeky reasons: I fixed her screensaver.&#13;
-</p>&#13;
-<a id="extended"></a><p>&#13;
-She uses the Weather Underground screensaver, and ever since she got her new computer (that I made for her), it hasn't worked.  Big, blank screen.&#13;
-</p><p>&#13;
-I kept telling her that I don't do Windows anymore, and that she should call Microsoft or Weather Underground for support.  She eventually sent Weather Underground an email.  &#13;
-</p><p>&#13;
-At the same time, I was learning some programming stuff that got me a little confused.  I had given up for the day, but after lunch I came back ready to go, and said, "I'm ready to get cracking on this problem."  She queried, "You mean my screensaver?"&#13;
-</p><p>&#13;
-"No, I mean my programming problem," I responded.  "Why don't you send Weather Underground an email?"&#13;
-</p><p>&#13;
-"I did," she said, and then proceeded to use the Wife Code on me: "That's OK, just go ahead and work on your stuff.  I'll wait for the email."&#13;
-</p><p>&#13;
-I've been married 17 years now, and I've learned a thing or two.  For the unobservant, she actually said, "You ought to work on my problem instead of your fun thing."&#13;
-</p><p>&#13;
-So I went to look at her screensaver.  It's supposed to retrieve weather images from the Weather Underground website and display them as a slideshow.  We figured there was a network problem.  I'd had her disable Windows Firewall earlier, but I've done tech support before, so I tried it again myself.&#13;
-</p><p>&#13;
-The screensaver still didn't work.  And I couldn't find anything else causing the problem, either: she'd already disabled all her adblocking and malware scanning stuff.&#13;
-</p><p>&#13;
-So I said I didn't know what the problem was.  She used the Wife Code again: "That's OK.  Don't worry about it.  I'll just wait."&#13;
-</p><p>&#13;
-Another translation, for the unobservant: "Don't you even think about quitting now, or there'll be trouble."&#13;
-</p><p>&#13;
-So I decided to bring in the big guns.  I started channelling the Alpha Geek.  He downloaded <a href="http://www.wireshark.org/">Wireshark</a>, a network sniffer, and installed it.  Then I started capturing and ran the screensaver.&#13;
-</p><p>&#13;
-It was making a connection with no problem.  In fact, it was downloading some screensaver.swf or something!  It was just a plain HTTP connection, and the URL was sitting right there in my capture log.&#13;
-</p><p>&#13;
-I put aside the bad design and security implications of running a Flash program as a screensaver and concentrated on how to get this problem off my back.  Putting the URL into Firefox loaded the slideshow with no problems.  That was the Aha Moment.  I figured that Windows was probably hardcoded to use Internet Exploder for all its networking needs.  And obviously, since I had built the computer, nobody had needed IE, so it wasn't configured with a Flash plugin!&#13;
-</p><p>&#13;
-Sure enough, loading the URL in IE gave me a plugin problem.  So I installed Flash, and the slideshow appeared in IE.&#13;
-</p><p>&#13;
-But not in the screensaver.  It gave me a dialog saying "This program needs the Macromedia Flash."  I put aside the bad grammar and concentrated on how to get this problem off my back.  :)&#13;
-</p><p>&#13;
-A reboot didn't do it.  But a quick Google search found the problem: the plugin installed Flash9.ocx, but external programs were looking for Flash.ocx.  I copied the file (because the plugin would still be looking for the file named Flash9.ocx) and renamed it.  Then the screensaver worked without a hitch!&#13;
-</p><p>&#13;
-It was at this point that my wife declared me a god.  It was a little flattering, I must say.  And largely undeserved.&#13;
-</p><p>&#13;
-Then I got back to the really important stuff: learning GNU autotools.&#13;
+<p>Yes, my wife actually said that.  For geeky reasons: I fixed her screensaver.
+</p>
+<a id="extended"></a><p>
+She uses the Weather Underground screensaver, and ever since she got her new computer (that I made for her), it hasn't worked.  Big, blank screen.
+</p><p>
+I kept telling her that I don't do Windows anymore, and that she should call Microsoft or Weather Underground for support.  She eventually sent Weather Underground an email.  
+</p><p>
+At the same time, I was learning some programming stuff that got me a little confused.  I had given up for the day, but after lunch I came back ready to go, and said, "I'm ready to get cracking on this problem."  She queried, "You mean my screensaver?"
+</p><p>
+"No, I mean my programming problem," I responded.  "Why don't you send Weather Underground an email?"
+</p><p>
+"I did," she said, and then proceeded to use the Wife Code on me: "That's OK, just go ahead and work on your stuff.  I'll wait for the email."
+</p><p>
+I've been married 17 years now, and I've learned a thing or two.  For the unobservant, she actually said, "You ought to work on my problem instead of your fun thing."
+</p><p>
+So I went to look at her screensaver.  It's supposed to retrieve weather images from the Weather Underground website and display them as a slideshow.  We figured there was a network problem.  I'd had her disable Windows Firewall earlier, but I've done tech support before, so I tried it again myself.
+</p><p>
+The screensaver still didn't work.  And I couldn't find anything else causing the problem, either: she'd already disabled all her adblocking and malware scanning stuff.
+</p><p>
+So I said I didn't know what the problem was.  She used the Wife Code again: "That's OK.  Don't worry about it.  I'll just wait."
+</p><p>
+Another translation, for the unobservant: "Don't you even think about quitting now, or there'll be trouble."
+</p><p>
+So I decided to bring in the big guns.  I started channelling the Alpha Geek.  He downloaded <a href="http://www.wireshark.org/">Wireshark</a>, a network sniffer, and installed it.  Then I started capturing and ran the screensaver.
+</p><p>
+It was making a connection with no problem.  In fact, it was downloading some screensaver.swf or something!  It was just a plain HTTP connection, and the URL was sitting right there in my capture log.
+</p><p>
+I put aside the bad design and security implications of running a Flash program as a screensaver and concentrated on how to get this problem off my back.  Putting the URL into Firefox loaded the slideshow with no problems.  That was the Aha Moment.  I figured that Windows was probably hardcoded to use Internet Exploder for all its networking needs.  And obviously, since I had built the computer, nobody had needed IE, so it wasn't configured with a Flash plugin!
+</p><p>
+Sure enough, loading the URL in IE gave me a plugin problem.  So I installed Flash, and the slideshow appeared in IE.
+</p><p>
+But not in the screensaver.  It gave me a dialog saying "This program needs the Macromedia Flash."  I put aside the bad grammar and concentrated on how to get this problem off my back.  :)
+</p><p>
+A reboot didn't do it.  But a quick Google search found the problem: the plugin installed Flash9.ocx, but external programs were looking for Flash.ocx.  I copied the file (because the plugin would still be looking for the file named Flash9.ocx) and renamed it.  Then the screensaver worked without a hitch!
+</p><p>
+It was at this point that my wife declared me a god.  It was a little flattering, I must say.  And largely undeserved.
+</p><p>
+Then I got back to the really important stuff: learning GNU autotools.
 </p>

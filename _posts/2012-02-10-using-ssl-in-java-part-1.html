@@ -38,34 +38,34 @@ comments:
     still be here when yo
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-Working (as I do) with secure equipment, it was inevitable that I'd eventually have to connect to a server using SSL.  I didn't even get to write my own code; I had to use a Java client library that was provided to me.&#13;
-</p><p>&#13;
-The programmers of my client library weren't exactly forthcoming on where I could change its configuration, but at least they had provided me with the certificates I needed.  I had to do a lot of research to find out how to use them, and I'm recording that information here.&#13;
-</p><p>&#13;
-After all, isn't learning supposed to be cooperative?  Read on, and I'll show you how to work with SSL sockets in Java.&#13;
-</p><a id="extended"></a><p>&#13;
-SSL is based on <b><i>keys</i></b>.  The keys come in pairs, like those switches for nuclear missiles that you see in the movies.  If you only use one key, nothing works.  If you try to use two copies of the same key, it still doesn't work.  You need both keys in the pair.&#13;
-</p><p>&#13;
-Because this is the computer world, you won't be standing right next to one another... so you also won't use the keys at the same time.  In fact, you can use the keys in any order, as long as you use them in their pairs.  &#13;
-</p><p>&#13;
-This is ideal if you're a bank.  Nobody's going to do business with you unless they're <b>certain</b> that you're the bank.  So you hand them one of the keys and say that you'll use the other key on anything you send to them.  To keep your messages secret, you just keep the keys secret.&#13;
-</p><p>&#13;
-Making a pair of keys for every customer involves a lot of keys, though.  And it would be a pain trying to keep track of everybody, too.  Besides, you don't really need to keep all the messages secret; you just need to say, "Hey, it's me!"  Once you know you're having a conversation with the right person, you can agree on some simpler way to encrypt your conversation.&#13;
-</p><p> &#13;
-In that case, you can use a <i>single</i> pair of keys, and hand copies of one key to everybody.  We call this the <b><i>public key</i></b>, since we hand it out to the general public.  The part you keep for yourself is the <b><i>private key</i></b>, oddly enough.  &#13;
-</p><p>&#13;
-Just to make it all clear, let's take it step by step.  The bank gives you a key. The bank says that anything they send you can be opened only with that key.  You visit their website, and they send you back a webpage.  You use your key on it, and it works; you know you're talking to your bank.  You feel that it's safe to send them your password, your checking account number, and whatever else they need to get your banking done.&#13;
-</p><p>&#13;
-That's pretty much how it works.  The only problem with it is the first sentence: "The bank gives you a key." The bank isn't going to mail it to you, or hand it to you when you come in to make a withdrawal.  When you visit the bank's website, it'll send they key along with the webpage.  Your browser does all the rest behind your back, whenever you use the "https://" protocol.&#13;
-</p><p>&#13;
-If you're sufficiently devious, you're thinking, "What's to keep me from putting up a fake website with a key and <b>saying</b> I'm the bank?"  &#13;
-</p><p>&#13;
-For publicly available websites, like banks, a third-party service keeps track of all the keys.  This kind of service is called a <b><i>certificate authority</i></b>, or CA.  They use keys, too, but the keys for all the CAs are included with your browser.&#13;
-</p><p>&#13;
-When you visit the bank, and it gives you a key, the browser asks the CA who the key belongs to.  Then it compares the reply with the site it's visiting.  If they don't match, you get a warning message.&#13;
-</p><p>&#13;
-After we've verified that everybody is who they say they are, we can agree on how to continue. &#13;
-</p><p>&#13;
-<a href="/progress/permalink/SSL2.html">In part 2, I'll go over how to make all this happen in Java.</a>&#13;
-</p>&#13;
+<p>
+Working (as I do) with secure equipment, it was inevitable that I'd eventually have to connect to a server using SSL.  I didn't even get to write my own code; I had to use a Java client library that was provided to me.
+</p><p>
+The programmers of my client library weren't exactly forthcoming on where I could change its configuration, but at least they had provided me with the certificates I needed.  I had to do a lot of research to find out how to use them, and I'm recording that information here.
+</p><p>
+After all, isn't learning supposed to be cooperative?  Read on, and I'll show you how to work with SSL sockets in Java.
+</p><a id="extended"></a><p>
+SSL is based on <b><i>keys</i></b>.  The keys come in pairs, like those switches for nuclear missiles that you see in the movies.  If you only use one key, nothing works.  If you try to use two copies of the same key, it still doesn't work.  You need both keys in the pair.
+</p><p>
+Because this is the computer world, you won't be standing right next to one another... so you also won't use the keys at the same time.  In fact, you can use the keys in any order, as long as you use them in their pairs.  
+</p><p>
+This is ideal if you're a bank.  Nobody's going to do business with you unless they're <b>certain</b> that you're the bank.  So you hand them one of the keys and say that you'll use the other key on anything you send to them.  To keep your messages secret, you just keep the keys secret.
+</p><p>
+Making a pair of keys for every customer involves a lot of keys, though.  And it would be a pain trying to keep track of everybody, too.  Besides, you don't really need to keep all the messages secret; you just need to say, "Hey, it's me!"  Once you know you're having a conversation with the right person, you can agree on some simpler way to encrypt your conversation.
+</p><p> 
+In that case, you can use a <i>single</i> pair of keys, and hand copies of one key to everybody.  We call this the <b><i>public key</i></b>, since we hand it out to the general public.  The part you keep for yourself is the <b><i>private key</i></b>, oddly enough.  
+</p><p>
+Just to make it all clear, let's take it step by step.  The bank gives you a key. The bank says that anything they send you can be opened only with that key.  You visit their website, and they send you back a webpage.  You use your key on it, and it works; you know you're talking to your bank.  You feel that it's safe to send them your password, your checking account number, and whatever else they need to get your banking done.
+</p><p>
+That's pretty much how it works.  The only problem with it is the first sentence: "The bank gives you a key." The bank isn't going to mail it to you, or hand it to you when you come in to make a withdrawal.  When you visit the bank's website, it'll send they key along with the webpage.  Your browser does all the rest behind your back, whenever you use the "https://" protocol.
+</p><p>
+If you're sufficiently devious, you're thinking, "What's to keep me from putting up a fake website with a key and <b>saying</b> I'm the bank?"  
+</p><p>
+For publicly available websites, like banks, a third-party service keeps track of all the keys.  This kind of service is called a <b><i>certificate authority</i></b>, or CA.  They use keys, too, but the keys for all the CAs are included with your browser.
+</p><p>
+When you visit the bank, and it gives you a key, the browser asks the CA who the key belongs to.  Then it compares the reply with the site it's visiting.  If they don't match, you get a warning message.
+</p><p>
+After we've verified that everybody is who they say they are, we can agree on how to continue. 
+</p><p>
+<a href="/progress/permalink/SSL2.html">In part 2, I'll go over how to make all this happen in Java.</a>
+</p>

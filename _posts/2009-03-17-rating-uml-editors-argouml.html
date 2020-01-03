@@ -54,44 +54,44 @@ comments:
     is 11 years old -- and it still doesn't have undo/redo capability.
 excerpt_separator: <a id="extended"></a>
 ---
-<!-- s9ymdb:898 --><img class="serendipity_image_left" width="100" height="100" style="float: left; border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/screenshots/argologo.s9yThumb.gif" alt="" />&#13;
-<p>I intend to keep going until I find <a href="/progress/archives/329-Rating-UML-Editors.html">a UML editor that fits my criteria</a>.  Onto the burning sands a new challenger comes: <a href="http://argouml.tigris.org/">ArgoUML</a>!  As a developer, I chose the latest beta:  0.28.Beta_4.&#13;
-</p><p>&#13;
-I never would have found this if it hadn't been for <a href="http://lau-sdl.blogspot.com/2009/02/uml-modeling-tools-reviews.html">Laurent's review of UML tools</a>; I just searched aptitude for anything with UML in the description, and it's not in the Ubuntu or Debian repositories.  Of course, Laurent just wants to draw diagrams.  I want some more modeling functionality.&#13;
-</p><p>&#13;
-Let's see what ArgoUML has to offer.&#13;
-</p><a id="extended"></a><p>&#13;
-<u>Class and Sequence Diagrams:</u> <b>Fail.</b>  I liked being able to import a single class from my large project.  That's useful for establishing a new class's place in the hierarchy.  But that's about the only thing I liked.  Everything else was difficult, or just plain frustrating.&#13;
-</p><p>&#13;
-Orthogonal lines are only available by creating them manually.  Even then, the dashed lines (like for realization) overlap incorrectly, and you have to fiddle with the line to get it to look right.  The user interface for adding calls to sequence diagrams is very nearly hostile.  It took me a long time to figure out how to define the call!  Even then, I couldn't get parameters listed.  Comments can't be moved freely, and even the comment association line can't be attached freely; I've still got one hanging in midair.  Reflexive calls are an <em>absolute nightmare</em>!&#13;
-</p><p>&#13;
-And I can't figure out how to remove the explicit returns.&#13;
-</p><p>&#13;
-<u>Configurable Display:</u> <b>Satisfactory.</b>  I've become enamored of Bouml's configurable colors, but I refuse to allow that to be a consideration here.  It took me a while to figure out how to hide attributes and operations that don't relate to my specific design (hint: it's called "remove from display"), but I eventually got it.  There were also some anomalies with comments, but that was the sort of thing that I generally attribute to my weird 64-bit system.&#13;
-</p><p>&#13;
-<u>Group Selection and Movement:</u> <b>Fail.</b>  Multiple selection works as expected, as does moving the objects around... on class diagrams.  On sequence diagrams, where you're much more likely to forget something and need to shuffle things, you're Stuck Outta Luck.  You have to move the calls and returns individually.  That's extremely difficult when you get into nested calls; in fact, moving the parent can cause it to come unattached from its children.  And vice-versa.&#13;
-</p><p>&#13;
-<u>Infinite Undo:</u> <b>Fail.</b>  ArgoUML has <strong><em>NO UNDO</em></strong>!  None at all.  If you move something through accidental selection, tough.  Put it back yourself.  In conjunction with the fact that almost every click creates a new modeling artifact, you wind up littering your model with stuff you don't need.&#13;
-</p><p>&#13;
-<u>Supports Synchronous, Asynchronous, and Reflexive Messages:</u> <b>Very Poor.</b>  You can get a reflexive arrow, but it's not easy.  And picking the method it represents is impossible, so far as I can tell.&#13;
-</p><p>&#13;
-<u>Dynamic Document Size:</u> <b>Great.</b>  No matter how big I made them, ArgoUML kept all the elements on my diagrams.  There were no page limits or size limits as far as I could tell.&#13;
-</p><p>&#13;
-<u>Scrolling:</u> <b>Satisfactory.</b>  Dragging a class to the sequence diagram would not cause a scroll, but dragging a message line would.  The class could be moved later; the message line couldn't.  In short, it scrolled when it needed to.  &#13;
-</p><p>&#13;
-<u>Shared Data Model:</u> <b>Poor.</b>  Like BOUML, the data model is actually displayed in a sidebar, so you can make changes to it no matter what diagram you're in.  Unfortunately, it expects you to name every class, section, <em>inheritance line, message line, and trivial association</em>.  Otherwise, it displays "Unnamed Message Call" or "Unnamed Association" or whatever.  For many items, even when you provide content, the name isn't updated; this is particularly true of sequence diagram elements, where the call, the send, and the return are <strong>separate elements in the model</strong>.&#13;
-</p><p>&#13;
-As I mentioned earlier, practically every click creates a new artifact in your model.  So you either spend your life naming every single dot, or you leave trash in your model.  Or you play Russian Roulette as you delete "Unnamed" artifacts without an undo.&#13;
-</p><p>&#13;
-<u>Supports Large Projects:</u> <b>Fair.</b>  ArgoUML imported all 50,000+ of my project's classes with no problem, but then it couldn't run any more.  It was taking up one CPU (out of four) all the time, and a second CPU every other two seconds.  I wasn't even trying to get it to make diagrams; I had reduced its import options to only take the classes.  I eventually closed the whole thing and just started from scratch.  &#13;
-</p><p>&#13;
-It partially made up for that by allowing me to import a single class instead.&#13;
-</p><p>&#13;
-For niceties, ArgoUML has outstanding alignment and spacing tools, including this neat "Broom" thing that lets you sweep a group of objects together.  It's the only tool I've seen so far with actual distribution tools.  Unfortunately, and as previously mentioned, you have to fiddle with dashed lines to make sure they don't overlap and create a visually solid line.  It did have code import, but it didn't function well with my giant project.  And it claims to generate code, although I didn't try it out.&#13;
-</p><p>&#13;
-For special problems, I tried to get ArgoUML to save a class diagram as a PNG.  I couldn't find the menu option for this simple operation.  Perhaps they expect me to take a screenshot?  But that's useless for large diagrams.  &#13;
-</p><p>&#13;
-Worse yet, when I messed it up and tried to reload from my last save, ArgoUML claimed there was an error.  A NullPointerException somewhere.  So much for my project!  That's why you get their logo instead of a screenshot.&#13;
-</p><p>&#13;
-<u>Final Verdict:</u>  ArgoUML was way too frustrating for me to use.  Perhaps it's intended for UML experts, who actually name every click they make.  Back to BOUML for me.&#13;
-</p>&#13;
+<!-- s9ymdb:898 --><img class="serendipity_image_left" width="100" height="100" style="float: left; border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/screenshots/argologo.s9yThumb.gif" alt="" />
+<p>I intend to keep going until I find <a href="/progress/archives/329-Rating-UML-Editors.html">a UML editor that fits my criteria</a>.  Onto the burning sands a new challenger comes: <a href="http://argouml.tigris.org/">ArgoUML</a>!  As a developer, I chose the latest beta:  0.28.Beta_4.
+</p><p>
+I never would have found this if it hadn't been for <a href="http://lau-sdl.blogspot.com/2009/02/uml-modeling-tools-reviews.html">Laurent's review of UML tools</a>; I just searched aptitude for anything with UML in the description, and it's not in the Ubuntu or Debian repositories.  Of course, Laurent just wants to draw diagrams.  I want some more modeling functionality.
+</p><p>
+Let's see what ArgoUML has to offer.
+</p><a id="extended"></a><p>
+<u>Class and Sequence Diagrams:</u> <b>Fail.</b>  I liked being able to import a single class from my large project.  That's useful for establishing a new class's place in the hierarchy.  But that's about the only thing I liked.  Everything else was difficult, or just plain frustrating.
+</p><p>
+Orthogonal lines are only available by creating them manually.  Even then, the dashed lines (like for realization) overlap incorrectly, and you have to fiddle with the line to get it to look right.  The user interface for adding calls to sequence diagrams is very nearly hostile.  It took me a long time to figure out how to define the call!  Even then, I couldn't get parameters listed.  Comments can't be moved freely, and even the comment association line can't be attached freely; I've still got one hanging in midair.  Reflexive calls are an <em>absolute nightmare</em>!
+</p><p>
+And I can't figure out how to remove the explicit returns.
+</p><p>
+<u>Configurable Display:</u> <b>Satisfactory.</b>  I've become enamored of Bouml's configurable colors, but I refuse to allow that to be a consideration here.  It took me a while to figure out how to hide attributes and operations that don't relate to my specific design (hint: it's called "remove from display"), but I eventually got it.  There were also some anomalies with comments, but that was the sort of thing that I generally attribute to my weird 64-bit system.
+</p><p>
+<u>Group Selection and Movement:</u> <b>Fail.</b>  Multiple selection works as expected, as does moving the objects around... on class diagrams.  On sequence diagrams, where you're much more likely to forget something and need to shuffle things, you're Stuck Outta Luck.  You have to move the calls and returns individually.  That's extremely difficult when you get into nested calls; in fact, moving the parent can cause it to come unattached from its children.  And vice-versa.
+</p><p>
+<u>Infinite Undo:</u> <b>Fail.</b>  ArgoUML has <strong><em>NO UNDO</em></strong>!  None at all.  If you move something through accidental selection, tough.  Put it back yourself.  In conjunction with the fact that almost every click creates a new modeling artifact, you wind up littering your model with stuff you don't need.
+</p><p>
+<u>Supports Synchronous, Asynchronous, and Reflexive Messages:</u> <b>Very Poor.</b>  You can get a reflexive arrow, but it's not easy.  And picking the method it represents is impossible, so far as I can tell.
+</p><p>
+<u>Dynamic Document Size:</u> <b>Great.</b>  No matter how big I made them, ArgoUML kept all the elements on my diagrams.  There were no page limits or size limits as far as I could tell.
+</p><p>
+<u>Scrolling:</u> <b>Satisfactory.</b>  Dragging a class to the sequence diagram would not cause a scroll, but dragging a message line would.  The class could be moved later; the message line couldn't.  In short, it scrolled when it needed to.  
+</p><p>
+<u>Shared Data Model:</u> <b>Poor.</b>  Like BOUML, the data model is actually displayed in a sidebar, so you can make changes to it no matter what diagram you're in.  Unfortunately, it expects you to name every class, section, <em>inheritance line, message line, and trivial association</em>.  Otherwise, it displays "Unnamed Message Call" or "Unnamed Association" or whatever.  For many items, even when you provide content, the name isn't updated; this is particularly true of sequence diagram elements, where the call, the send, and the return are <strong>separate elements in the model</strong>.
+</p><p>
+As I mentioned earlier, practically every click creates a new artifact in your model.  So you either spend your life naming every single dot, or you leave trash in your model.  Or you play Russian Roulette as you delete "Unnamed" artifacts without an undo.
+</p><p>
+<u>Supports Large Projects:</u> <b>Fair.</b>  ArgoUML imported all 50,000+ of my project's classes with no problem, but then it couldn't run any more.  It was taking up one CPU (out of four) all the time, and a second CPU every other two seconds.  I wasn't even trying to get it to make diagrams; I had reduced its import options to only take the classes.  I eventually closed the whole thing and just started from scratch.  
+</p><p>
+It partially made up for that by allowing me to import a single class instead.
+</p><p>
+For niceties, ArgoUML has outstanding alignment and spacing tools, including this neat "Broom" thing that lets you sweep a group of objects together.  It's the only tool I've seen so far with actual distribution tools.  Unfortunately, and as previously mentioned, you have to fiddle with dashed lines to make sure they don't overlap and create a visually solid line.  It did have code import, but it didn't function well with my giant project.  And it claims to generate code, although I didn't try it out.
+</p><p>
+For special problems, I tried to get ArgoUML to save a class diagram as a PNG.  I couldn't find the menu option for this simple operation.  Perhaps they expect me to take a screenshot?  But that's useless for large diagrams.  
+</p><p>
+Worse yet, when I messed it up and tried to reload from my last save, ArgoUML claimed there was an error.  A NullPointerException somewhere.  So much for my project!  That's why you get their logo instead of a screenshot.
+</p><p>
+<u>Final Verdict:</u>  ArgoUML was way too frustrating for me to use.  Perhaps it's intended for UML experts, who actually name every click they make.  Back to BOUML for me.
+</p>

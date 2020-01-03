@@ -305,84 +305,84 @@ comments:
     fight with graphical undo or block movement because text editors are just good.\r\n\r\ncheers"
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-In my job, I go through a Software Design phase for every task I'm given.  That includes drawing a class diagram and a sequence diagram in more-or-less standard <a href="http://en.wikipedia.org/wiki/Unified_Modeling_Language">UML</a>.  &#13;
-</p><p>&#13;
-Now, I've drawn my diagrams in a variety of tools in the past, ranging from the highly specialized to the wildly simplistic (like PowerPoint).  I've come to understand the shortcomings of UML modeling tools in general.  And as a good geek, I'm going to write them down.&#13;
-</p><p>&#13;
-Rather than being negative, I'm going to write down what I want from a modeling tool.  Then I can use that wishlist as criteria for evaluating the available tools, until I find a good one.  If any such thing exists.&#13;
-</p><a id="extended"></a><p>&#13;
-The following are absolutely required for any UML modeling tool:&#13;
-</p>&#13;
-<ol>&#13;
-<li>Supports Class and Sequence Diagrams<br />&#13;
-More would be nice, but these are the two I really require.</li>&#13;
-<li>Configurable Display<br />&#13;
-I should be allowed to choose whether parameters are included in the messages on sequence diagrams.  I should also be able to choose not to display some operations of a class in a class diagram, since they're probably not all important to my design.</li>&#13;
-<li>Group Selection and Movement<br />&#13;
-This is particularly important on sequence diagrams, where I move groups of messages up or down to make room for steps I forgot.  Doing so shouldn't mess up my alignment, my lifelines, or any other portion of the diagram.</li>&#13;
-<li>Infinite Undo<br />&#13;
-Seriously.  We all make mistakes.  <strong>Every</strong> operation should be subject to Control-Z.</li>&#13;
-<li>Supports Synchronous, Asynchronous, and Reflexive Messages<br />&#13;
-Again, seriously.  Why are there tools that don't support reflexive (call myself) messages?</li>&#13;
-<li>Dynamic Document Size<br />&#13;
-I'm creating software design here, not a pretty drawing.  I don't care how big it gets; it's as big as it needs to be.  Don't restrict me to some printing size or other.  And on a related note...</li>&#13;
-<li>Scrolling<br />&#13;
-When these diagrams get complicated, I may need to draw a line all the way from one end to the other.  <em>Don't</em> make me zoom out so far I can't tell what I'm doing.  Just keep scrolling when I drag a line off the visible area.  And keep a marker or tooltip so I can tell which line I'm connecting to.</li>&#13;
-<li>Shared Data Model<br />&#13;
-When I change a class on the class diagram, the method should become available on the sequence diagram.  If I add a new method on the sequence diagram, it should show up on the class diagram.  All these drawings are descriptions of a single system; they should all be connected.</li>&#13;
-<li>Supports Large Projects<br />&#13;
-I'm dealing with thousands of classes, sometimes.  My tools should be able to deal with them, too.  Without crashing or even slowing down.</li>&#13;
-</ol>&#13;
-<p>&#13;
-These things would be nice to have, but they are not required:&#13;
-</p>&#13;
-<ol>&#13;
-<li>Import Existing Code<br />&#13;
-I can make everything myself, but importing the aforementioned thousands of classes would be nice.  I don't necessarily need a class diagram, but the tool should know who's derived from who.  Bonus points for automatically drawing the relationship when I put related classes on the diagram.</li>&#13;
-<li>Code Generation<br />&#13;
-I can write my own code.  Really.  I do it all the time.  As long as we've got all this UML, though, why don't you kick things off for me and save me some typing?</li>&#13;
-<li>Design Patterns<br />&#13;
-This would be useful for experts and learners alike.  Save me a little time and effort, give me a button that produces a Factory pattern from a few simple inputs.</li>&#13;
-<li>Alignment and Spacing<br />&#13;
-Okay, I'm not <strong>just</strong> making pretty pictures.  I want to be able to align the classes with their tops together, or align two asynchronous message interactions.  I want all those classes that implement one interface to look like I've drawn a single dotted line with lots of branches.  I want my classes spread out evenly.  Is this too much to ask?</li>&#13;
-<li>Standard Format Import and Export<br />&#13;
-I may switch tools someday.  I don't want to be locked into a single format.  Give me a way to save for other editors, and a way to import old projects.</li>&#13;
-</ol>&#13;
-<p>&#13;
-Anybody else want to add something?  Leave it in the comments, and I'll consider it.  Got a tool that does all that, and brings me a warm lunch?  I'd love to review it.  Just leave a comment, and I'll get to it as soon as time allows.  $DEITY knows I've got enough to model.&#13;
-</p>&#13;
-<h3>The Results So Far</h3>&#13;
-<ol>&#13;
+<p>
+In my job, I go through a Software Design phase for every task I'm given.  That includes drawing a class diagram and a sequence diagram in more-or-less standard <a href="http://en.wikipedia.org/wiki/Unified_Modeling_Language">UML</a>.  
+</p><p>
+Now, I've drawn my diagrams in a variety of tools in the past, ranging from the highly specialized to the wildly simplistic (like PowerPoint).  I've come to understand the shortcomings of UML modeling tools in general.  And as a good geek, I'm going to write them down.
+</p><p>
+Rather than being negative, I'm going to write down what I want from a modeling tool.  Then I can use that wishlist as criteria for evaluating the available tools, until I find a good one.  If any such thing exists.
+</p><a id="extended"></a><p>
+The following are absolutely required for any UML modeling tool:
+</p>
+<ol>
+<li>Supports Class and Sequence Diagrams<br />
+More would be nice, but these are the two I really require.</li>
+<li>Configurable Display<br />
+I should be allowed to choose whether parameters are included in the messages on sequence diagrams.  I should also be able to choose not to display some operations of a class in a class diagram, since they're probably not all important to my design.</li>
+<li>Group Selection and Movement<br />
+This is particularly important on sequence diagrams, where I move groups of messages up or down to make room for steps I forgot.  Doing so shouldn't mess up my alignment, my lifelines, or any other portion of the diagram.</li>
+<li>Infinite Undo<br />
+Seriously.  We all make mistakes.  <strong>Every</strong> operation should be subject to Control-Z.</li>
+<li>Supports Synchronous, Asynchronous, and Reflexive Messages<br />
+Again, seriously.  Why are there tools that don't support reflexive (call myself) messages?</li>
+<li>Dynamic Document Size<br />
+I'm creating software design here, not a pretty drawing.  I don't care how big it gets; it's as big as it needs to be.  Don't restrict me to some printing size or other.  And on a related note...</li>
+<li>Scrolling<br />
+When these diagrams get complicated, I may need to draw a line all the way from one end to the other.  <em>Don't</em> make me zoom out so far I can't tell what I'm doing.  Just keep scrolling when I drag a line off the visible area.  And keep a marker or tooltip so I can tell which line I'm connecting to.</li>
+<li>Shared Data Model<br />
+When I change a class on the class diagram, the method should become available on the sequence diagram.  If I add a new method on the sequence diagram, it should show up on the class diagram.  All these drawings are descriptions of a single system; they should all be connected.</li>
+<li>Supports Large Projects<br />
+I'm dealing with thousands of classes, sometimes.  My tools should be able to deal with them, too.  Without crashing or even slowing down.</li>
+</ol>
+<p>
+These things would be nice to have, but they are not required:
+</p>
+<ol>
+<li>Import Existing Code<br />
+I can make everything myself, but importing the aforementioned thousands of classes would be nice.  I don't necessarily need a class diagram, but the tool should know who's derived from who.  Bonus points for automatically drawing the relationship when I put related classes on the diagram.</li>
+<li>Code Generation<br />
+I can write my own code.  Really.  I do it all the time.  As long as we've got all this UML, though, why don't you kick things off for me and save me some typing?</li>
+<li>Design Patterns<br />
+This would be useful for experts and learners alike.  Save me a little time and effort, give me a button that produces a Factory pattern from a few simple inputs.</li>
+<li>Alignment and Spacing<br />
+Okay, I'm not <strong>just</strong> making pretty pictures.  I want to be able to align the classes with their tops together, or align two asynchronous message interactions.  I want all those classes that implement one interface to look like I've drawn a single dotted line with lots of branches.  I want my classes spread out evenly.  Is this too much to ask?</li>
+<li>Standard Format Import and Export<br />
+I may switch tools someday.  I don't want to be locked into a single format.  Give me a way to save for other editors, and a way to import old projects.</li>
+</ol>
+<p>
+Anybody else want to add something?  Leave it in the comments, and I'll consider it.  Got a tool that does all that, and brings me a warm lunch?  I'd love to review it.  Just leave a comment, and I'll get to it as soon as time allows.  $DEITY knows I've got enough to model.
+</p>
+<h3>The Results So Far</h3>
+<ol>
 <li>
-<a href="/progress/archives/331-UML-Editors-BOUML.html">BOUML</a> - <b>Unsatisfactory</b>, but it's still the best thing I can find.  Unfortunately, the project lead has taken down all downloads due to a copyright battle Wikipedia.  I am now actively looking for another editor... again.</li>&#13;
+<a href="/progress/archives/331-UML-Editors-BOUML.html">BOUML</a> - <b>Unsatisfactory</b>, but it's still the best thing I can find.  Unfortunately, the project lead has taken down all downloads due to a copyright battle Wikipedia.  I am now actively looking for another editor... again.</li>
 <li>
-<a href="/progress/archives/333-UML-Editors-Umbrello.html">Umbrello</a> - <b>Unsatisfactory</b>, mostly because of its failure when rearranging sequence diagram actions, but also because it has trouble importing classes.  At least it's got a data model, though.</li>&#13;
+<a href="/progress/archives/333-UML-Editors-Umbrello.html">Umbrello</a> - <b>Unsatisfactory</b>, mostly because of its failure when rearranging sequence diagram actions, but also because it has trouble importing classes.  At least it's got a data model, though.</li>
 <li>
-<a href="/progress/archives/358-Rating-UML-Editors-Open-ModelSphere.html">Open ModelSphere</a> - <b>Poor</b>, because it's so limited and can't import my codebase.</li>&#13;
+<a href="/progress/archives/358-Rating-UML-Editors-Open-ModelSphere.html">Open ModelSphere</a> - <b>Poor</b>, because it's so limited and can't import my codebase.</li>
 <li>
-<a href="/progress/archives/339-Rating-UML-Editors-Dia.html">Dia</a> - <b>Poor</b>, because it's just a drawing program, not a modeling program.  But at least it draws diagrams pretty well.</li>&#13;
+<a href="/progress/archives/339-Rating-UML-Editors-Dia.html">Dia</a> - <b>Poor</b>, because it's just a drawing program, not a modeling program.  But at least it draws diagrams pretty well.</li>
 <li>
-<a href="/progress/archives/332-UML-Editors-Gaphor.html">Gaphor</a> - <b>Fail</b>, because its lack of a model leaves it just a drawing program, and even then its missing some of the tools you need.</li>&#13;
+<a href="/progress/archives/332-UML-Editors-Gaphor.html">Gaphor</a> - <b>Fail</b>, because its lack of a model leaves it just a drawing program, and even then its missing some of the tools you need.</li>
 <li>
-<a href="/progress/archives/337-Rating-UML-Editors-ArgoUML.html">ArgoUML</a> - <b>Fail</b>, because it's a pain to work with and it has <b>NO UNDO</b>.</li>&#13;
-</ol>&#13;
-<h3>Some Other UML Modeling Programs</h3>&#13;
-<ul>&#13;
+<a href="/progress/archives/337-Rating-UML-Editors-ArgoUML.html">ArgoUML</a> - <b>Fail</b>, because it's a pain to work with and it has <b>NO UNDO</b>.</li>
+</ol>
+<h3>Some Other UML Modeling Programs</h3>
+<ul>
 <li>
-<a href="http://www.umlgraph.org/">UMLGraph</a> - Although it's kept up-to-date, it can't do sequence diagrams.</li>&#13;
+<a href="http://www.umlgraph.org/">UMLGraph</a> - Although it's kept up-to-date, it can't do sequence diagrams.</li>
 <li>
-<a href="http://www.papyrusuml.org/scripts/home/publigen/content/templates/show.asp?P=130&amp;L=EN&amp;ITEMID=4">Papyrus for UML</a> - An Eclipse plugin that looks intriguing, but apparently hasn't been updated since 2008.</li>&#13;
+<a href="http://www.papyrusuml.org/scripts/home/publigen/content/templates/show.asp?P=130&amp;L=EN&amp;ITEMID=4">Papyrus for UML</a> - An Eclipse plugin that looks intriguing, but apparently hasn't been updated since 2008.</li>
 <li>
-<a href="http://alexdp.free.fr/violetumleditor/page.php">Violet</a> - Even though it's from 2007, I installed it because it offered Eclipse integration, with drag-and-drop class import.  Unfortunately, it didn't automatically detect inheritance, it couldn't customize the class appearance, and it crashed Eclipse while trying to update a line.  Sigh.</li>&#13;
+<a href="http://alexdp.free.fr/violetumleditor/page.php">Violet</a> - Even though it's from 2007, I installed it because it offered Eclipse integration, with drag-and-drop class import.  Unfortunately, it didn't automatically detect inheritance, it couldn't customize the class appearance, and it crashed Eclipse while trying to update a line.  Sigh.</li>
 <li>
-<a href="http://softeng.polito.it/projects/XUG/">XUG</a> - Looks like it's specifically designed for reverse engineering, may not support editing.  Since it's based on UMLGraph, it probably can't do sequence diagrams.  Oh, and it's from 2005.</li>&#13;
+<a href="http://softeng.polito.it/projects/XUG/">XUG</a> - Looks like it's specifically designed for reverse engineering, may not support editing.  Since it's based on UMLGraph, it probably can't do sequence diagrams.  Oh, and it's from 2005.</li>
 <li>
-<a href="http://www.umlet.com/">UMLet</a> - An <b>even older</b> UML modeling program with no class import.</li>&#13;
+<a href="http://www.umlet.com/">UMLet</a> - An <b>even older</b> UML modeling program with no class import.</li>
 <li>
-<a href="http://lightuml.sourceforge.net/">LightUML</a> - a 2006 Eclipse plug-in.</li>&#13;
+<a href="http://lightuml.sourceforge.net/">LightUML</a> - a 2006 Eclipse plug-in.</li>
 <li>
-<a href="http://nclass.sourceforge.net/">NClass</a> - No class import from Java. </li>&#13;
+<a href="http://nclass.sourceforge.net/">NClass</a> - No class import from Java. </li>
 <li>
-<a href="http://www.gentleware.com/uml-software-community-edition.html">Poseidon for UML</a> - Spend $200 to import from Java?  Thanks, but no.</li>&#13;
-</ul>&#13;
+<a href="http://www.gentleware.com/uml-software-community-edition.html">Poseidon for UML</a> - Spend $200 to import from Java?  Thanks, but no.</li>
+</ul>

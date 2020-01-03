@@ -19,52 +19,52 @@ tags: []
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>I apologize in advance for writing this so long after the fact.  Nathan came over last Sunday (2007-09-09), and we tried to figure out why I got such short range on my last trip.&#13;
-</p><p>&#13;
-There are three main candidates: brush advance, rolling resistance, and battery charge.&#13;
+<p>I apologize in advance for writing this so long after the fact.  Nathan came over last Sunday (2007-09-09), and we tried to figure out why I got such short range on my last trip.
+</p><p>
+There are three main candidates: brush advance, rolling resistance, and battery charge.
 </p><a id="extended"></a><figure class="figure-left" style="width: 110px">
 <!-- mdb='588' -->
   <a href="/progress/media/EV/photos/hte_brush_advance.gif">
     <img src="/progress/media/EV/photos/hte_brush_advance.s9yThumb.gif" width="110" height="83" alt="" />
   </a>
   <figcaption>Brush advance explained</figcaption>
-</figure>&#13;
-<p>&#13;
-Thanks again to the EVDL, and specifically the tireless efforts and <a href="http://hitorqueelectric.com">amazing customer service from Jim Husted of Hi-Torque Electric motor repair and construction</a>, who took a look at my pictures and told me that my brushes were advanced the wrong way.  Ironically, he used my motor in a picture he made to explain <a href="http://hitorqueelectric.com/gallery/v/Step_by_step/Brush+Advancement/BRUSH+ADVANCE+PIC.GIF.html">how to tell if your brushes are advanced</a>.  &#13;
-</p><p>&#13;
-Note that, in the picture, the motor rotation is the red arrow on the <b>right</b>.  The red arrow on the <b>left</b> shows how the brushes <b>have been moved</b>.  You can see that, as the motor rotates in the direction indicated by the rightmost red arrow, any particular commutator bar will meet the brushes <b>before</b> it reaches the pole shoe bolts.  Therefore the brushes are <b>advanced</b>.  &#13;
-</p><p>&#13;
-Also note that, if your motor rotates in the opposite direction (as mine does), any particular commutator bar will reach the brushes <b>after</b> it passes the pole shoe bolts.  This is <b>retarded</b>, possibly in multiple senses of the word.  It's good for regen, which I don't have.  It's very very bad for running the motor at high voltage or high amperage, like I do when I accelerate hard, because it makes electricity arc from one brush to another.  This burns the copper and the brushes, leaving a non-conductive black residue.  &#13;
-</p><p>&#13;
-Back to the story: my brushes are severly retarded.  This is probably the cause of my crackling noise at higher revs (and, I hope, of the sickly-sweet smell, too).  While it is inefficient, it's not so bad that it would halve my range.  &#13;
-</p><p>&#13;
-On the other hand, this retardation <a href="http://en.wikipedia.org/wiki/Culturally_significant_phrases_from_The_Simpsons#Cromulent_and_embiggens">(a perfectly chromulent word)</a> is more severe than most of the EVDL have seen.  You see, the brushes are attached to the endcap (silver bit on the left-hand side), so adjusting them is just a matter of removing four bolts, rotating the endcap, and bolting it back down.  Usually these motors come with three bolt holes:  one for neutral timing, and one for advanced timing in both the clockwise (CW) and counter-clockwise (CCW) directions.  Mine only came with two holes: neutral, and advanced in the most common direction (CCW as you look at the output shaft).  Since my motor rotates in the other direction, <a href="/progress/EV/brushes.html">Nathan had to drill new holes to advance the brushes</a>.  &#13;
-</p><p>&#13;
-Unfortunately, we managed to miscommunicate something, and he drilled the holes in the wrong direction.  So, instead of 10 degrees of advance, we wound up with about 20 degrees of retard.  We figured this out by unbolting the endcap -- a difficult process with the motor still in the car, but eased by removing the adjacent wheel -- and examining the bolt holes directly.  That was my task for the day.  (Pictures coming soon.)  Sure enough, the bolts were in the holes Nathan made.  This means we need to make new holes.  &#13;
-</p><p>&#13;
-Meanwhile, though, Nathan had been checking for the source of the rolling resistance.  With the car on jackstands, we ran a prybar through the passenger-side rim and rotated it until it was stuck.  The differential thus defeated, we could reproducibly measure the resistance of the remaining wheel.&#13;
-</p><p>&#13;
-But how to measure?  If the resistance was sufficient, we could simply attach a torque wrench to one of the bolts and directly measure the force required to move the wheel; but that would include starting resistance, whereas my real concern is the rolling resistance.  A better test would be to attach a crank to the wheel, rotate it at a given speed (perhaps with the help of metronome), and count how many revolutions until it stopped.  I have a metronome, but no way to fashion a crank.&#13;
-</p><p>&#13;
-In the end, we just pushed the wheels.  We started by jacking up one side of the hatchback, putting it in neutral, and giving its wheel a push.  It went 1 and 2/3 revolution.  Since the hatchback coasts just fine, we used this as our reference point.  The (approximately) same push on the wagon got 1/3 turn.  That indicated a significant resistance somewhere in the wagon drive train.&#13;
-</p><p>&#13;
-To find the source of the resistance, we started disconnecting pieces.  Putting the transmission in neutral yielded no change; the motor, therefore, offered no resistance.  But removing the CV axle got us 1 and 1/3 revolution:  nearly the same as the hatchback.  Therefore the brakes and wheel bearings offered only minimal resistance.&#13;
-</p><p>&#13;
-So, that leaves the tranny itself and the CV axles.  We removed the prybar and tried pushing the other wheel with the CV axle still connected, and it went only 2/3 of a revolution.  That indicates that either both CV axles are messed up, or the tranny is the problem.  Occam's Razor suggests the tranny.&#13;
-</p><p>&#13;
-So now we've got two problems to work on: finding the tranny resistance, and advancing the brushes.  We only had time for one.  We picked the tranny resistance, figuring that we could always just move the brushes to neutral.  Besides, if we have to take out the tranny, the motor is coming with it, giving us a better chance to drill the new brush holes.&#13;
-</p><p>&#13;
-We spent the rest of our time removing the transfer case, to see if it was the problem.  The output shaft wasn't spinning, so we figured that wasn't it.  That means something inside the transmission is the source of resistance.  Unfortunately, the only things we can do are rebuild it, replace it, or ignore it.  Nathan's not comfortable rebuilding it, and he says most places won't rebuild a manual transmission because it's not profitable enough.  4WD wagon transmissions are not exactly easy to find, or cheap, and I don't know if a substitute 2WD tranny without a transfer case will properly fit my existing adapter plate, so replacement is not a simple matter, either.  Nathan also thinks that this resistance is our main range problem: it's always there, preventing us from coasting, constantly eating up electricity, so we can't just ignore it.  In short, we're stuck.&#13;
-</p><p>&#13;
-I'm not sure it's enough to make such a big difference.  After all, when I tried to measure it with a torque wrench, it was so slight as to be unmeasurable.  Maybe 5 foot-pounds, but my wrench only goes down to 10 foot-pounds, and may be wildly innaccurate with lower forces.  Of course, in contrast, the free wheel is completely unmeasurable, even at the lowest possible setting:  it moves when I try to attach the wrench.  An inch-pound wrench would be sensitive enough, but neither of us has one.  &#13;
-</p><p>&#13;
-Since I have no measurement for normal resistance, this might just be what a wagon transmission is like.  I decided to ask the <a href="http://hondacivicwagon.com/">Honda Civic Wagon Forum</a> if they could help me out.  The idea is to get the car moving at 10MPH on a flat surface, put it in neutral, and see how far (and how long) it goes before it stops on it own.  That would provide a measure of rolling resistance that's reproducible.  No help from them, yet.  &#13;
-</p><p>&#13;
-The last problem, battery charging, is my best guess for the problem.  The E-Meter only read 143V when I started out on my short-range trip, which is just under 12V per block, which is not full.  Full is 13.2V per block, or 158V.  Since I may already be guilty of battricide from driving them so low, I am carefully avoiding overcharging them: I started with bumping the voltage a little, then letting it charge for an hour or so, then repeating.  Finally one battery regulator flashed green.  I reduced the current and let it run again.  Since the regulator can competently bypass 2 amps, I figured that would be safe for extended charging.&#13;
-</p><p>&#13;
-At the end of four hours, only the original regulator was flashing.  Bleah.  I measured some battery voltages with my analog meter: the flashing one (#4) was 15V and a smidgen, #1 (closest to the charger, physically next to #5) was 15V, #8 (last in the rear box, physically next to #4) was 15V, and #9 (in the front box) was only 14.5V or so.&#13;
-</p><p>&#13;
-I'm letting them rest; I'd like to discharge them a bit before charging them again.  Maybe I can take a short trip.  Then I think I'll start with a nice 13A current for an hour or so, then switch to 2A until somebody starts blinking.&#13;
-</p><p>&#13;
-This Sunday is a family day.  We'll probably work on Silent E the Sunday after that.  Meanwhile, I may put it back together so I can keep adjusting the charger, or remove the tray so we can reach the transmission mountings.  Other than that, the car is going to wait while I try to figure out what to do next.&#13;
+</figure>
+<p>
+Thanks again to the EVDL, and specifically the tireless efforts and <a href="http://hitorqueelectric.com">amazing customer service from Jim Husted of Hi-Torque Electric motor repair and construction</a>, who took a look at my pictures and told me that my brushes were advanced the wrong way.  Ironically, he used my motor in a picture he made to explain <a href="http://hitorqueelectric.com/gallery/v/Step_by_step/Brush+Advancement/BRUSH+ADVANCE+PIC.GIF.html">how to tell if your brushes are advanced</a>.  
+</p><p>
+Note that, in the picture, the motor rotation is the red arrow on the <b>right</b>.  The red arrow on the <b>left</b> shows how the brushes <b>have been moved</b>.  You can see that, as the motor rotates in the direction indicated by the rightmost red arrow, any particular commutator bar will meet the brushes <b>before</b> it reaches the pole shoe bolts.  Therefore the brushes are <b>advanced</b>.  
+</p><p>
+Also note that, if your motor rotates in the opposite direction (as mine does), any particular commutator bar will reach the brushes <b>after</b> it passes the pole shoe bolts.  This is <b>retarded</b>, possibly in multiple senses of the word.  It's good for regen, which I don't have.  It's very very bad for running the motor at high voltage or high amperage, like I do when I accelerate hard, because it makes electricity arc from one brush to another.  This burns the copper and the brushes, leaving a non-conductive black residue.  
+</p><p>
+Back to the story: my brushes are severly retarded.  This is probably the cause of my crackling noise at higher revs (and, I hope, of the sickly-sweet smell, too).  While it is inefficient, it's not so bad that it would halve my range.  
+</p><p>
+On the other hand, this retardation <a href="http://en.wikipedia.org/wiki/Culturally_significant_phrases_from_The_Simpsons#Cromulent_and_embiggens">(a perfectly chromulent word)</a> is more severe than most of the EVDL have seen.  You see, the brushes are attached to the endcap (silver bit on the left-hand side), so adjusting them is just a matter of removing four bolts, rotating the endcap, and bolting it back down.  Usually these motors come with three bolt holes:  one for neutral timing, and one for advanced timing in both the clockwise (CW) and counter-clockwise (CCW) directions.  Mine only came with two holes: neutral, and advanced in the most common direction (CCW as you look at the output shaft).  Since my motor rotates in the other direction, <a href="/progress/EV/brushes.html">Nathan had to drill new holes to advance the brushes</a>.  
+</p><p>
+Unfortunately, we managed to miscommunicate something, and he drilled the holes in the wrong direction.  So, instead of 10 degrees of advance, we wound up with about 20 degrees of retard.  We figured this out by unbolting the endcap -- a difficult process with the motor still in the car, but eased by removing the adjacent wheel -- and examining the bolt holes directly.  That was my task for the day.  (Pictures coming soon.)  Sure enough, the bolts were in the holes Nathan made.  This means we need to make new holes.  
+</p><p>
+Meanwhile, though, Nathan had been checking for the source of the rolling resistance.  With the car on jackstands, we ran a prybar through the passenger-side rim and rotated it until it was stuck.  The differential thus defeated, we could reproducibly measure the resistance of the remaining wheel.
+</p><p>
+But how to measure?  If the resistance was sufficient, we could simply attach a torque wrench to one of the bolts and directly measure the force required to move the wheel; but that would include starting resistance, whereas my real concern is the rolling resistance.  A better test would be to attach a crank to the wheel, rotate it at a given speed (perhaps with the help of metronome), and count how many revolutions until it stopped.  I have a metronome, but no way to fashion a crank.
+</p><p>
+In the end, we just pushed the wheels.  We started by jacking up one side of the hatchback, putting it in neutral, and giving its wheel a push.  It went 1 and 2/3 revolution.  Since the hatchback coasts just fine, we used this as our reference point.  The (approximately) same push on the wagon got 1/3 turn.  That indicated a significant resistance somewhere in the wagon drive train.
+</p><p>
+To find the source of the resistance, we started disconnecting pieces.  Putting the transmission in neutral yielded no change; the motor, therefore, offered no resistance.  But removing the CV axle got us 1 and 1/3 revolution:  nearly the same as the hatchback.  Therefore the brakes and wheel bearings offered only minimal resistance.
+</p><p>
+So, that leaves the tranny itself and the CV axles.  We removed the prybar and tried pushing the other wheel with the CV axle still connected, and it went only 2/3 of a revolution.  That indicates that either both CV axles are messed up, or the tranny is the problem.  Occam's Razor suggests the tranny.
+</p><p>
+So now we've got two problems to work on: finding the tranny resistance, and advancing the brushes.  We only had time for one.  We picked the tranny resistance, figuring that we could always just move the brushes to neutral.  Besides, if we have to take out the tranny, the motor is coming with it, giving us a better chance to drill the new brush holes.
+</p><p>
+We spent the rest of our time removing the transfer case, to see if it was the problem.  The output shaft wasn't spinning, so we figured that wasn't it.  That means something inside the transmission is the source of resistance.  Unfortunately, the only things we can do are rebuild it, replace it, or ignore it.  Nathan's not comfortable rebuilding it, and he says most places won't rebuild a manual transmission because it's not profitable enough.  4WD wagon transmissions are not exactly easy to find, or cheap, and I don't know if a substitute 2WD tranny without a transfer case will properly fit my existing adapter plate, so replacement is not a simple matter, either.  Nathan also thinks that this resistance is our main range problem: it's always there, preventing us from coasting, constantly eating up electricity, so we can't just ignore it.  In short, we're stuck.
+</p><p>
+I'm not sure it's enough to make such a big difference.  After all, when I tried to measure it with a torque wrench, it was so slight as to be unmeasurable.  Maybe 5 foot-pounds, but my wrench only goes down to 10 foot-pounds, and may be wildly innaccurate with lower forces.  Of course, in contrast, the free wheel is completely unmeasurable, even at the lowest possible setting:  it moves when I try to attach the wrench.  An inch-pound wrench would be sensitive enough, but neither of us has one.  
+</p><p>
+Since I have no measurement for normal resistance, this might just be what a wagon transmission is like.  I decided to ask the <a href="http://hondacivicwagon.com/">Honda Civic Wagon Forum</a> if they could help me out.  The idea is to get the car moving at 10MPH on a flat surface, put it in neutral, and see how far (and how long) it goes before it stops on it own.  That would provide a measure of rolling resistance that's reproducible.  No help from them, yet.  
+</p><p>
+The last problem, battery charging, is my best guess for the problem.  The E-Meter only read 143V when I started out on my short-range trip, which is just under 12V per block, which is not full.  Full is 13.2V per block, or 158V.  Since I may already be guilty of battricide from driving them so low, I am carefully avoiding overcharging them: I started with bumping the voltage a little, then letting it charge for an hour or so, then repeating.  Finally one battery regulator flashed green.  I reduced the current and let it run again.  Since the regulator can competently bypass 2 amps, I figured that would be safe for extended charging.
+</p><p>
+At the end of four hours, only the original regulator was flashing.  Bleah.  I measured some battery voltages with my analog meter: the flashing one (#4) was 15V and a smidgen, #1 (closest to the charger, physically next to #5) was 15V, #8 (last in the rear box, physically next to #4) was 15V, and #9 (in the front box) was only 14.5V or so.
+</p><p>
+I'm letting them rest; I'd like to discharge them a bit before charging them again.  Maybe I can take a short trip.  Then I think I'll start with a nice 13A current for an hour or so, then switch to 2A until somebody starts blinking.
+</p><p>
+This Sunday is a family day.  We'll probably work on Silent E the Sunday after that.  Meanwhile, I may put it back together so I can keep adjusting the charger, or remove the tray so we can reach the transmission mountings.  Other than that, the car is going to wait while I try to figure out what to do next.
 </p>

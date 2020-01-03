@@ -17,15 +17,15 @@ tags:
 - serendipity
 comments: []
 ---
-<p>&#13;
-<a href="http://s9y.org">Serendipity 1.4 just went beta!</a>  That means my new upload validation code comes into play.&#13;
-</p><p>&#13;
-I developed the code a while ago, when people on the forums were having trouble with corrupted uploads.  Some clients were uploading everything in ASCII mode, some were skipping files... it was a nightmare.&#13;
-</p><p>&#13;
-The new validation is working, but as more people start testing it, we expect to find the edge cases.  <a href="http://board.s9y.org/viewtopic.php?t=14140">Like the installation problem reported on the forum.</a>  &#13;
-</p><p>&#13;
-Turned out the FTP server was stripping all the linefeeds out of a weird file.  I made <a href="/progress/media/s9y/sumcheck.zip">a PHP application to check your FTP client and server for hiccups</a> like the one that hit rj.  You should be able to just unzip it and upload the files to your server; when you visit sumcheck.php, it'll explain what you should be seeing.  You can let me know on the forums (or in the comments) if you find anything interesting.&#13;
-</p>&#13;
+<p>
+<a href="http://s9y.org">Serendipity 1.4 just went beta!</a>  That means my new upload validation code comes into play.
+</p><p>
+I developed the code a while ago, when people on the forums were having trouble with corrupted uploads.  Some clients were uploading everything in ASCII mode, some were skipping files... it was a nightmare.
+</p><p>
+The new validation is working, but as more people start testing it, we expect to find the edge cases.  <a href="http://board.s9y.org/viewtopic.php?t=14140">Like the installation problem reported on the forum.</a>  
+</p><p>
+Turned out the FTP server was stripping all the linefeeds out of a weird file.  I made <a href="/progress/media/s9y/sumcheck.zip">a PHP application to check your FTP client and server for hiccups</a> like the one that hit rj.  You should be able to just unzip it and upload the files to your server; when you visit sumcheck.php, it'll explain what you should be seeing.  You can let me know on the forums (or in the comments) if you find anything interesting.
+</p>
 <div class="download_link">
   <a href="/progress/media/s9y/sumcheck.zip">checksum tester (zip)</a>
 </div>

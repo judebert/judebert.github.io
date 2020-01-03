@@ -23,28 +23,28 @@ tags:
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-A while back I got a rush from rewiring the power brakes' vacuum pump: it had been directly connected to the battery, allowing it to turn on at odd times, even when the car was off.  I rewired it to be part of the ignition circuit.&#13;
-</p><p>&#13;
-The rush came with a nasty let-down.  It turned out that the pump blew the fuse regularly.  So I increased the fuse rating (which everyone knows is a bad idea).  The big problem turned up a little later: sometimes the car would "stall", refusing to turn on unless the vacuum pump was running.  &#13;
-</p><p>&#13;
-At least I could just pump the brakes to restart.  But it was still a safety issue, and not just from a driving standpoint.  My wires weren't rated for the pump's current, and they were getting warm.&#13;
-</p><p>&#13;
-This weekend, I bought a 40A relay off the shelf in my local auto parts store.  I left the vacuum switch wired to the ignition circuit, but instead of running the pump, it runs the relay.  The pump is connected to the battery through the 40A side of the relay.&#13;
-</p><p>&#13;
-It works!  Of course, there is a tradeoff.&#13;
-</p><a id="extended"></a><p>&#13;
-The new problem is that the pump comes on any time I press the brake, and it stays on for longer than I'd like.  This is a minor problem, since it doesn't use enough electricity to effect my range, and the only other annoyance is noise.&#13;
-</p><p>&#13;
-Perhaps the hardest part of the problem was explaining it to Melissa.  I eventually used a water tank analogy, and she understood.  She's the most interested of my daughters; she always volunteers to help, and she wants to understand what's going on.  When it's time to pass Silent E along, I think she's the one who'll get it.&#13;
-</p><p>&#13;
-The root of the problem seems to be that the vacuum switch isn't an on / off device.  It's more analog: a little on, but mostly off.  (I could be wrong about this, but it fits the observations.)  When the vacuum switch was wired to the pump, the switch had to reach, say, 50% on before it passed enough current to start the pump.  When it was at 30% on, it was still passing current, but that only served to create heat and drop the voltage of the entire ignition circuit.  If the voltage dropped too low, the contactor wouldn't stay closed, and the car would stall.  &#13;
-</p><p>&#13;
-But the pump had desirable behavior!  It wasn't too sensitive to the vacuum: it would inflate to 25psi, but it wouldn't start pumping again until the vacuum dropped to about 15psi.  (Or is that inches of mercury?  I don't remember.)&#13;
-</p><p>&#13;
-The relay is much more sensitive.  It turns on when the switch is only 10% on.  The pump still inflates to 25psi, but it turns back on at 23.5psi.  That's not enough for even a single light tap on the brakes.  On the <b>good</b> side, the relay doesn't drain enough current to starve the contactors or to heat the wires.&#13;
-</p><p>&#13;
-Oddly, it was the brand-new Czonka contactor that was opening up (as determined by multimeter).  The old, gigantic, open contactor worked just fine.  You could even see its contacts, closed up tight.  I guess they really <i>don't</i> make 'em like they used to.&#13;
-</p><p>&#13;
-Anyway.  My solution will be a new vacuum switch, one that allows me to adjust both the max and min pressure.  And the moral of the story for other EV converters: the ignition circuit can't handle much current.  Your car will be unreliable if you put high-current devices in the ignition loop.  You gotta keep 'em separated!&#13;
+<p>
+A while back I got a rush from rewiring the power brakes' vacuum pump: it had been directly connected to the battery, allowing it to turn on at odd times, even when the car was off.  I rewired it to be part of the ignition circuit.
+</p><p>
+The rush came with a nasty let-down.  It turned out that the pump blew the fuse regularly.  So I increased the fuse rating (which everyone knows is a bad idea).  The big problem turned up a little later: sometimes the car would "stall", refusing to turn on unless the vacuum pump was running.  
+</p><p>
+At least I could just pump the brakes to restart.  But it was still a safety issue, and not just from a driving standpoint.  My wires weren't rated for the pump's current, and they were getting warm.
+</p><p>
+This weekend, I bought a 40A relay off the shelf in my local auto parts store.  I left the vacuum switch wired to the ignition circuit, but instead of running the pump, it runs the relay.  The pump is connected to the battery through the 40A side of the relay.
+</p><p>
+It works!  Of course, there is a tradeoff.
+</p><a id="extended"></a><p>
+The new problem is that the pump comes on any time I press the brake, and it stays on for longer than I'd like.  This is a minor problem, since it doesn't use enough electricity to effect my range, and the only other annoyance is noise.
+</p><p>
+Perhaps the hardest part of the problem was explaining it to Melissa.  I eventually used a water tank analogy, and she understood.  She's the most interested of my daughters; she always volunteers to help, and she wants to understand what's going on.  When it's time to pass Silent E along, I think she's the one who'll get it.
+</p><p>
+The root of the problem seems to be that the vacuum switch isn't an on / off device.  It's more analog: a little on, but mostly off.  (I could be wrong about this, but it fits the observations.)  When the vacuum switch was wired to the pump, the switch had to reach, say, 50% on before it passed enough current to start the pump.  When it was at 30% on, it was still passing current, but that only served to create heat and drop the voltage of the entire ignition circuit.  If the voltage dropped too low, the contactor wouldn't stay closed, and the car would stall.  
+</p><p>
+But the pump had desirable behavior!  It wasn't too sensitive to the vacuum: it would inflate to 25psi, but it wouldn't start pumping again until the vacuum dropped to about 15psi.  (Or is that inches of mercury?  I don't remember.)
+</p><p>
+The relay is much more sensitive.  It turns on when the switch is only 10% on.  The pump still inflates to 25psi, but it turns back on at 23.5psi.  That's not enough for even a single light tap on the brakes.  On the <b>good</b> side, the relay doesn't drain enough current to starve the contactors or to heat the wires.
+</p><p>
+Oddly, it was the brand-new Czonka contactor that was opening up (as determined by multimeter).  The old, gigantic, open contactor worked just fine.  You could even see its contacts, closed up tight.  I guess they really <i>don't</i> make 'em like they used to.
+</p><p>
+Anyway.  My solution will be a new vacuum switch, one that allows me to adjust both the max and min pressure.  And the moral of the story for other EV converters: the ignition circuit can't handle much current.  Your car will be unreliable if you put high-current devices in the ignition loop.  You gotta keep 'em separated!
 </p>

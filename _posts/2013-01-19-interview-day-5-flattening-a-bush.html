@@ -25,200 +25,200 @@ tags:
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-Yesterday I made a linked list, in Java.  Yeah, that's right.  &#13;
-</p><p>&#13;
-Today I'm taking on a programming problem: given a doubly-linked list (with head and tail), where any element may have a child doubly-linked list (without head and tail), flatten the structure into a doubly-linked list.&#13;
-</p><p>&#13;
-That sounds vaguely tree-like, but trees don't usually have linked siblings.  It's all just parents and children. I'm calling this a bush.&#13;
-</p><p>&#13;
-Let's look at the structure.&#13;
-</p><pre>&#13;
-head-&gt;A&lt;=&gt;D&lt;=&gt;E&lt;=&gt;FC       G&#13;
-                  |&#13;
-                  H&#13;
-&#13;
-</pre><p>&#13;
-Without being told where to put stuff, I could just tack it all on the tail.  But I think tacking it on after its parent is more elegant, if it can be implemented in similar complexity and space.  In the bush I drew, I'd like the nodes to end up in alphabetical order.&#13;
-</p><p>&#13;
-I might even be able to do this without recursion.&#13;
-</p><a id="extended"></a><p>&#13;
-I'll travel along the list, examining each node.  If it's got a child, I'll append the child to the parent.  Then I move to the next element.&#13;
-</p><p>&#13;
-That screws up the double linking, though.  I could, on append, travel to the end of the child list, and adjust the links from there.  But then I have to visit all the children twice.  Well, that's not too bad; it increases the time complexity to O(2n), which is still linear, and storage stays O(1): all I need is a couple of pointers.&#13;
-</p><p>&#13;
-On the other hand, if storage is not the biggest issue, I can use a <i>little</i> bit of recursion to get a faster implementation, which visits each node only once.  &#13;
-</p><p>&#13;
-The recursive function flattenAndFindTail(Bush head) flattens the provided bush and returns the tail.  Basically, it just iterates down the bush, and calls flattenAndFindTail(node.child) on any bush that has a child.  It then inserts the whole flattened list between the parent and the parent's next sibling, using the returned tail to adjust the sibling's prev pointer.  Finally, it advances to the sibling, skipping the inserted list, because the inserted list has already been flattened.&#13;
-</p><p>&#13;
-This works in O(n) time, rather than O(2n)... not a big improvement, but more efficient regardless.  Unfortunately, it takes up O(m) storage, where m is the maximum depth of the bush, in remembering a parent pointer for each recursive call.&#13;
-</p><p>&#13;
-In cases where the depth of the bush is not expected to be large, I'd like to use the recursive function.  And I really like the elegance of flattening the child behind the parent; it's looks like the diagramming I did in English class.  I'll use an iterative method to create the array in main(), just to show off that I can do it both ways.&#13;
-</p>[code]&#13;
-public class BushNode {&#13;
-	public String value = null;&#13;
-	public BushNode next = null;&#13;
-	public BushNode prev = null;&#13;
-	public BushNode child = null;&#13;
-&#13;
-	public BushNode(String value) {&#13;
-		this.value = value;&#13;
-	}&#13;
-	&#13;
-}&#13;
-[/code][code]&#13;
-public class Bush {&#13;
-	public BushNode head = null;&#13;
-	public BushNode tail = null;&#13;
-	&#13;
-	/**&#13;
-	 * Print out the bush with braces around sublists.&#13;
-	 * @param top The top of the bush&#13;
-	 */&#13;
-	public void printBush(BushNode top) {&#13;
-		System.out.print(top.value + " ");&#13;
-		if (top.child != null) {&#13;
-			System.out.print("{ ");&#13;
-			printBush(top.child);&#13;
-			System.out.print("} ");&#13;
-		}&#13;
-		if (top.next != null) {&#13;
-			printBush(top.next);&#13;
-		}&#13;
-	}&#13;
-	&#13;
-	/**&#13;
-	 * Driver to create a bush and flatten it&#13;
-	 * @param args A single string of the form { A B { C { D E F } G } H { I J } K },&#13;
-	 * where each brace indicates the start of a child list.  In this case, A&#13;
-	 * has no children, while B has a child list of two elements, including &#13;
-	 * an element C with a three-element child list of its own.&#13;
-	 */&#13;
-	public static void main(String args[]) {&#13;
-		Bush bush = new Bush();&#13;
-		String list = "{ A B { C { D E F } G } H { I J } K }";&#13;
-		if (args.length &gt; 0) {&#13;
-			list = args[0];&#13;
-		}&#13;
-		if (!list.startsWith("{")) {&#13;
-			System.out.println("First character of list must be an opening brace!");&#13;
-			System.exit(-1);&#13;
-		}&#13;
-		if (!list.endsWith("}")) {&#13;
-			System.out.println("Last character of list must be a closing brace!");&#13;
-			System.exit(-2);&#13;
-		}&#13;
-		list = list.substring(1, list.length() - 1);&#13;
-		BushNode curr = null;&#13;
-		boolean firstChild = true;&#13;
-		LinkedList<bushnode> levelStack = new LinkedList<bushnode>();&#13;
-		StringTokenizer t = new StringTokenizer(list, " ");&#13;
-		while (t.hasMoreElements()) {&#13;
-		    String tok = t.nextToken();&#13;
-		    if (tok.equals("{")) {&#13;
-		    	// We need to start a new sublist&#13;
-		    	if (firstChild) {&#13;
-		    		System.out.println("Invalid argument: list without parent!");&#13;
-		    		System.exit(-5);&#13;
-		    	}&#13;
-		    	firstChild = true;&#13;
-		    	levelStack.push(curr);&#13;
-		    } else if (tok.equals("}")) {&#13;
-		    	// This sublist is finished!&#13;
-		    	try {&#13;
-		    		curr = levelStack.pop();&#13;
-		    	} catch (NoSuchElementException e) {&#13;
-		    		System.out.println("Invalid argument: no start for list end!");&#13;
-		    		System.exit(-4);&#13;
-		    	}&#13;
-		    } else {&#13;
-		    	if (firstChild) {&#13;
-		    		// First element in a new list&#13;
-		    		if (curr == null) {&#13;
-		    			// The first element in the whole list&#13;
-		    			bush.head = curr = new BushNode(tok);&#13;
-		    		} else {&#13;
-		    			// First element in a sublist of the current element&#13;
-						curr.child = new BushNode(tok);&#13;
-						curr = curr.child;&#13;
-		    		}&#13;
-		    		firstChild = false;&#13;
-		    	} else {&#13;
-		    		// Just another element in the current list&#13;
-					curr.next = new BushNode(tok);&#13;
-					curr.next.prev = curr;&#13;
-					curr = curr.next;&#13;
-		    	}&#13;
-		    }&#13;
-		}&#13;
-		// All done with elements.  Pop up to the top level and set the tail.&#13;
-		System.out.print("{ ");&#13;
-		bush.printBush(bush.head);&#13;
-		System.out.println("} ");&#13;
-		System.out.println("Flattenning...");&#13;
-		Flatten f = new Flatten();&#13;
-		f.flatten(bush);&#13;
-		f.printFlattenedBush(bush);&#13;
-	}&#13;
-&#13;
-}&#13;
-[/code][code]&#13;
-/**&#13;
- * Flatten a doubly-linked list with child lists (which I call a Bush).&#13;
- */&#13;
-public class Flatten {&#13;
-	&#13;
-	/**&#13;
-	 * Traverse the bush; whenever a node has a child, attach the child and &#13;
-	 * its siblings after the parent in the top list.&#13;
-	 * &#13;
-	 * This algorithm has the advantage of visiting each node only once, &#13;
-	 * although it requires additional space to accommodate the recursion.&#13;
-	 * @param bush The bush to flatten&#13;
-	 */&#13;
-	public void flatten(Bush bush) {&#13;
-		bush.tail = flattenAndFindTail(bush.head);&#13;
-	}&#13;
-	&#13;
-	public BushNode flattenAndFindTail(BushNode node) {&#13;
-		BushNode curr = null;&#13;
-		BushNode next = node;&#13;
-		do {&#13;
-			curr = next;&#13;
-			if (curr.child != null) {&#13;
-				BushNode subTail = flattenAndFindTail(curr.child);&#13;
-				subTail.next = curr.next;&#13;
-				if (curr.next != null) {&#13;
-					curr.next.prev = subTail;&#13;
-				}&#13;
-				curr.next = curr.child;&#13;
-				curr.child.prev = curr;&#13;
-				curr = subTail;&#13;
-			}&#13;
-			// Nothing to flatten here&#13;
-			next = curr.next;&#13;
-		} while (next != null);&#13;
-		return curr;&#13;
-	}&#13;
-	&#13;
-	/**&#13;
-	 * Print the Bush, ignoring any children.&#13;
-	 * @param bush The bush to print&#13;
-	 */&#13;
-	public void printFlattenedBush(Bush bush) {&#13;
-		BushNode curr = bush.head;&#13;
-		System.out.print("_ ");&#13;
-		while (curr != null) {&#13;
-			System.out.print(curr.value + " ");&#13;
-			curr = curr.next;&#13;
-		}&#13;
-		System.out.println("_");&#13;
-	}&#13;
-	&#13;
-}&#13;
-[/code]<p>&#13;
-Pretty swanky, eh?  &#13;
+<p>
+Yesterday I made a linked list, in Java.  Yeah, that's right.  
+</p><p>
+Today I'm taking on a programming problem: given a doubly-linked list (with head and tail), where any element may have a child doubly-linked list (without head and tail), flatten the structure into a doubly-linked list.
+</p><p>
+That sounds vaguely tree-like, but trees don't usually have linked siblings.  It's all just parents and children. I'm calling this a bush.
+</p><p>
+Let's look at the structure.
+</p><pre>
+head-&gt;A&lt;=&gt;D&lt;=&gt;E&lt;=&gt;FC       G
+                  |
+                  H
+
+</pre><p>
+Without being told where to put stuff, I could just tack it all on the tail.  But I think tacking it on after its parent is more elegant, if it can be implemented in similar complexity and space.  In the bush I drew, I'd like the nodes to end up in alphabetical order.
+</p><p>
+I might even be able to do this without recursion.
+</p><a id="extended"></a><p>
+I'll travel along the list, examining each node.  If it's got a child, I'll append the child to the parent.  Then I move to the next element.
+</p><p>
+That screws up the double linking, though.  I could, on append, travel to the end of the child list, and adjust the links from there.  But then I have to visit all the children twice.  Well, that's not too bad; it increases the time complexity to O(2n), which is still linear, and storage stays O(1): all I need is a couple of pointers.
+</p><p>
+On the other hand, if storage is not the biggest issue, I can use a <i>little</i> bit of recursion to get a faster implementation, which visits each node only once.  
+</p><p>
+The recursive function flattenAndFindTail(Bush head) flattens the provided bush and returns the tail.  Basically, it just iterates down the bush, and calls flattenAndFindTail(node.child) on any bush that has a child.  It then inserts the whole flattened list between the parent and the parent's next sibling, using the returned tail to adjust the sibling's prev pointer.  Finally, it advances to the sibling, skipping the inserted list, because the inserted list has already been flattened.
+</p><p>
+This works in O(n) time, rather than O(2n)... not a big improvement, but more efficient regardless.  Unfortunately, it takes up O(m) storage, where m is the maximum depth of the bush, in remembering a parent pointer for each recursive call.
+</p><p>
+In cases where the depth of the bush is not expected to be large, I'd like to use the recursive function.  And I really like the elegance of flattening the child behind the parent; it's looks like the diagramming I did in English class.  I'll use an iterative method to create the array in main(), just to show off that I can do it both ways.
+</p>[code]
+public class BushNode {
+	public String value = null;
+	public BushNode next = null;
+	public BushNode prev = null;
+	public BushNode child = null;
+
+	public BushNode(String value) {
+		this.value = value;
+	}
+	
+}
+[/code][code]
+public class Bush {
+	public BushNode head = null;
+	public BushNode tail = null;
+	
+	/**
+	 * Print out the bush with braces around sublists.
+	 * @param top The top of the bush
+	 */
+	public void printBush(BushNode top) {
+		System.out.print(top.value + " ");
+		if (top.child != null) {
+			System.out.print("{ ");
+			printBush(top.child);
+			System.out.print("} ");
+		}
+		if (top.next != null) {
+			printBush(top.next);
+		}
+	}
+	
+	/**
+	 * Driver to create a bush and flatten it
+	 * @param args A single string of the form { A B { C { D E F } G } H { I J } K },
+	 * where each brace indicates the start of a child list.  In this case, A
+	 * has no children, while B has a child list of two elements, including 
+	 * an element C with a three-element child list of its own.
+	 */
+	public static void main(String args[]) {
+		Bush bush = new Bush();
+		String list = "{ A B { C { D E F } G } H { I J } K }";
+		if (args.length &gt; 0) {
+			list = args[0];
+		}
+		if (!list.startsWith("{")) {
+			System.out.println("First character of list must be an opening brace!");
+			System.exit(-1);
+		}
+		if (!list.endsWith("}")) {
+			System.out.println("Last character of list must be a closing brace!");
+			System.exit(-2);
+		}
+		list = list.substring(1, list.length() - 1);
+		BushNode curr = null;
+		boolean firstChild = true;
+		LinkedList<bushnode> levelStack = new LinkedList<bushnode>();
+		StringTokenizer t = new StringTokenizer(list, " ");
+		while (t.hasMoreElements()) {
+		    String tok = t.nextToken();
+		    if (tok.equals("{")) {
+		    	// We need to start a new sublist
+		    	if (firstChild) {
+		    		System.out.println("Invalid argument: list without parent!");
+		    		System.exit(-5);
+		    	}
+		    	firstChild = true;
+		    	levelStack.push(curr);
+		    } else if (tok.equals("}")) {
+		    	// This sublist is finished!
+		    	try {
+		    		curr = levelStack.pop();
+		    	} catch (NoSuchElementException e) {
+		    		System.out.println("Invalid argument: no start for list end!");
+		    		System.exit(-4);
+		    	}
+		    } else {
+		    	if (firstChild) {
+		    		// First element in a new list
+		    		if (curr == null) {
+		    			// The first element in the whole list
+		    			bush.head = curr = new BushNode(tok);
+		    		} else {
+		    			// First element in a sublist of the current element
+						curr.child = new BushNode(tok);
+						curr = curr.child;
+		    		}
+		    		firstChild = false;
+		    	} else {
+		    		// Just another element in the current list
+					curr.next = new BushNode(tok);
+					curr.next.prev = curr;
+					curr = curr.next;
+		    	}
+		    }
+		}
+		// All done with elements.  Pop up to the top level and set the tail.
+		System.out.print("{ ");
+		bush.printBush(bush.head);
+		System.out.println("} ");
+		System.out.println("Flattenning...");
+		Flatten f = new Flatten();
+		f.flatten(bush);
+		f.printFlattenedBush(bush);
+	}
+
+}
+[/code][code]
+/**
+ * Flatten a doubly-linked list with child lists (which I call a Bush).
+ */
+public class Flatten {
+	
+	/**
+	 * Traverse the bush; whenever a node has a child, attach the child and 
+	 * its siblings after the parent in the top list.
+	 * 
+	 * This algorithm has the advantage of visiting each node only once, 
+	 * although it requires additional space to accommodate the recursion.
+	 * @param bush The bush to flatten
+	 */
+	public void flatten(Bush bush) {
+		bush.tail = flattenAndFindTail(bush.head);
+	}
+	
+	public BushNode flattenAndFindTail(BushNode node) {
+		BushNode curr = null;
+		BushNode next = node;
+		do {
+			curr = next;
+			if (curr.child != null) {
+				BushNode subTail = flattenAndFindTail(curr.child);
+				subTail.next = curr.next;
+				if (curr.next != null) {
+					curr.next.prev = subTail;
+				}
+				curr.next = curr.child;
+				curr.child.prev = curr;
+				curr = subTail;
+			}
+			// Nothing to flatten here
+			next = curr.next;
+		} while (next != null);
+		return curr;
+	}
+	
+	/**
+	 * Print the Bush, ignoring any children.
+	 * @param bush The bush to print
+	 */
+	public void printFlattenedBush(Bush bush) {
+		BushNode curr = bush.head;
+		System.out.print("_ ");
+		while (curr != null) {
+			System.out.print(curr.value + " ");
+			curr = curr.next;
+		}
+		System.out.println("_");
+	}
+	
+}
+[/code]<p>
+Pretty swanky, eh?  
 </p>
-<p>&#13;
-Well, fine, then.  If you've got a better idea, I'd love to hear it!&#13;
+<p>
+Well, fine, then.  If you've got a better idea, I'd love to hear it!
 </p></bushnode></bushnode>

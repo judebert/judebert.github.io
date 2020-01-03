@@ -29,88 +29,88 @@ comments:
     hear from you soon\r\n\r\ntake care\r\n\r\nkasonde"
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-As I said before, <a href="/progress/facebook/PHP-Client-Library.html">I've had some trouble with PHP Facebook development.</a>.  This time, I couldn't get a user ID because the user came from a non-Facebook page.&#13;
-</p><p>&#13;
-An application's drawing page is called it's "canvas page".  It's the starting point for the whole app.  Unfortunately, when the user jumps there from a bookmark, or enters the URL into the browser directly, Facebook can't supply the user ID.  The app can't do anything, because it doesn't know who the heck it's working for.  The user must visit your app's canvas page from a Facebook page.&#13;
-</p><p>&#13;
-Since your canvas page <b>is</b> a Facebook page, and the user just visited it directly, you'd think that redirecting to the same page would do the job.  And it does!  But only if the user clicks on a link.&#13;
-</p><p>&#13;
-Then there's the additional problem of users who don't allow you to see their user ID.  You have to ask them for permission first.&#13;
-</p><p>&#13;
-I put together a skeleton that takes care of all these issues for FBML pages (I don't think it'll work for iFrame pages).  Read on for the code.&#13;
-</p><a id="extended"></a><p>First, we need to include some variables.  For instance, you'll need to know your Facebook app id, API key, and secret.  (I call these $fbappid, $fbapikey, and $fbsecret, respectively.)  I keep these in a separate file, which I name config.inc.php.  It looks like this:&#13;
-</p>&#13;
-[code]// Facebook stuff&#13;
-$fbappid = '<the app="" id="">';&#13;
-$fbcanvas = '<url of="" the="" app="" canvas="" page="">';&#13;
-$fbapikey = '<the app="" api="" key="">';&#13;
-$fbsecret = '<the app="" secret="">';&#13;
-[/code]&#13;
-<p>You'll fill out your app's data, of course, which you can find in it's Developer profile.  Include the data in the main program with a simple require statement:&#13;
-</p>&#13;
-[code]require_once('config.inc.php');&#13;
-[/code]&#13;
-<p>Now we start checking for weird cases.  For instance, some joker might examine the code and figure out where you keep your server.  And then he'll visit you directly.  Hence, this bit of code:&#13;
-</p>&#13;
-[code]// Anyone who visits my server directly gets redirected to my FB profile page&#13;
-if (!isset($_SERVER['HTTP_X_FB_USER_REMOTE_ADDR'])) {&#13;
-    $app_profile = "http://www.facebook.com/apps/application.php?id=$fbappid";&#13;
-    header('Location: ' . $app_profile);&#13;
-    http_redirect($app_profile);&#13;
-    exit;&#13;
-}&#13;
-[/code]&#13;
-<p>If the user has created a bookmark for your app, he might visit while he's not logged in to Facebook.  That'll never do!  We'd better check for that, which Facebook indicates by setting 'fb_sig_logged_out_facebook' in the GET or POST variables:&#13;
-</p>&#13;
-[code]&#13;
-// Logged-out users get a nice error message&#13;
-if (isset($_REQUEST['fb_sig_logged_out_facebook'])) {&#13;
-    echo "<error message="You must log in!">Please log in above to use <application-name></application-name></error>";&#13;
-    exit;&#13;
-}&#13;
-[/code]&#13;
-<p>Having covered the instant-failure cases, we can move on to the complicated cases.  For these, we'll have to create a Facebook object and try to retrieve the user's ID.  The user might be just visiting the canvas page, in which case we'd like to give him a preview of the app, with all the functionality we can provide.  Alternatively, he might be a "logged in" user: a user who has given us additional permissions, and who can therefore access all our app's features.  You call get_canvas_user() to get the ID for the casual user, and get_logged_in_user() for the full user:&#13;
-</p>&#13;
-[code]require_once 'facebook.php';&#13;
-$facebook = new Facebook($fbapikey, $fbsecret);&#13;
-&#13;
-// Find Facebook user ID&#13;
-//&#13;
-// Is this a casual user? (Hasn't authorized me)&#13;
-$user_id = $facebook-&gt;get_canvas_user();&#13;
-if (empty($user_id)) {&#13;
-    // Is this an authorized user?&#13;
-    $user_id = $facebook-&gt;get_loggedin_user();&#13;
-}&#13;
-[/code]&#13;
-<p>&#13;
-Unfortunately, this doesn't cover <b>quite</b> all the possibilities.  If the user came from a non-Facebook page, the user ID won't be set at all, and we'll need him to click a link to get within the Facebook structure.  If the user's privacy settings are restrictively high, the ID won't be set either, and he'll need to allow us to access his data.  But how can we tell the difference?  Easy: if he came from a Facebook page, '_fb_fromhash' is set.&#13;
-</p>&#13;
-[code]if (empty($user_id)) {&#13;
-    // We're on the canvas page, it should be Facebook framed.  &#13;
-    // Make certain.  Could redirect us.&#13;
-    $facebook-&gt;require_frame();  &#13;
-    // If the 'came from Facebook' flag isn't set...&#13;
-    if (!isset($_GET['_fb_fromhash'])) {&#13;
-        // ...redirect to ourselves, with the flag set.&#13;
-        // Rather than recreate the application blurb with a "Go to <appname>"&#13;
-        // button, let's just redirect to the app profile page.  It's already&#13;
-        // got the blurb, more information, AND a "Go to application" button.&#13;
-        $app_profile = "http://www.facebook.com/apps/application.php?id=$fbappid";&#13;
-        echo "<redirect url="$app_profile"></redirect>";&#13;
-        exit;&#13;
-    } else {&#13;
-        // ... we already redirected once.  We must be in case 2.&#13;
-        echo "<error message="Unable to identify user">Your privacy settings do not allow me to determine who you are.</error>\n";&#13;
-        echo "<p>I can't do anything until I can recognize you.  Please <a href="%24fbcanvas" requirelogin="1">authorize <application-name linked="false"></application-name> to access your information</a> or change your profile to share more public information.</p>";&#13;
-        exit;&#13;
-    }&#13;
-}&#13;
-[/code]&#13;
-<p>&#13;
-Once we've gotten pas this point, we're guaranteed to have a valid user ID in the $user_id variable.  We can carry on with the actual application.  We might want to save the user ID for later.&#13;
+<p>
+As I said before, <a href="/progress/facebook/PHP-Client-Library.html">I've had some trouble with PHP Facebook development.</a>.  This time, I couldn't get a user ID because the user came from a non-Facebook page.
+</p><p>
+An application's drawing page is called it's "canvas page".  It's the starting point for the whole app.  Unfortunately, when the user jumps there from a bookmark, or enters the URL into the browser directly, Facebook can't supply the user ID.  The app can't do anything, because it doesn't know who the heck it's working for.  The user must visit your app's canvas page from a Facebook page.
+</p><p>
+Since your canvas page <b>is</b> a Facebook page, and the user just visited it directly, you'd think that redirecting to the same page would do the job.  And it does!  But only if the user clicks on a link.
+</p><p>
+Then there's the additional problem of users who don't allow you to see their user ID.  You have to ask them for permission first.
+</p><p>
+I put together a skeleton that takes care of all these issues for FBML pages (I don't think it'll work for iFrame pages).  Read on for the code.
+</p><a id="extended"></a><p>First, we need to include some variables.  For instance, you'll need to know your Facebook app id, API key, and secret.  (I call these $fbappid, $fbapikey, and $fbsecret, respectively.)  I keep these in a separate file, which I name config.inc.php.  It looks like this:
 </p>
-<p>&#13;
-Put it all together, and you get a nice skeleton for an FBML Facebook app.  I'm using this skeleton with my first Facebook app, which I hope to release soon.&#13;
+[code]// Facebook stuff
+$fbappid = '<the app="" id="">';
+$fbcanvas = '<url of="" the="" app="" canvas="" page="">';
+$fbapikey = '<the app="" api="" key="">';
+$fbsecret = '<the app="" secret="">';
+[/code]
+<p>You'll fill out your app's data, of course, which you can find in it's Developer profile.  Include the data in the main program with a simple require statement:
+</p>
+[code]require_once('config.inc.php');
+[/code]
+<p>Now we start checking for weird cases.  For instance, some joker might examine the code and figure out where you keep your server.  And then he'll visit you directly.  Hence, this bit of code:
+</p>
+[code]// Anyone who visits my server directly gets redirected to my FB profile page
+if (!isset($_SERVER['HTTP_X_FB_USER_REMOTE_ADDR'])) {
+    $app_profile = "http://www.facebook.com/apps/application.php?id=$fbappid";
+    header('Location: ' . $app_profile);
+    http_redirect($app_profile);
+    exit;
+}
+[/code]
+<p>If the user has created a bookmark for your app, he might visit while he's not logged in to Facebook.  That'll never do!  We'd better check for that, which Facebook indicates by setting 'fb_sig_logged_out_facebook' in the GET or POST variables:
+</p>
+[code]
+// Logged-out users get a nice error message
+if (isset($_REQUEST['fb_sig_logged_out_facebook'])) {
+    echo "<error message="You must log in!">Please log in above to use <application-name></application-name></error>";
+    exit;
+}
+[/code]
+<p>Having covered the instant-failure cases, we can move on to the complicated cases.  For these, we'll have to create a Facebook object and try to retrieve the user's ID.  The user might be just visiting the canvas page, in which case we'd like to give him a preview of the app, with all the functionality we can provide.  Alternatively, he might be a "logged in" user: a user who has given us additional permissions, and who can therefore access all our app's features.  You call get_canvas_user() to get the ID for the casual user, and get_logged_in_user() for the full user:
+</p>
+[code]require_once 'facebook.php';
+$facebook = new Facebook($fbapikey, $fbsecret);
+
+// Find Facebook user ID
+//
+// Is this a casual user? (Hasn't authorized me)
+$user_id = $facebook-&gt;get_canvas_user();
+if (empty($user_id)) {
+    // Is this an authorized user?
+    $user_id = $facebook-&gt;get_loggedin_user();
+}
+[/code]
+<p>
+Unfortunately, this doesn't cover <b>quite</b> all the possibilities.  If the user came from a non-Facebook page, the user ID won't be set at all, and we'll need him to click a link to get within the Facebook structure.  If the user's privacy settings are restrictively high, the ID won't be set either, and he'll need to allow us to access his data.  But how can we tell the difference?  Easy: if he came from a Facebook page, '_fb_fromhash' is set.
+</p>
+[code]if (empty($user_id)) {
+    // We're on the canvas page, it should be Facebook framed.  
+    // Make certain.  Could redirect us.
+    $facebook-&gt;require_frame();  
+    // If the 'came from Facebook' flag isn't set...
+    if (!isset($_GET['_fb_fromhash'])) {
+        // ...redirect to ourselves, with the flag set.
+        // Rather than recreate the application blurb with a "Go to <appname>"
+        // button, let's just redirect to the app profile page.  It's already
+        // got the blurb, more information, AND a "Go to application" button.
+        $app_profile = "http://www.facebook.com/apps/application.php?id=$fbappid";
+        echo "<redirect url="$app_profile"></redirect>";
+        exit;
+    } else {
+        // ... we already redirected once.  We must be in case 2.
+        echo "<error message="Unable to identify user">Your privacy settings do not allow me to determine who you are.</error>\n";
+        echo "<p>I can't do anything until I can recognize you.  Please <a href="%24fbcanvas" requirelogin="1">authorize <application-name linked="false"></application-name> to access your information</a> or change your profile to share more public information.</p>";
+        exit;
+    }
+}
+[/code]
+<p>
+Once we've gotten pas this point, we're guaranteed to have a valid user ID in the $user_id variable.  We can carry on with the actual application.  We might want to save the user ID for later.
+</p>
+<p>
+Put it all together, and you get a nice skeleton for an FBML Facebook app.  I'm using this skeleton with my first Facebook app, which I hope to release soon.
 </p></appname></the></the></url></the>

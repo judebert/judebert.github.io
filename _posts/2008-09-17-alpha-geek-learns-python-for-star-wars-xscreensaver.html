@@ -38,38 +38,38 @@ comments:
     for the update.
 excerpt_separator: <a id="extended"></a>
 ---
-<p>My work computer is pretty restricted.  I don't get <b>any</b> admin privileges at all.  This is occasionally a real problem, like when I need something for development.  But usually it's only a pain; although my browser's Java plugin only supports 1.4, I can't imagine a business case when I need a better one; after all, we're developing a real application, not an applet.&#13;
-</p><p>&#13;
-One such pain is the text in XScreenSaver.  It's using <code>uptime</code> to provide text for the Star Wars screensaver and similar text-based modules, which is just boring.  I'm allowed to specify a command that will produce text output, like <code>fortune</code>, but I'd like to get an RSS feed.  And since xscreensaver-text isn't installed, all I can use is elinks, which puts raw HTML in the output.&#13;
-</p><p>&#13;
-So, being the Alpha Geek, I learned enough Python to read a feed.  It's installed by default, but the <a href="http://www.feedparser.org/">Universal Feed Parser</a> isn't.  I had to figure out how to manipulate the module search path, read the arguments, and traverse and combine lists and dictionaries.  No biggie.  The source to my python "screenfeed" script is available if you read more.&#13;
-</p><a id="extended"></a><p>&#13;
-Here's the script:&#13;
-</p>&#13;
+<p>My work computer is pretty restricted.  I don't get <b>any</b> admin privileges at all.  This is occasionally a real problem, like when I need something for development.  But usually it's only a pain; although my browser's Java plugin only supports 1.4, I can't imagine a business case when I need a better one; after all, we're developing a real application, not an applet.
+</p><p>
+One such pain is the text in XScreenSaver.  It's using <code>uptime</code> to provide text for the Star Wars screensaver and similar text-based modules, which is just boring.  I'm allowed to specify a command that will produce text output, like <code>fortune</code>, but I'd like to get an RSS feed.  And since xscreensaver-text isn't installed, all I can use is elinks, which puts raw HTML in the output.
+</p><p>
+So, being the Alpha Geek, I learned enough Python to read a feed.  It's installed by default, but the <a href="http://www.feedparser.org/">Universal Feed Parser</a> isn't.  I had to figure out how to manipulate the module search path, read the arguments, and traverse and combine lists and dictionaries.  No biggie.  The source to my python "screenfeed" script is available if you read more.
+</p><a id="extended"></a><p>
+Here's the script:
+</p>
 <blockquote>
   <pre>
-    <code>&#13;
-#!/usr/bin/python&#13;
-import sys&#13;
-#import random&#13;
-sys.path.append('/path/to/feedparser')&#13;
-import feedparser&#13;
-if len(sys.argv) &lt; 2:&#13;
-  feeds = ['http://feeds.theonion.com/theonion/daily']&#13;
-else:&#13;
-  feeds = sys.argv[1:]&#13;
-parsedfeeds = {}&#13;
-for feed in feeds:&#13;
-  d = feedparser.parse(feed)&#13;
-  parsedfeeds[feed] = d;&#13;
-#random.shuffle(allitems)&#13;
-for key in parsedfeeds.keys():&#13;
-  for i in parsedfeeds[key].entries:&#13;
-    print '[%s]%s' % (parsedfeeds[key]['feed']['title'], i.title)&#13;
-    print&#13;
+    <code>
+#!/usr/bin/python
+import sys
+#import random
+sys.path.append('/path/to/feedparser')
+import feedparser
+if len(sys.argv) &lt; 2:
+  feeds = ['http://feeds.theonion.com/theonion/daily']
+else:
+  feeds = sys.argv[1:]
+parsedfeeds = {}
+for feed in feeds:
+  d = feedparser.parse(feed)
+  parsedfeeds[feed] = d;
+#random.shuffle(allitems)
+for key in parsedfeeds.keys():
+  for i in parsedfeeds[key].entries:
+    print '[%s]%s' % (parsedfeeds[key]['feed']['title'], i.title)
+    print
 </code>
   </pre>
-</blockquote>&#13;
-<p>&#13;
-I just made that executable, put it in my path, and now I've got the headlines displayed in a Star Wars marquee!  I can even specify multiple feeds to read.  Of course, it could be more sophisticated, but I think it's not bad for a first Python script.&#13;
+</blockquote>
+<p>
+I just made that executable, put it in my path, and now I've got the headlines displayed in a Star Wars marquee!  I can even specify multiple feeds to read.  Of course, it could be more sophisticated, but I think it's not bad for a first Python script.
 </p>

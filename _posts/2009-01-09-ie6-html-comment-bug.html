@@ -141,26 +141,26 @@ comments:
     they are going to change this with the new version.
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-While hacking on CSS image borders for a new site, I discovered yet another IE6 bug.  (I know, you didn't think any more could fit.  Haven't we expended our quota already?)&#13;
-</p><p>&#13;
-In short: <b>HTML comments mess up IE6 layout for relatively position containers</b>.  Yup. &#13;
-</p><a id="extended"></a><p>&#13;
-I searched Google to see if <a href="http://lists.evolt.org/archive/Week-of-Mon-20010827/056409.html">other people had problems with IE6 HTML comments</a>, but I didn't find anything specific, so I'm demonstrating it for the good of webdesignerkind.&#13;
-</p><p>&#13;
-I was actually trying to understand <a href="http://positioniseverything.net/articles/dropshadows2.html">Position Is Everything's "Four Sided PNG Drop Shadows"</a> layout and extend it for IE6.  After all, the December statistics for browser share show that 20% of visitors use it; I figured I'd use a dithered PNG-8 for them.&#13;
-</p><p>&#13;
-I built the HTML (substituting my own class names), assigning each div an arbitrary color so I could tell them apart.  Then I started commenting pieces out to see how they affected the size of their containing div.  With each step, I verified my understanding with Firefox.  When I was done, I sent the final page to BrowerShots to see if IE6 had a problem with the layout or just the PNGs.  Here's what FireFox had showed me:<br />&#13;
-<!-- s9ymdb:867 --><img class="serendipity_image_center" width="699" height="174" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/howto/comment_bug_ff.png" alt="" />&#13;
-</p><p>&#13;
-Here's what the IE6 screenshot looked like:&#13;
-<!-- s9ymdb:869 --><img class="serendipity_image_center" width="709" height="174" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/howto/comment_bug_ie6.png" alt="" />&#13;
-</p><p>&#13;
-I obviously couldn't experiment with BrowserShots, and I couldn't install IE6 because I run Linux.  Luckily, my friend <a href="http://www.optional-necessity.com/">Don Chambers came to the rescue</a>.  With a IM and a little patience, we discovered that <em>the HTML comments I had left in the page were messing up the display of the relative divs</em>.&#13;
-</p><p>&#13;
-Just when you thought it couldn't get any worse: best practices mess up your layout.&#13;
-</p><p>&#13;
-I'm obviously not privy to IE6 source code, but looking at it from a programmer's point of view, I'd say that IE6 sets the comments to visibility:hidden to prevent their display, and the relatively positioned divs inherit the setting. But that's just a guess.  I verified that removing the comments from the HTML repairs the layout.&#13;
-</p><p>&#13;
-If you have IE6 (upgrade if you can), you can see the <a href="/examples/comment_bug/comment_bug.html">IE6 comment bug example page</a> and verify it for yourself.  Feel free to download the file and abuse it any way you like.&#13;
+<p>
+While hacking on CSS image borders for a new site, I discovered yet another IE6 bug.  (I know, you didn't think any more could fit.  Haven't we expended our quota already?)
+</p><p>
+In short: <b>HTML comments mess up IE6 layout for relatively position containers</b>.  Yup. 
+</p><a id="extended"></a><p>
+I searched Google to see if <a href="http://lists.evolt.org/archive/Week-of-Mon-20010827/056409.html">other people had problems with IE6 HTML comments</a>, but I didn't find anything specific, so I'm demonstrating it for the good of webdesignerkind.
+</p><p>
+I was actually trying to understand <a href="http://positioniseverything.net/articles/dropshadows2.html">Position Is Everything's "Four Sided PNG Drop Shadows"</a> layout and extend it for IE6.  After all, the December statistics for browser share show that 20% of visitors use it; I figured I'd use a dithered PNG-8 for them.
+</p><p>
+I built the HTML (substituting my own class names), assigning each div an arbitrary color so I could tell them apart.  Then I started commenting pieces out to see how they affected the size of their containing div.  With each step, I verified my understanding with Firefox.  When I was done, I sent the final page to BrowerShots to see if IE6 had a problem with the layout or just the PNGs.  Here's what FireFox had showed me:<br />
+<!-- s9ymdb:867 --><img class="serendipity_image_center" width="699" height="174" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/howto/comment_bug_ff.png" alt="" />
+</p><p>
+Here's what the IE6 screenshot looked like:
+<!-- s9ymdb:869 --><img class="serendipity_image_center" width="709" height="174" style="border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/howto/comment_bug_ie6.png" alt="" />
+</p><p>
+I obviously couldn't experiment with BrowserShots, and I couldn't install IE6 because I run Linux.  Luckily, my friend <a href="http://www.optional-necessity.com/">Don Chambers came to the rescue</a>.  With a IM and a little patience, we discovered that <em>the HTML comments I had left in the page were messing up the display of the relative divs</em>.
+</p><p>
+Just when you thought it couldn't get any worse: best practices mess up your layout.
+</p><p>
+I'm obviously not privy to IE6 source code, but looking at it from a programmer's point of view, I'd say that IE6 sets the comments to visibility:hidden to prevent their display, and the relatively positioned divs inherit the setting. But that's just a guess.  I verified that removing the comments from the HTML repairs the layout.
+</p><p>
+If you have IE6 (upgrade if you can), you can see the <a href="/examples/comment_bug/comment_bug.html">IE6 comment bug example page</a> and verify it for yourself.  Feel free to download the file and abuse it any way you like.
 </p>

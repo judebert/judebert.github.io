@@ -44,44 +44,44 @@ excerpt_separator: <a id="extended"></a>
 <a class="serendipity_image_link" href="/progress/media/screenshots/umbrello.png">
 <!-- s9ymdb:892 -->
   <img class="serendipity_image_left" width="110" height="79" style="float: left; border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/screenshots/umbrello.s9yThumb.png" alt="" />
-</a><p>&#13;
-<a href="/progress/archives/329-Rating-UML-Editors.html">I'm still rating UML editors.</a> Last time, <a href="/progress/archives/332-UML-Editors-Gaphor.html">Gaphor disappointed me tremendously.</a>  After two contenders, can <a href="http://uml.sourceforge.net/">Umbrello</a> restore my confidence in Open-Source programmers?&#13;
-</p><p>&#13;
-Let's check that list!&#13;
-</p>&#13;
-<a id="extended"></a><p>&#13;
-The first time I loaded Umbrello, it came up in full-screen mode.  Not just maximized, but actually full-screen, with no window decorations.  I need to reference other documents (like Use Case documents) while I do my design, so that was no good for me.  I searched fruitlessly for hours; apparently Umbrello <i>has no fullscreen mode</i>. Maybe it doesn't like my Gnome/Compiz desktop because it's a KDE program?  But there was no change when I installed the Compiz KDE backend and integration.  Finally I realized that "no window decorations" probably meant "conflicts with slick Compiz window manager"; when I turned that off, I got a regular window.  Oh well, at least it's working.  On with the evaluation!&#13;
-</p><p>&#13;
-<u>Class and Sequence Diagrams:</u> <b>Good.</b> &#13;
-Umbrello supports class and sequence diagrams with all the elements I need.  The only problem is the horrible default colors.  Who in the world thought yellow and red was a good color combination?!  &#13;
-</p><p>&#13;
-Okay, the other problem is that sequence diagram support is spotty.  Why don't the lifelines extend automatically when you add a message below all the existing execution bars?&#13;
-</p><p>&#13;
-Okay, the <i>third</i> problem is that hierarchy groups were hard to implement.  Two classes per group only.  And orthogonal lines -- which would make it at least <b>look</b> like a single group -- was not an option that I could find with my limited time.&#13;
-</p><p>&#13;
-<u>Configurable Display:</u> <b>Poor.</b>  Umbrello gives you a fair amount of control over the customization of your class display, including changing the color of individual classes.  However, the sequence diagram display is a different beast; it won't allow you to change the properties of individual items, only the whole page.  And some of the changes don't take effect unless you <i>re-select</i> the item (like whether to include the entire signature on the message line).&#13;
-</p><p>&#13;
-I also dislike explicit returns on my message lines, but there's no way to turn them off.  The way execution bars are stacked on lifelines is arbitrarily modified by clicking on other items.  The reflexive call message line can't be expanded horizontally.  All of these things are minor annoyances, but together they really add up.&#13;
-</p><p>&#13;
-<u>Group Selection and Movement:</u> <b>Fail.</b>  At first I thought this would just be "unsatisfactory", because Umbrello does allow you to select multiple message lines at once.  However, the selection seems a bit arbitrary:  there's some kind of rule about whether you selected the label or not.  And the standard "dotted box" selection isn't used; instead you get a constellation of points (which move the element) and a sizing corner (which resizes it).  &#13;
-</p><p>&#13;
-Messages emitted from a sub-bar didn't move with the sub-bar, which was a big problem.  They also didn't extend the execution bar when they were moved beyond it's current size.  I could still reach the sizing handle even when the bar was covered, which at least made it possible to correct the issue, but was also counterintuitive.&#13;
-</p><p>&#13;
-Movement and resizing were the failure.  Sometimes the message line would move without taking its label along.  Classes would move without taking their associations, unless they reached a limit like the edge of the class.  Sometimes elements would jump to arbitrarily large sizes while I attempted to shrink them, or slip entirely off the top of the screen.  Maybe that's because I'm running 64-bit; if so, somebody should realize that this is a common professional environment these days.&#13;
-</p><p>&#13;
-<u>Infinite Undo:</u> <b>Unsatisfactory.</b>  While infinite undo is available -- heck, there's even an "undo queue" in the sidebar -- sometimes the effects weren't visible until a redraw.&#13;
-</p><p>&#13;
-<u>Supports Synchronous, Asynchronous, and Reflexive Messages:</u> <b>Good.</b>  Well, it does.  It just forces them to have explicit returns, and you can't embed reflexive messages because the vertical portions of the lines overlap.  Additionally, I found the method for entering a message name to be cumbersome.&#13;
-</p><p>&#13;
-<u>Dynamic Document Size:</u> <b>Perfect!</b>  I never had to mess with page sizes, and when I dragged something off the document edge, the document got bigger to keep up with me.  &#13;
-</p><p>&#13;
-<u>Scrolling:</u> <b>Perfect!</b> When I tried to draw a message from the first bar to a bar way off the screen, it dragged right along with me.  Clearly this is one of the use cases that got some thought.&#13;
-</p><p>&#13;
-<u>Shared Data Model:</u> <b>Very Good.</b>  Entering new operations from the sequence diagram is not as intuitive as it might be, but at least it's possible.  Doing so updates the class diagram.  All very smooth and integrated.&#13;
-</p><p>&#13;
-<u>Supports Large Projects:</u> <b>Poor.</b>  I let Umbrello run for days trying to import my codebase.  No dice; eventually I gave up on it.  It took 100% of one CPU on my quad-core system.  A progress indicator would be good for situations like this.  I don't know how it would handle large projects that were entered by hand.  &#13;
-</p><p>&#13;
-So, another one bites the dust.  With its odd sequence diagram editing problems, Umbrello is essentially useless for me.  Although it does provide code generation in a plethora of languages, I'm never going to see it at work.  There's a menu item for aligning elements, but I never even tried it.&#13;
-</p><p>&#13;
-Tune in next time, when another UML editor will be thrown to the wolves!  Or at least, to the sloths.&#13;
+</a><p>
+<a href="/progress/archives/329-Rating-UML-Editors.html">I'm still rating UML editors.</a> Last time, <a href="/progress/archives/332-UML-Editors-Gaphor.html">Gaphor disappointed me tremendously.</a>  After two contenders, can <a href="http://uml.sourceforge.net/">Umbrello</a> restore my confidence in Open-Source programmers?
+</p><p>
+Let's check that list!
+</p>
+<a id="extended"></a><p>
+The first time I loaded Umbrello, it came up in full-screen mode.  Not just maximized, but actually full-screen, with no window decorations.  I need to reference other documents (like Use Case documents) while I do my design, so that was no good for me.  I searched fruitlessly for hours; apparently Umbrello <i>has no fullscreen mode</i>. Maybe it doesn't like my Gnome/Compiz desktop because it's a KDE program?  But there was no change when I installed the Compiz KDE backend and integration.  Finally I realized that "no window decorations" probably meant "conflicts with slick Compiz window manager"; when I turned that off, I got a regular window.  Oh well, at least it's working.  On with the evaluation!
+</p><p>
+<u>Class and Sequence Diagrams:</u> <b>Good.</b> 
+Umbrello supports class and sequence diagrams with all the elements I need.  The only problem is the horrible default colors.  Who in the world thought yellow and red was a good color combination?!  
+</p><p>
+Okay, the other problem is that sequence diagram support is spotty.  Why don't the lifelines extend automatically when you add a message below all the existing execution bars?
+</p><p>
+Okay, the <i>third</i> problem is that hierarchy groups were hard to implement.  Two classes per group only.  And orthogonal lines -- which would make it at least <b>look</b> like a single group -- was not an option that I could find with my limited time.
+</p><p>
+<u>Configurable Display:</u> <b>Poor.</b>  Umbrello gives you a fair amount of control over the customization of your class display, including changing the color of individual classes.  However, the sequence diagram display is a different beast; it won't allow you to change the properties of individual items, only the whole page.  And some of the changes don't take effect unless you <i>re-select</i> the item (like whether to include the entire signature on the message line).
+</p><p>
+I also dislike explicit returns on my message lines, but there's no way to turn them off.  The way execution bars are stacked on lifelines is arbitrarily modified by clicking on other items.  The reflexive call message line can't be expanded horizontally.  All of these things are minor annoyances, but together they really add up.
+</p><p>
+<u>Group Selection and Movement:</u> <b>Fail.</b>  At first I thought this would just be "unsatisfactory", because Umbrello does allow you to select multiple message lines at once.  However, the selection seems a bit arbitrary:  there's some kind of rule about whether you selected the label or not.  And the standard "dotted box" selection isn't used; instead you get a constellation of points (which move the element) and a sizing corner (which resizes it).  
+</p><p>
+Messages emitted from a sub-bar didn't move with the sub-bar, which was a big problem.  They also didn't extend the execution bar when they were moved beyond it's current size.  I could still reach the sizing handle even when the bar was covered, which at least made it possible to correct the issue, but was also counterintuitive.
+</p><p>
+Movement and resizing were the failure.  Sometimes the message line would move without taking its label along.  Classes would move without taking their associations, unless they reached a limit like the edge of the class.  Sometimes elements would jump to arbitrarily large sizes while I attempted to shrink them, or slip entirely off the top of the screen.  Maybe that's because I'm running 64-bit; if so, somebody should realize that this is a common professional environment these days.
+</p><p>
+<u>Infinite Undo:</u> <b>Unsatisfactory.</b>  While infinite undo is available -- heck, there's even an "undo queue" in the sidebar -- sometimes the effects weren't visible until a redraw.
+</p><p>
+<u>Supports Synchronous, Asynchronous, and Reflexive Messages:</u> <b>Good.</b>  Well, it does.  It just forces them to have explicit returns, and you can't embed reflexive messages because the vertical portions of the lines overlap.  Additionally, I found the method for entering a message name to be cumbersome.
+</p><p>
+<u>Dynamic Document Size:</u> <b>Perfect!</b>  I never had to mess with page sizes, and when I dragged something off the document edge, the document got bigger to keep up with me.  
+</p><p>
+<u>Scrolling:</u> <b>Perfect!</b> When I tried to draw a message from the first bar to a bar way off the screen, it dragged right along with me.  Clearly this is one of the use cases that got some thought.
+</p><p>
+<u>Shared Data Model:</u> <b>Very Good.</b>  Entering new operations from the sequence diagram is not as intuitive as it might be, but at least it's possible.  Doing so updates the class diagram.  All very smooth and integrated.
+</p><p>
+<u>Supports Large Projects:</u> <b>Poor.</b>  I let Umbrello run for days trying to import my codebase.  No dice; eventually I gave up on it.  It took 100% of one CPU on my quad-core system.  A progress indicator would be good for situations like this.  I don't know how it would handle large projects that were entered by hand.  
+</p><p>
+So, another one bites the dust.  With its odd sequence diagram editing problems, Umbrello is essentially useless for me.  Although it does provide code generation in a plethora of languages, I'm never going to see it at work.  There's a menu item for aligning elements, but I never even tried it.
+</p><p>
+Tune in next time, when another UML editor will be thrown to the wolves!  Or at least, to the sloths.
 </p>

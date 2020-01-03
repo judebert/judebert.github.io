@@ -24,151 +24,151 @@ tags:
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-I started my studying today by looking at <i>Programming Interviews Exposed</i>.  The author indicates that linked-list problems are common in coding interviews, because they can be solved relatively quickly, but they still expose the coder's thought processes.&#13;
-</p><p>&#13;
-As a Java programmer, I don't have much use for linked lists.  Java includes a LinkedList class that takes care of all the operations for me.  But according to the book, I might still be asked to implement a linked list of my own and solve some linked list problems... because it will expose my thought process.&#13;
-</p><p>&#13;
-Okay, I remember linked lists from back when I was a hot-shot C programmer.  (I used to think Java was a flash in a pan.  With the recent security vulnerabilities, it may turn out that way after all.)  I can do this.  But perhaps I should pass on the brain teaser for today.  The list problems can be my brain teaser.&#13;
-</p><p>&#13;
-Implement a singly-linked list.  Given a doubly-linked list (with tail pointer) where each node may have a doubly-linked list (without head or tail pointers) as a child, and the children may have their own children, flatten it to a plain doubly-linked list.  Now <i>put it back</i>.&#13;
-</p><a id="extended"></a><p>&#13;
-Implement a singly-linked list.  No problem; that's just a single element that points to the next element.  I can even genericize it.  Of course, you'll probably want insert and delete operations... and some way to traverse the list... hmmm, there's more work here than just the simple data structure, isn't there?  I'll implement just those operations.  If you really want me to implement the List interface I can, but it'll take a little longer.&#13;
-</p>[code]&#13;
-public class MyList<t> {&#13;
-  /** The node type.  Skipping accessors and constructor for now. */&#13;
-  private class MyNode {&#13;
-    public T value = null;&#13;
-    public MyNode next = null;&#13;
-  }&#13;
-&#13;
-  /** Again, skipping accessors here.  They're too simple to worry about. */&#13;
-  private MyNode head = null;&#13;
-&#13;
-  /** Insert at index */&#13;
-  public void add(int index, T val) {&#13;
-    if (index &lt; 0) { throw new IndexOutOfBoundsException("Can't insert at negative index!"); }&#13;
-    if (index == 0) {&#13;
-      // Insert at head&#13;
-      MyNode n = new MyNode();&#13;
-      n.value = val;&#13;
-      n.next = head;&#13;
-      head = n;&#13;
-      return;&#13;
-    }&#13;
-    MyNode curr = head;&#13;
-    int togo = index - 1;&#13;
-    while (togo &gt; 0) {&#13;
-      curr = curr.next;&#13;
-      togo--;&#13;
-      // Did we overrun the bounds of the list?&#13;
-      if (curr == null) {&#13;
-        throw new IndexOutOfBoundsException("Index " + index + " exceeds list size.");&#13;
-      }&#13;
-    }&#13;
-    MyNode n = new MyNode();&#13;
-    n.value = val;&#13;
-    n.next = curr.next;&#13;
-    curr.next = n;&#13;
-  }&#13;
-&#13;
-  /** Add on back */&#13;
-  public boolean add(T val) {&#13;
-    if (head == null) {&#13;
-      add(0, val);&#13;
-      return true;&#13;
-    }&#13;
-    MyNode n = new MyNode();&#13;
-    n.value = val;&#13;
-    MyNode curr = head;&#13;
-    while (curr.next != null) {&#13;
-      curr = curr.next;&#13;
-    }&#13;
-    curr.next = n;&#13;
-    n.next = null;&#13;
-    return true;&#13;
-  }&#13;
-  &#13;
-  /** Insert in front */&#13;
-  public void insert(T val) {&#13;
-    add(0, val);&#13;
-  }&#13;
-&#13;
-  /** Remove at node index */&#13;
-  public T remove(int index) {&#13;
-    if (index &lt; 0) { &#13;
-      throw new IndexOutOfBoundsException("Can't remove at negative index!"); &#13;
-    }&#13;
-    if (head == null) { &#13;
-      throw new IndexOutOfBoundsException("Can't remove from null list!"); &#13;
-    }&#13;
-    MyNode curr = head;&#13;
-    if (index == 0) {&#13;
-      head = head.next;&#13;
-      return curr.value;&#13;
-    }&#13;
-    int togo = index - 1;&#13;
-    MyNode prev = curr;&#13;
-    curr = curr.next;&#13;
-    while (togo &gt; 0) {&#13;
-      prev = curr;&#13;
-      curr = curr.next;&#13;
-      togo--;&#13;
-      if (curr == null) { &#13;
-        throw new IndexOutOfBoundsException("Index " + index + " exceeds final list index!"); &#13;
-      }&#13;
-    }&#13;
-    prev.next = curr.next;&#13;
-    return curr.value;&#13;
-  }&#13;
-&#13;
-  /** Remove first instance of specified value */&#13;
-  public boolean remove(T val) {&#13;
-    if (head == null) { return false; }&#13;
-    MyNode curr = head;&#13;
-    if (head.value.equals(val)) {&#13;
-      head = head.next;&#13;
-      curr.next = null;&#13;
-      return true;&#13;
-    }&#13;
-    while (curr.next != null) {&#13;
-      if (curr.next.value.equals(val)) {&#13;
-        MyNode match = curr.next;&#13;
-        curr.next = match.next;&#13;
-        match.next = null;&#13;
-        return true;&#13;
-      }&#13;
-    }&#13;
-    // Reached end of list without finding a value.&#13;
-    return false;&#13;
-  }&#13;
-&#13;
-  public class MyIterator implements Iterator<t> {&#13;
-    public MyNode curr = null;&#13;
-    public MyIterator() {&#13;
-      curr = head;&#13;
-    }&#13;
-    public boolean hasNext() {&#13;
-      return curr != null;&#13;
-    }&#13;
-    public T next() {&#13;
-      T val = curr.value;&#13;
-      curr = curr.next;&#13;
-      return val;&#13;
-    }&#13;
-    public void remove() {&#13;
-       throw new UnsupportedOperationException("Not on my watch!");&#13;
-    }&#13;
-  }&#13;
-&#13;
-  public MyIterator iterator() {&#13;
-    return new MyIterator();&#13;
-  }&#13;
-}&#13;
-[/code]<p>&#13;
-Wow, it's a good thing I've got Eclipse at my back.  Typing that out without code completions and warnings took a lot longer than I expected.  And I made a few mistakes.  In particular, I have to remember that declaring an inner class with the same generic type parameter doesn't make a generic instance of that type; it <b>hides</b> the outer class's generic type declaration.  That's why I can get away without declaring MyNode&lt;T&gt;: it's redundant, and downright harmful.&#13;
+<p>
+I started my studying today by looking at <i>Programming Interviews Exposed</i>.  The author indicates that linked-list problems are common in coding interviews, because they can be solved relatively quickly, but they still expose the coder's thought processes.
+</p><p>
+As a Java programmer, I don't have much use for linked lists.  Java includes a LinkedList class that takes care of all the operations for me.  But according to the book, I might still be asked to implement a linked list of my own and solve some linked list problems... because it will expose my thought process.
+</p><p>
+Okay, I remember linked lists from back when I was a hot-shot C programmer.  (I used to think Java was a flash in a pan.  With the recent security vulnerabilities, it may turn out that way after all.)  I can do this.  But perhaps I should pass on the brain teaser for today.  The list problems can be my brain teaser.
+</p><p>
+Implement a singly-linked list.  Given a doubly-linked list (with tail pointer) where each node may have a doubly-linked list (without head or tail pointers) as a child, and the children may have their own children, flatten it to a plain doubly-linked list.  Now <i>put it back</i>.
+</p><a id="extended"></a><p>
+Implement a singly-linked list.  No problem; that's just a single element that points to the next element.  I can even genericize it.  Of course, you'll probably want insert and delete operations... and some way to traverse the list... hmmm, there's more work here than just the simple data structure, isn't there?  I'll implement just those operations.  If you really want me to implement the List interface I can, but it'll take a little longer.
+</p>[code]
+public class MyList<t> {
+  /** The node type.  Skipping accessors and constructor for now. */
+  private class MyNode {
+    public T value = null;
+    public MyNode next = null;
+  }
+
+  /** Again, skipping accessors here.  They're too simple to worry about. */
+  private MyNode head = null;
+
+  /** Insert at index */
+  public void add(int index, T val) {
+    if (index &lt; 0) { throw new IndexOutOfBoundsException("Can't insert at negative index!"); }
+    if (index == 0) {
+      // Insert at head
+      MyNode n = new MyNode();
+      n.value = val;
+      n.next = head;
+      head = n;
+      return;
+    }
+    MyNode curr = head;
+    int togo = index - 1;
+    while (togo &gt; 0) {
+      curr = curr.next;
+      togo--;
+      // Did we overrun the bounds of the list?
+      if (curr == null) {
+        throw new IndexOutOfBoundsException("Index " + index + " exceeds list size.");
+      }
+    }
+    MyNode n = new MyNode();
+    n.value = val;
+    n.next = curr.next;
+    curr.next = n;
+  }
+
+  /** Add on back */
+  public boolean add(T val) {
+    if (head == null) {
+      add(0, val);
+      return true;
+    }
+    MyNode n = new MyNode();
+    n.value = val;
+    MyNode curr = head;
+    while (curr.next != null) {
+      curr = curr.next;
+    }
+    curr.next = n;
+    n.next = null;
+    return true;
+  }
+  
+  /** Insert in front */
+  public void insert(T val) {
+    add(0, val);
+  }
+
+  /** Remove at node index */
+  public T remove(int index) {
+    if (index &lt; 0) { 
+      throw new IndexOutOfBoundsException("Can't remove at negative index!"); 
+    }
+    if (head == null) { 
+      throw new IndexOutOfBoundsException("Can't remove from null list!"); 
+    }
+    MyNode curr = head;
+    if (index == 0) {
+      head = head.next;
+      return curr.value;
+    }
+    int togo = index - 1;
+    MyNode prev = curr;
+    curr = curr.next;
+    while (togo &gt; 0) {
+      prev = curr;
+      curr = curr.next;
+      togo--;
+      if (curr == null) { 
+        throw new IndexOutOfBoundsException("Index " + index + " exceeds final list index!"); 
+      }
+    }
+    prev.next = curr.next;
+    return curr.value;
+  }
+
+  /** Remove first instance of specified value */
+  public boolean remove(T val) {
+    if (head == null) { return false; }
+    MyNode curr = head;
+    if (head.value.equals(val)) {
+      head = head.next;
+      curr.next = null;
+      return true;
+    }
+    while (curr.next != null) {
+      if (curr.next.value.equals(val)) {
+        MyNode match = curr.next;
+        curr.next = match.next;
+        match.next = null;
+        return true;
+      }
+    }
+    // Reached end of list without finding a value.
+    return false;
+  }
+
+  public class MyIterator implements Iterator<t> {
+    public MyNode curr = null;
+    public MyIterator() {
+      curr = head;
+    }
+    public boolean hasNext() {
+      return curr != null;
+    }
+    public T next() {
+      T val = curr.value;
+      curr = curr.next;
+      return val;
+    }
+    public void remove() {
+       throw new UnsupportedOperationException("Not on my watch!");
+    }
+  }
+
+  public MyIterator iterator() {
+    return new MyIterator();
+  }
+}
+[/code]<p>
+Wow, it's a good thing I've got Eclipse at my back.  Typing that out without code completions and warnings took a lot longer than I expected.  And I made a few mistakes.  In particular, I have to remember that declaring an inner class with the same generic type parameter doesn't make a generic instance of that type; it <b>hides</b> the outer class's generic type declaration.  That's why I can get away without declaring MyNode&lt;T&gt;: it's redundant, and downright harmful.
 </p>
-<p>&#13;
-That's quite a bit of code for one post.  I think I'll pick up with the flattening tomorrow!&#13;
-</p>&#13;
+<p>
+That's quite a bit of code for one post.  I think I'll pick up with the flattening tomorrow!
+</p>
 </t></t>

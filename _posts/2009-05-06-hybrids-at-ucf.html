@@ -24,47 +24,47 @@ tags:
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-I recently took Monday off and attended the <a href="http://www.cecs.ucf.edu/corporate/seniordesign09/">UCF - Progress Energy Senior Design Symposium in Renewable &amp; Sustainable Energy</a>.  Don Harper generously arranged charging for my EV behind one of the UCF engineering buildings.  &#13;
-</p><p>&#13;
-The seniors presented finished projects in a variety of alternative energy fields.  They featured real-life building improvements, biodiesel extraction and automation, wind turbine control and design, ocean wave energy, mass transit monitoring, and even a electric generating bicycle and a solar cooker.&#13;
-</p><p>&#13;
-I enjoyed talking with all the teams.  They were knowledgeable and enthusiastic.  I was especially impressed by the wireless auto-dimming LED light bulb, the DynaLight (I want to re-illuminate my entire house with them!).  But of course my favorites were the two hybrid golf cart teams.&#13;
-</p><p>&#13;
-One team made a series hybrid golf cart, while the other made a parallel hybrid.  In a series hybrid, the gas engine only generates electricity and the electric motor only pushes the wheels.  They Chevy Volt will be a series hybrid.  In a parallel hybrid, both the gas engine and the electric motor push the wheels.  The Toyota Prius is a parallel hybrid.&#13;
-</p><p>&#13;
-Both projects were rudimentary, and neither were applicable to a production automobile.  But it was interesting to see how each team had solved the control problem.&#13;
-</p><a id="extended"></a><h4>Series Control</h4>&#13;
-<p>&#13;
-In a series hybrid, the question is always when to turn on the gas engine.  It's only efficient at one speed, so you want to use the electric motor for acceleration and keep the gas engine only for electricity generation.  Then you have to worry about overcharging the batteries, so you want the electricity to go through a charger that can monitor the battery state.  But most chargers can't output the current needed to push the car; in that case, you give up the capability to run your car continuously.&#13;
-</p><p>&#13;
-In a production car, you'd build a controller that turned the gas engine on and off appropriately, preventing the batteries from overcharging.  You might build a charger capable of pushing the whole car, and just feed the electricity from the gas engine's generator into that.  But that's making the charger almost as big as the electric motor controller!  You may as well build them all together.&#13;
-</p><p>&#13;
-The UCF series hybrid team simply used separate controls for the gas engine, providing a gauge showing the battery state, and forcing the human to act as the battery monitor.  That works, but it means the driver has to learn a new skill, and has the ability to destroy the batteries.  To offset that problem they used flooded lead-acid batteries, which are resistant to overcharging and can be reconditioned simply by adding more electrolyte.  They used matched permanent-magnet motors, and their controller included regenerative braking.  It could easily be installed as a kit.&#13;
-</p><p>&#13;
-They claimed more than double the fuel efficiency in "highway" conditions, but a drop in efficiency in "city" conditions.  I think there might have been a measurement error.  On the other hand, they did lock the original CVT, and they were running the engine at its most efficient point... but then I would have expected a big boost in "city", and a modest boost in "highway".  Perhaps I misunderstood the test procedures.&#13;
-</p>&#13;
-<h4>Parallel Control</h4>&#13;
-<p>&#13;
-In a parallel hybrid, the question is how to synchronize the gas engine and the electric motor.  It's possible to do this with a complicated transmission or with a complicated controller.  In either case, you have to decide at each moment how much effort should be provided by the gas engine and how much should be provided by the electric motor.  It's not an easy task.&#13;
-</p><p>&#13;
-In a production car, you'd could fudge the whole thing by building a power-sharing transmission and only turn on the gas engine when it was needed, like the Toyota Prius.  That's not a very efficient solution, though, because the gas engine still operates at a range of speeds including its inefficient ones.&#13;
-</p><p>&#13;
-A better solution would be to build a power-sharing transmission and a throttle controller.  The throttle controller would take the driver's desired throttle and decide how much of the gas engine and how much of the electric motor to use.  Then it would pull two throttles to provide the appropriate inputs to each motor. &#13;
-</p><p>&#13;
-The UCF parallel hybrid team went an easier route.  They left the gas engine and throttle unmodified, welded a sprocket to the CVT drive shaft and attached an AC motor to it, and added an extension to the throttle arm and connected it to the AC motor's controller.&#13;
-</p><p>&#13;
-This is a crude power-sharing transmission.  Of course, the gas engine doesn't operate at its most efficient, but it's assisted by the electric motor.  In fact, the big problem is resistance when the gas motor is trying to move faster than the gas engine.  With a programmable controller, they could modify the electric motor output for a variety of conditions -- although without sensors to measure load, the program would never be anything better than an approximation.&#13;
-</p><p>&#13;
-The parallel team claimed a more modest fuel efficiency improvement under all conditions.  Just for giggles, they disconnected the gas engine from the CVT.  They experienced a big speed improvement immediately.  Possibly, finding a way to physically disconnect the gas engine when not needed would give them a bigger improvement.&#13;
-</p>&#13;
-<h4>Ramifications for Silent E</h4>&#13;
-<p>&#13;
-Of course I've been considering hybridizing, just for the range improvement.  Obviously welding a sprocket to the transmission drive shaft is infeasible on a conversion car.  For a new conversion, perhaps a 4WD could run one set of wheels with gas, and the other with a motor: a road-coupled hybrid.  To make a road-coupled hybrid for Silent E isn't an impossibility; it's called a "pusher trailer".  It's a trailer made out of the rear end of a VW, that actually pushes the EV along when it's turned on.  Control is still the big problem there: either the engine drags you along all the way, or you need to find a way to engage the clutch and transmission.  And you either lock the throttle in one position, or you need to build something that disconnects the electric throttle when you're just pushing.&#13;
-</p><p>&#13;
-The series hybrid seems much more feasible.  The trailer would simply hold a BIG generator, which would run at its single most efficient speed.  The electricity would be run straight to the batteries, and the driver would be responsible for preventing overcharging.  The existing voltage gauge would suffice for existing lead-acid batteries.  The only extra control would be a switch to turn on the generator.&#13;
-</p><p>&#13;
-While simpler, the series hybrid trailer would probably be less efficient.  In both cases, the gas engine is running at its most efficient.  With the series trailer, there are four conversions between the engine and the road: motion to electricity, electricity to batteries and controller, electricity to motion, and motion through the transmission to the road.  Each has an inefficiency.  With the parallel hybrid trailer, there's only one conversion: motion through the transmission to the road.  &#13;
-</p><p>&#13;
-Naturally, I was hoping that the seniors had solved the control problem in a way that I could use.  They didn't, but they did give me a chance to reflect on it a little more.&#13;
+<p>
+I recently took Monday off and attended the <a href="http://www.cecs.ucf.edu/corporate/seniordesign09/">UCF - Progress Energy Senior Design Symposium in Renewable &amp; Sustainable Energy</a>.  Don Harper generously arranged charging for my EV behind one of the UCF engineering buildings.  
+</p><p>
+The seniors presented finished projects in a variety of alternative energy fields.  They featured real-life building improvements, biodiesel extraction and automation, wind turbine control and design, ocean wave energy, mass transit monitoring, and even a electric generating bicycle and a solar cooker.
+</p><p>
+I enjoyed talking with all the teams.  They were knowledgeable and enthusiastic.  I was especially impressed by the wireless auto-dimming LED light bulb, the DynaLight (I want to re-illuminate my entire house with them!).  But of course my favorites were the two hybrid golf cart teams.
+</p><p>
+One team made a series hybrid golf cart, while the other made a parallel hybrid.  In a series hybrid, the gas engine only generates electricity and the electric motor only pushes the wheels.  They Chevy Volt will be a series hybrid.  In a parallel hybrid, both the gas engine and the electric motor push the wheels.  The Toyota Prius is a parallel hybrid.
+</p><p>
+Both projects were rudimentary, and neither were applicable to a production automobile.  But it was interesting to see how each team had solved the control problem.
+</p><a id="extended"></a><h4>Series Control</h4>
+<p>
+In a series hybrid, the question is always when to turn on the gas engine.  It's only efficient at one speed, so you want to use the electric motor for acceleration and keep the gas engine only for electricity generation.  Then you have to worry about overcharging the batteries, so you want the electricity to go through a charger that can monitor the battery state.  But most chargers can't output the current needed to push the car; in that case, you give up the capability to run your car continuously.
+</p><p>
+In a production car, you'd build a controller that turned the gas engine on and off appropriately, preventing the batteries from overcharging.  You might build a charger capable of pushing the whole car, and just feed the electricity from the gas engine's generator into that.  But that's making the charger almost as big as the electric motor controller!  You may as well build them all together.
+</p><p>
+The UCF series hybrid team simply used separate controls for the gas engine, providing a gauge showing the battery state, and forcing the human to act as the battery monitor.  That works, but it means the driver has to learn a new skill, and has the ability to destroy the batteries.  To offset that problem they used flooded lead-acid batteries, which are resistant to overcharging and can be reconditioned simply by adding more electrolyte.  They used matched permanent-magnet motors, and their controller included regenerative braking.  It could easily be installed as a kit.
+</p><p>
+They claimed more than double the fuel efficiency in "highway" conditions, but a drop in efficiency in "city" conditions.  I think there might have been a measurement error.  On the other hand, they did lock the original CVT, and they were running the engine at its most efficient point... but then I would have expected a big boost in "city", and a modest boost in "highway".  Perhaps I misunderstood the test procedures.
+</p>
+<h4>Parallel Control</h4>
+<p>
+In a parallel hybrid, the question is how to synchronize the gas engine and the electric motor.  It's possible to do this with a complicated transmission or with a complicated controller.  In either case, you have to decide at each moment how much effort should be provided by the gas engine and how much should be provided by the electric motor.  It's not an easy task.
+</p><p>
+In a production car, you'd could fudge the whole thing by building a power-sharing transmission and only turn on the gas engine when it was needed, like the Toyota Prius.  That's not a very efficient solution, though, because the gas engine still operates at a range of speeds including its inefficient ones.
+</p><p>
+A better solution would be to build a power-sharing transmission and a throttle controller.  The throttle controller would take the driver's desired throttle and decide how much of the gas engine and how much of the electric motor to use.  Then it would pull two throttles to provide the appropriate inputs to each motor. 
+</p><p>
+The UCF parallel hybrid team went an easier route.  They left the gas engine and throttle unmodified, welded a sprocket to the CVT drive shaft and attached an AC motor to it, and added an extension to the throttle arm and connected it to the AC motor's controller.
+</p><p>
+This is a crude power-sharing transmission.  Of course, the gas engine doesn't operate at its most efficient, but it's assisted by the electric motor.  In fact, the big problem is resistance when the gas motor is trying to move faster than the gas engine.  With a programmable controller, they could modify the electric motor output for a variety of conditions -- although without sensors to measure load, the program would never be anything better than an approximation.
+</p><p>
+The parallel team claimed a more modest fuel efficiency improvement under all conditions.  Just for giggles, they disconnected the gas engine from the CVT.  They experienced a big speed improvement immediately.  Possibly, finding a way to physically disconnect the gas engine when not needed would give them a bigger improvement.
+</p>
+<h4>Ramifications for Silent E</h4>
+<p>
+Of course I've been considering hybridizing, just for the range improvement.  Obviously welding a sprocket to the transmission drive shaft is infeasible on a conversion car.  For a new conversion, perhaps a 4WD could run one set of wheels with gas, and the other with a motor: a road-coupled hybrid.  To make a road-coupled hybrid for Silent E isn't an impossibility; it's called a "pusher trailer".  It's a trailer made out of the rear end of a VW, that actually pushes the EV along when it's turned on.  Control is still the big problem there: either the engine drags you along all the way, or you need to find a way to engage the clutch and transmission.  And you either lock the throttle in one position, or you need to build something that disconnects the electric throttle when you're just pushing.
+</p><p>
+The series hybrid seems much more feasible.  The trailer would simply hold a BIG generator, which would run at its single most efficient speed.  The electricity would be run straight to the batteries, and the driver would be responsible for preventing overcharging.  The existing voltage gauge would suffice for existing lead-acid batteries.  The only extra control would be a switch to turn on the generator.
+</p><p>
+While simpler, the series hybrid trailer would probably be less efficient.  In both cases, the gas engine is running at its most efficient.  With the series trailer, there are four conversions between the engine and the road: motion to electricity, electricity to batteries and controller, electricity to motion, and motion through the transmission to the road.  Each has an inefficiency.  With the parallel hybrid trailer, there's only one conversion: motion through the transmission to the road.  
+</p><p>
+Naturally, I was hoping that the seniors had solved the control problem in a way that I could use.  They didn't, but they did give me a chance to reflect on it a little more.
 </p>

@@ -30,34 +30,34 @@ excerpt_separator: <a id="extended"></a>
     <img src="/progress/media/gimpwork/wet-paintbrush.s9yThumb.png" width="110" height="57" alt="" />
   </a>
   <figcaption>Hey, Honda, can I use your logos to make T-shirts?  Please?</figcaption>
-</figure><p>I want to sell some T-shirts, so I'm experimenting with Inkscape to produce vector graphics for the designs.  I once spray-painted a tee shirt with some Volkswagen logos on it.  The results were extremely attractive.  Now I want to reproduce that with vector graphics.&#13;
-</p><p>&#13;
-It's surprisingly difficult to make blotches.  Although I couldn't get a spray paint effect, I finally got a wet paintbrush stroke to work.  Continue reading for my method.&#13;
-</p><a id="extended"></a><p>&#13;
-After a great deal of experimentation, I came up with a method that produces reasonable results.  I'm recording it here for my reference and your edification.  <a href="/progress/media/gimpwork/wet-paintbrush.svg" title="wet-paintbrush.svg" target="_blank">My original wet-paintbrush Inkscape file</a> and a crippled, exported <a href="/progress/media/gimpwork/wet-paintbrush.eps" title="wet-paintbrush.eps" target="_blank">EPS version of the wet paintbrush stroke</a> are available for download.&#13;
-</p>&#13;
-<h4>Big Wet Paintbrush Stroke&#13;
-</h4><p>&#13;
-Create a 5px circle.  Use Edit -&gt; Clone -&gt; Create Tiled Clones... with the following settings to make a splotchy rectangle:&#13;
-</p>&#13;
-<ul>&#13;
-<li>Symmetry: simple translation</li>&#13;
-<li>Shift: -40% X/column, Randomize 50%  X and Y, Exponent 0.8 / row</li>&#13;
-<li>Scale: Randomize 50% X and Y</li>&#13;
-<li>Rows: 10</li>&#13;
-<li>Columns: 100</li>&#13;
-</ul>&#13;
-<p>Keep hitting Create until you've got something that's almost full on the right and splotchy on the left, like the beginning of a wet paintbrush stroke.&#13;
-</p><p>&#13;
-Create a second splotchy rectangle using the same parameters and mirror it horizontally.  It's going to be the end of the paintbrush stroke.&#13;
-</p><p>&#13;
-Put the two together.  The center should be completely opaque, with splotchy ends.  &#13;
-</p><p>&#13;
-Now the time consuming part: select the whole thing and use Edit -&gt; Clone -&gt; Unlink Clone (Alt+Shift+D).  You might want to select just a few at a time; that prevents the computer from completely locking up.&#13;
-</p><p>&#13;
-Make sure all the circles are selected and use Path -&gt; Object to Path (Shift+Ctrl+C), then Path -&gt; Union (Ctrl++).  Wait a long time for it to finish up.  Simplify the curve with Path -&gt; Simplify (Ctrl+L).  &#13;
-</p><p>&#13;
-Finally, draw the path for the brush stroke.  Select the brush, then the path, and select Effects -&gt; Generate From Path -&gt; Pattern Along Path.  Repeat the images with Snake deformation.  Play with the Space Between Copies until you find the one that creates a solid center with no banding; I used -60 for mine.&#13;
-</p><p>&#13;
-Pretty good, eh?  ShirtCity didn't like it much; some of the features were smaller than 1.5mm, which they refuse to print.  Oh well; I can always scale it up next time.&#13;
+</figure><p>I want to sell some T-shirts, so I'm experimenting with Inkscape to produce vector graphics for the designs.  I once spray-painted a tee shirt with some Volkswagen logos on it.  The results were extremely attractive.  Now I want to reproduce that with vector graphics.
+</p><p>
+It's surprisingly difficult to make blotches.  Although I couldn't get a spray paint effect, I finally got a wet paintbrush stroke to work.  Continue reading for my method.
+</p><a id="extended"></a><p>
+After a great deal of experimentation, I came up with a method that produces reasonable results.  I'm recording it here for my reference and your edification.  <a href="/progress/media/gimpwork/wet-paintbrush.svg" title="wet-paintbrush.svg" target="_blank">My original wet-paintbrush Inkscape file</a> and a crippled, exported <a href="/progress/media/gimpwork/wet-paintbrush.eps" title="wet-paintbrush.eps" target="_blank">EPS version of the wet paintbrush stroke</a> are available for download.
+</p>
+<h4>Big Wet Paintbrush Stroke
+</h4><p>
+Create a 5px circle.  Use Edit -&gt; Clone -&gt; Create Tiled Clones... with the following settings to make a splotchy rectangle:
+</p>
+<ul>
+<li>Symmetry: simple translation</li>
+<li>Shift: -40% X/column, Randomize 50%  X and Y, Exponent 0.8 / row</li>
+<li>Scale: Randomize 50% X and Y</li>
+<li>Rows: 10</li>
+<li>Columns: 100</li>
+</ul>
+<p>Keep hitting Create until you've got something that's almost full on the right and splotchy on the left, like the beginning of a wet paintbrush stroke.
+</p><p>
+Create a second splotchy rectangle using the same parameters and mirror it horizontally.  It's going to be the end of the paintbrush stroke.
+</p><p>
+Put the two together.  The center should be completely opaque, with splotchy ends.  
+</p><p>
+Now the time consuming part: select the whole thing and use Edit -&gt; Clone -&gt; Unlink Clone (Alt+Shift+D).  You might want to select just a few at a time; that prevents the computer from completely locking up.
+</p><p>
+Make sure all the circles are selected and use Path -&gt; Object to Path (Shift+Ctrl+C), then Path -&gt; Union (Ctrl++).  Wait a long time for it to finish up.  Simplify the curve with Path -&gt; Simplify (Ctrl+L).  
+</p><p>
+Finally, draw the path for the brush stroke.  Select the brush, then the path, and select Effects -&gt; Generate From Path -&gt; Pattern Along Path.  Repeat the images with Snake deformation.  Play with the Space Between Copies until you find the one that creates a solid center with no banding; I used -60 for mine.
+</p><p>
+Pretty good, eh?  ShirtCity didn't like it much; some of the features were smaller than 1.5mm, which they refuse to print.  Oh well; I can always scale it up next time.
 </p>

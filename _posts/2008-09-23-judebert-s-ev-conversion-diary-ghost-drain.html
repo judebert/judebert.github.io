@@ -21,35 +21,35 @@ tags:
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>Many of you know I damaged my batteries by allowing them to discharge to 6V.  The question at this point is: how much capacity do they have, and how much can I get back?&#13;
-</p><p>&#13;
-Well, they seem to rest around 128V after a full charge.  They're supposed to rest at 132V.  And with a bottom of 105V, that's... 85% of their original capacity.  Assuming you can use voltage to determine capacity in AGM batteries, which you really can't.  (You need to check voltage under load, which is hard to do with just your eyes.)&#13;
-</p><p>&#13;
-I'm using every technique I can think of to restore the batteries.  Some of those techniques require a lot of monitoring.&#13;
-</p><p>&#13;
-You can imagine my surprise when I went to check the charge yesterday and discovered that I was draining 18 amps!  I cut off the charger and my E-meter claimed I was actually <b>draining 28 amps!</b>&#13;
-</p><a id="extended"></a><p>&#13;
-What could cause such a drain?  I checked the heater, which never comes on anyway.  I started to panic, thinking maybe I had reversed a cell, and all the other batteries were trying to recharge it.  But that should've taken <i>thousands</i> of amps, and blown all my fuses.&#13;
-</p><p>&#13;
-Luckily, it went back to a reasonable level: about 2A, which I believe is used recharging my accessory battery.  I restarted the charger, but by the end of the day the E-meter thought I was only three-quarters full.  The voltage told a different tale, and I made it all the way home.&#13;
-</p><p>&#13;
-Where it started all over again.&#13;
-</p><p>&#13;
-With more time at my disposal, I took stock of the situation more closely.  I checked the battery voltages; none were reversed.  I turned on the charger with no current; no change.  Switching the regulators between equalize and normal had no effect.  Flipping the heater switch had no effect.  &#13;
-</p><p>&#13;
-<b>Disconnecting power at the emergency switch had no effect.</b>  Wait, what?  That's unpossible!  The Ghost Drain is pulling 28A out of a disconnected pack?!?  There must be a short somewhere.  But if that was the case, how could I drive it at all?&#13;
-</p><p>&#13;
-Time for some direct empirical observation.  I broke out my handy-dandy Digital Volt Meter and started trying to find the short.&#13;
-</p><p>&#13;
-No short.  Maybe my E-Meter is broken?  I wouldn't like that.  It's the only way I know how much voltage my pack has, and how my acceleration effects it.  Well, we can check, anyway: the E-Meter measures current by checking the voltage across a shunt.  The shunt is a bar of metal with connections for the battery pack on one side, and for all the drains on the other.  There are two screws in between, separated by a known amount in the middle; that gives them a <i>tiny</i> bit of resistance.  By measuring their voltage, up to 250mV, you can tell what current is flowing.&#13;
-</p><p>&#13;
-The DVM was unable to get a good reading.  It fluctuated wildly.  The Ghost Drain is intermittent?  I tried again, this time directly contacting the leads for the E-Meter.&#13;
-</p><p>&#13;
-They moved.&#13;
-</p><p>&#13;
-When I pinned them down, they read a nice, consistent zero.  The shunt tap screws had come loose.&#13;
-</p><p>&#13;
-Very loose.  I tightened them down carefully with an uninsulated screwdriver, managing for once not to set any sparks loose.  My E-Meter read a solid, consistent zero.  Not even negative zero!  &#13;
-</p><p>&#13;
-Now I've got another thing to check and tighten as maintenance.  At least it's easier than changing the oil.&#13;
+<p>Many of you know I damaged my batteries by allowing them to discharge to 6V.  The question at this point is: how much capacity do they have, and how much can I get back?
+</p><p>
+Well, they seem to rest around 128V after a full charge.  They're supposed to rest at 132V.  And with a bottom of 105V, that's... 85% of their original capacity.  Assuming you can use voltage to determine capacity in AGM batteries, which you really can't.  (You need to check voltage under load, which is hard to do with just your eyes.)
+</p><p>
+I'm using every technique I can think of to restore the batteries.  Some of those techniques require a lot of monitoring.
+</p><p>
+You can imagine my surprise when I went to check the charge yesterday and discovered that I was draining 18 amps!  I cut off the charger and my E-meter claimed I was actually <b>draining 28 amps!</b>
+</p><a id="extended"></a><p>
+What could cause such a drain?  I checked the heater, which never comes on anyway.  I started to panic, thinking maybe I had reversed a cell, and all the other batteries were trying to recharge it.  But that should've taken <i>thousands</i> of amps, and blown all my fuses.
+</p><p>
+Luckily, it went back to a reasonable level: about 2A, which I believe is used recharging my accessory battery.  I restarted the charger, but by the end of the day the E-meter thought I was only three-quarters full.  The voltage told a different tale, and I made it all the way home.
+</p><p>
+Where it started all over again.
+</p><p>
+With more time at my disposal, I took stock of the situation more closely.  I checked the battery voltages; none were reversed.  I turned on the charger with no current; no change.  Switching the regulators between equalize and normal had no effect.  Flipping the heater switch had no effect.  
+</p><p>
+<b>Disconnecting power at the emergency switch had no effect.</b>  Wait, what?  That's unpossible!  The Ghost Drain is pulling 28A out of a disconnected pack?!?  There must be a short somewhere.  But if that was the case, how could I drive it at all?
+</p><p>
+Time for some direct empirical observation.  I broke out my handy-dandy Digital Volt Meter and started trying to find the short.
+</p><p>
+No short.  Maybe my E-Meter is broken?  I wouldn't like that.  It's the only way I know how much voltage my pack has, and how my acceleration effects it.  Well, we can check, anyway: the E-Meter measures current by checking the voltage across a shunt.  The shunt is a bar of metal with connections for the battery pack on one side, and for all the drains on the other.  There are two screws in between, separated by a known amount in the middle; that gives them a <i>tiny</i> bit of resistance.  By measuring their voltage, up to 250mV, you can tell what current is flowing.
+</p><p>
+The DVM was unable to get a good reading.  It fluctuated wildly.  The Ghost Drain is intermittent?  I tried again, this time directly contacting the leads for the E-Meter.
+</p><p>
+They moved.
+</p><p>
+When I pinned them down, they read a nice, consistent zero.  The shunt tap screws had come loose.
+</p><p>
+Very loose.  I tightened them down carefully with an uninsulated screwdriver, managing for once not to set any sparks loose.  My E-Meter read a solid, consistent zero.  Not even negative zero!  
+</p><p>
+Now I've got another thing to check and tighten as maintenance.  At least it's easier than changing the oil.
 </p>

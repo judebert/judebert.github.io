@@ -27,71 +27,71 @@ comments:
     very well written strategy guide. I'll link to it from the website. \r\n\r\nciao,\r\nMario"
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-<a href="http://apistudios.com/hosted/marzec/quantum">Quantum is a really neat RTS game</a> that I found while perusing <a href="http://www.happypenguin.org/">The Linux Game Tome</a>.  Don't be put off by the name of the repository: the game runs equally well on Linux, Mac, and Windows, because it's programmed in Java.  Don't be put off by the programming language, either: it starts and runs quite quickly.&#13;
-</p><p>&#13;
-I recommend using the <a href="http://apiservers.com/hosted/marzec/quantum/quantum-webstart.php">Quantum webstart link</a>, since you'll not only get the up-to-date version, but libraries that are appropriate for your system, too.  (This is practically necessary if you run on a 64-bit Linux machine.)&#13;
-</p><p>&#13;
-There's no documentation, so I'm writing my own.  Read on for my Quantum strategy guide.&#13;
-</p><a id="extended"></a><h3>How to Play Quantum</h3>&#13;
-<p>&#13;
-As the all-seeing god of Quantum, you control a network of planets full of little creatures that grow from trees.  I am not making this up.  The creatures (called "bots") can perform three actions: move along predefined tracks between planets, fight, and plant more trees.&#13;
-</p><p>&#13;
-The Quantum tutorial is quite useful for learning the basics.  It will teach you how to move the bots from one planet to another (including automatic movement, or "chaining"), how to plant trees, how the bots' attributes vary, and how planet resources are used and regenerated.&#13;
-</p><p>&#13;
-However, it leaves out some specifics and a general overview of <i>strategy</i>.  I'll provide that here.&#13;
-</p>&#13;
-<h4>Resources</h4>&#13;
-<p>&#13;
-The tutorial explained that trees consume resources to create new bots.  It also said that trees grow larger when they create bots, and "wither" when resources are depleted.  Finally, it warned you that resources will not begin replenishing until the planet has no creatures on it.&#13;
-</p><p>&#13;
-What the tutorial <i>didn't</i> tell you is that your trees won't die from starvation.  No matter how long you have bots on a depleted planet, the trees will still be there when the resources finally replenish.  Besides being comforting, that means you can stockpile bots on a planet, even if it has trees.&#13;
-</p>&#13;
-<h4>Zooming</h4>&#13;
-<p>&#13;
-Any commander knows that the more he can see, the better he can plan and react.  The game starts at a ridiculous zoom level.  Zoom out, preferably until you can see the whole board.  Zoom in only when you can't read a planet's stats or control creature movement.  You don't need to see the bots; they're fine as dots!&#13;
-</p>&#13;
-<h4>Planting Trees Wisely</h4>&#13;
-<p>&#13;
-Since it takes 10 creatures to create a tree, you want the trees on planets where they'll produce more than 10 creatures before you get swarmed by the enemy.  That means you shouldn't plant a tree on a "leaf" planet, especially one right next to an enemy encampment.&#13;
-</p><p>&#13;
-Chaining provides problems for bot generation, too.  Since all the bots aren't created in one shot, there's a steady trickle from one planet to the next.  Planets that shunt creatures from multiple sources may not be empty of bots for long periods of time.  This is especially true of planets that are at the receiving end of long chains, and planets that receive from multiple chains.  These aren't the best places to plant trees.&#13;
-</p><p>&#13;
-Having multiple trees doesn't create more bots, it just creates them more quickly.  Resources replenish at identical rates, so <i>over a given time</i>, a planet with two trees <i>will</i> create more bots than an identical planet with one tree.  Not twice as many, but the generation stage will be cut in half, getting you to the resource replenishment stage more quickly.  &#13;
-</p>&#13;
-<h4>Choke Points</h4>&#13;
-<p>&#13;
-The playing field is a <i>network</i> of planets, so there are bound to be choke points.  A choke point is a planet (or small group of planets) through which bots must travel to reach other destinations.   Taking control of a choke point gives you a strategic advantage.  It's a bad place to plant a tree, not only because your bots are likely to be hanging out there, but also because your enemies will be trying to take control of it, too.&#13;
-</p><p>&#13;
-On the other hand, if you can take each of the planets just out from the choke point, and plant a useful tree on each of them, you might be able to hold it for a longer time.  At least you'll have a warning that enemies are coming.  And if you can see enough of the field, your might be able to route some bots from your choke point to a planet under attack in time to save the tree.&#13;
-</p>&#13;
-<h4>Destroy the Trees!</h4>&#13;
-<p>&#13;
-While many folks try to kill the enemy bots, that's not going to get you anywhere.  What you want to do is destroy the <i>trees</i>.  The simplebot AI is really quite bad at this, especially on small boards: it will happily use up almost all its bots creating trees on its home planets.  If the board is small enough, you can take <b>all</b> your bots across the board and wipe out his trees before he has created enough bots to plant another.  Even if he takes over every other planet on the board, you can now defeat him at your leisure: he'll never get any <i>more</i> bots, and you will.&#13;
-</p><p>&#13;
-Likewise, each tree represents 10 bots lost to your enemy, with no loss to you.  The simplebot AI wastes bots planting trees that you can wipe out easily.  Each time you do, he's lost 10 bots that he could've used to attack you and your trees.&#13;
-</p><p>&#13;
-You'll notice after a while that bot generation seems to come in waves.  If you can slip past a big wave -- maybe sacrificing a few barren planets to take a big force around another way -- you can reach the enemy's planets while they're still in the regeneration stage.  This is a great time to attack trees.  Note that it takes about 200 bots to ensure quick destruction.&#13;
-</p><p>&#13;
-Big trees are harder to destroy than small trees, but they generate bots more quickly.  Given a choice between the two, attack the big tree.  Even if you don't destroy it, you'll prune it down to size and give yourself more time between waves.&#13;
-</p>&#13;
-<h4>Save the Trees!</h4>&#13;
-<p>&#13;
-For the same reason you want to destroy the enemy's trees, you must protect your own.  You know better than to plant trees willy-nilly.  You must also know when to break a chain to protect a tree.  If you must choose between protecting two planets that are otherwise equally valuable, choose the planet with more trees, then the planet with bigger trees, then the planet with better resources.  &#13;
-</p>&#13;
-<h4>Rush to Victory</h4>&#13;
-<p>&#13;
-One well-known RTS strategy is the rush: build up lots of offensive units as quickly as possible and overwhelm the enemy with numbers.  In Quantum, although each planet produces bots with different attributes, the variation isn't enough to build a strategy upon, so you'll be tempted to rush.  There are two variations to consider.  &#13;
-</p><p>&#13;
-In the first variation, you skimp on building trees to rush across the board and take control of a choke point.  This strangles the enemy, giving you a little time to expand.  In general, this "choke point rush" is effective only on small boards, where you can continuously reinforce a single choke point.  &#13;
-</p><p>&#13;
-In the second variation, you take control of your own choke point and develop behind it, amassing a large number of bots and letting your enemies kill each other off while you wait to spring.  This strategy is only useful when you have plenty of space behind the choke point to develop, and only when your opponents are too involved with their own concerns to notice what you're doing.  It's made additionally difficult by the game mechanics: normally each tree spawns bots every five seconds.  When you have more than 1500 bots, that increases to every 50 seconds.  It's actually better to send those armies into battle than to hoard them.&#13;
-</p><p>&#13;
-</p><h4>Build to Victory</h4>&#13;
-<p>&#13;
-An arguably more subtle strategy is to build LOTS of trees on your secure planets.  This will produce giant waves of bots.  Keep in mind, though, that the AI expands constantly; your biggest goal must be to contain him long enough to overwhelm him.  Staying at home and building trees isn't going to accomplish that goal.&#13;
-</p><p>&#13;
-</p><h4>Conclusion</h4>&#13;
-<p>&#13;
-So, there you go.  A general strategy guide to Quantum.  Now get out there and kick some bot!&#13;
+<p>
+<a href="http://apistudios.com/hosted/marzec/quantum">Quantum is a really neat RTS game</a> that I found while perusing <a href="http://www.happypenguin.org/">The Linux Game Tome</a>.  Don't be put off by the name of the repository: the game runs equally well on Linux, Mac, and Windows, because it's programmed in Java.  Don't be put off by the programming language, either: it starts and runs quite quickly.
+</p><p>
+I recommend using the <a href="http://apiservers.com/hosted/marzec/quantum/quantum-webstart.php">Quantum webstart link</a>, since you'll not only get the up-to-date version, but libraries that are appropriate for your system, too.  (This is practically necessary if you run on a 64-bit Linux machine.)
+</p><p>
+There's no documentation, so I'm writing my own.  Read on for my Quantum strategy guide.
+</p><a id="extended"></a><h3>How to Play Quantum</h3>
+<p>
+As the all-seeing god of Quantum, you control a network of planets full of little creatures that grow from trees.  I am not making this up.  The creatures (called "bots") can perform three actions: move along predefined tracks between planets, fight, and plant more trees.
+</p><p>
+The Quantum tutorial is quite useful for learning the basics.  It will teach you how to move the bots from one planet to another (including automatic movement, or "chaining"), how to plant trees, how the bots' attributes vary, and how planet resources are used and regenerated.
+</p><p>
+However, it leaves out some specifics and a general overview of <i>strategy</i>.  I'll provide that here.
+</p>
+<h4>Resources</h4>
+<p>
+The tutorial explained that trees consume resources to create new bots.  It also said that trees grow larger when they create bots, and "wither" when resources are depleted.  Finally, it warned you that resources will not begin replenishing until the planet has no creatures on it.
+</p><p>
+What the tutorial <i>didn't</i> tell you is that your trees won't die from starvation.  No matter how long you have bots on a depleted planet, the trees will still be there when the resources finally replenish.  Besides being comforting, that means you can stockpile bots on a planet, even if it has trees.
+</p>
+<h4>Zooming</h4>
+<p>
+Any commander knows that the more he can see, the better he can plan and react.  The game starts at a ridiculous zoom level.  Zoom out, preferably until you can see the whole board.  Zoom in only when you can't read a planet's stats or control creature movement.  You don't need to see the bots; they're fine as dots!
+</p>
+<h4>Planting Trees Wisely</h4>
+<p>
+Since it takes 10 creatures to create a tree, you want the trees on planets where they'll produce more than 10 creatures before you get swarmed by the enemy.  That means you shouldn't plant a tree on a "leaf" planet, especially one right next to an enemy encampment.
+</p><p>
+Chaining provides problems for bot generation, too.  Since all the bots aren't created in one shot, there's a steady trickle from one planet to the next.  Planets that shunt creatures from multiple sources may not be empty of bots for long periods of time.  This is especially true of planets that are at the receiving end of long chains, and planets that receive from multiple chains.  These aren't the best places to plant trees.
+</p><p>
+Having multiple trees doesn't create more bots, it just creates them more quickly.  Resources replenish at identical rates, so <i>over a given time</i>, a planet with two trees <i>will</i> create more bots than an identical planet with one tree.  Not twice as many, but the generation stage will be cut in half, getting you to the resource replenishment stage more quickly.  
+</p>
+<h4>Choke Points</h4>
+<p>
+The playing field is a <i>network</i> of planets, so there are bound to be choke points.  A choke point is a planet (or small group of planets) through which bots must travel to reach other destinations.   Taking control of a choke point gives you a strategic advantage.  It's a bad place to plant a tree, not only because your bots are likely to be hanging out there, but also because your enemies will be trying to take control of it, too.
+</p><p>
+On the other hand, if you can take each of the planets just out from the choke point, and plant a useful tree on each of them, you might be able to hold it for a longer time.  At least you'll have a warning that enemies are coming.  And if you can see enough of the field, your might be able to route some bots from your choke point to a planet under attack in time to save the tree.
+</p>
+<h4>Destroy the Trees!</h4>
+<p>
+While many folks try to kill the enemy bots, that's not going to get you anywhere.  What you want to do is destroy the <i>trees</i>.  The simplebot AI is really quite bad at this, especially on small boards: it will happily use up almost all its bots creating trees on its home planets.  If the board is small enough, you can take <b>all</b> your bots across the board and wipe out his trees before he has created enough bots to plant another.  Even if he takes over every other planet on the board, you can now defeat him at your leisure: he'll never get any <i>more</i> bots, and you will.
+</p><p>
+Likewise, each tree represents 10 bots lost to your enemy, with no loss to you.  The simplebot AI wastes bots planting trees that you can wipe out easily.  Each time you do, he's lost 10 bots that he could've used to attack you and your trees.
+</p><p>
+You'll notice after a while that bot generation seems to come in waves.  If you can slip past a big wave -- maybe sacrificing a few barren planets to take a big force around another way -- you can reach the enemy's planets while they're still in the regeneration stage.  This is a great time to attack trees.  Note that it takes about 200 bots to ensure quick destruction.
+</p><p>
+Big trees are harder to destroy than small trees, but they generate bots more quickly.  Given a choice between the two, attack the big tree.  Even if you don't destroy it, you'll prune it down to size and give yourself more time between waves.
+</p>
+<h4>Save the Trees!</h4>
+<p>
+For the same reason you want to destroy the enemy's trees, you must protect your own.  You know better than to plant trees willy-nilly.  You must also know when to break a chain to protect a tree.  If you must choose between protecting two planets that are otherwise equally valuable, choose the planet with more trees, then the planet with bigger trees, then the planet with better resources.  
+</p>
+<h4>Rush to Victory</h4>
+<p>
+One well-known RTS strategy is the rush: build up lots of offensive units as quickly as possible and overwhelm the enemy with numbers.  In Quantum, although each planet produces bots with different attributes, the variation isn't enough to build a strategy upon, so you'll be tempted to rush.  There are two variations to consider.  
+</p><p>
+In the first variation, you skimp on building trees to rush across the board and take control of a choke point.  This strangles the enemy, giving you a little time to expand.  In general, this "choke point rush" is effective only on small boards, where you can continuously reinforce a single choke point.  
+</p><p>
+In the second variation, you take control of your own choke point and develop behind it, amassing a large number of bots and letting your enemies kill each other off while you wait to spring.  This strategy is only useful when you have plenty of space behind the choke point to develop, and only when your opponents are too involved with their own concerns to notice what you're doing.  It's made additionally difficult by the game mechanics: normally each tree spawns bots every five seconds.  When you have more than 1500 bots, that increases to every 50 seconds.  It's actually better to send those armies into battle than to hoard them.
+</p><p>
+</p><h4>Build to Victory</h4>
+<p>
+An arguably more subtle strategy is to build LOTS of trees on your secure planets.  This will produce giant waves of bots.  Keep in mind, though, that the AI expands constantly; your biggest goal must be to contain him long enough to overwhelm him.  Staying at home and building trees isn't going to accomplish that goal.
+</p><p>
+</p><h4>Conclusion</h4>
+<p>
+So, there you go.  A general strategy guide to Quantum.  Now get out there and kick some bot!
 </p>

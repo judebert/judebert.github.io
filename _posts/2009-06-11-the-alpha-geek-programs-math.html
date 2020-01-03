@@ -33,18 +33,18 @@ comments:
   content: "Well, yes... of course, it quickly overruns 16-bit numbers, and even 32-bit
     numbers can't contain it for long.\r\n\r\nOther than that, Fibonacci works great!"
 ---
-<p>&#13;
-I know I've been neglecting my blogs lately.  And my online forums.  And FaceBook.  I apologize.&#13;
-</p><p>&#13;
-I've been working on a neat little puzzle game.  Not a "puzzle game" like Bejeweled or those other match-up toys.  Something that actually requires a little bit of thought, like Sudoku or Griddlers, but more logic.  I've got a prototype, but I'm not ready to release it just yet; I promise to let you know when it's ready.&#13;
-</p><p>&#13;
-What's taken me so long is the mathematical whirlwind I've immersed myself in.  It's been delightful.  (Yes, the Alpha Geek enjoys math.)  For a rather minor aspect of the coding, I needed a way to sum any pair of 36 possible numbers and guarantee that the result was unique for that pair.  (In mathematical terms, I needed a set such that a<sub>i</sub> + a<sub>j</sub> is distinct for all i &lt; j.)  I searched online for days before finding what I need: weak Sidon sets, also known as "well-spread sets" or S<sub>2</sub> sets.&#13;
-</p><p>&#13;
-It turns out that nobody has published any weak Sidon sequences of any appreciable length, though.  I needed to write a program to generate them.  &#13;
-</p><p>&#13;
-My first try turned up a 36-member set and a 100-member set in short order.  But I wanted smaller numbers, so I programmed more exhaustive search methods.  One of them ran for 36 hours before Kayla decided to log me out, destroying all my progress.&#13;
-</p><p>&#13;
-So I modified the program.  It now finds all well-spread sequences of a particular length chosen from the set of integers smaller than a specified maximum.  And it saves its progress, so if I'm ever interrupted again, I can simply resume.  I can even run on multiple computers by generating new start states (although of course I'll have to quit one of the programs manually).&#13;
-</p><p>&#13;
-When I've got my first set of sequences, I'll publish my results and my program.  I just thought you should know why you haven't heard much from me.  &#13;
+<p>
+I know I've been neglecting my blogs lately.  And my online forums.  And FaceBook.  I apologize.
+</p><p>
+I've been working on a neat little puzzle game.  Not a "puzzle game" like Bejeweled or those other match-up toys.  Something that actually requires a little bit of thought, like Sudoku or Griddlers, but more logic.  I've got a prototype, but I'm not ready to release it just yet; I promise to let you know when it's ready.
+</p><p>
+What's taken me so long is the mathematical whirlwind I've immersed myself in.  It's been delightful.  (Yes, the Alpha Geek enjoys math.)  For a rather minor aspect of the coding, I needed a way to sum any pair of 36 possible numbers and guarantee that the result was unique for that pair.  (In mathematical terms, I needed a set such that a<sub>i</sub> + a<sub>j</sub> is distinct for all i &lt; j.)  I searched online for days before finding what I need: weak Sidon sets, also known as "well-spread sets" or S<sub>2</sub> sets.
+</p><p>
+It turns out that nobody has published any weak Sidon sequences of any appreciable length, though.  I needed to write a program to generate them.  
+</p><p>
+My first try turned up a 36-member set and a 100-member set in short order.  But I wanted smaller numbers, so I programmed more exhaustive search methods.  One of them ran for 36 hours before Kayla decided to log me out, destroying all my progress.
+</p><p>
+So I modified the program.  It now finds all well-spread sequences of a particular length chosen from the set of integers smaller than a specified maximum.  And it saves its progress, so if I'm ever interrupted again, I can simply resume.  I can even run on multiple computers by generating new start states (although of course I'll have to quit one of the programs manually).
+</p><p>
+When I've got my first set of sequences, I'll publish my results and my program.  I just thought you should know why you haven't heard much from me.  
 </p>

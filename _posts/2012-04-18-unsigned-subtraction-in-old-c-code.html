@@ -21,118 +21,118 @@ tags:
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-I'm porting some old C++ code to Java.  How old?  So old that it doesn't just assume a <code>long</code> is 32 bits, it actually <i>checks to make sure</i> and bails if not.  That's 1997 or so, by my guess.&#13;
-</p><p>&#13;
-I can already hear the programmers in the audience asking, "Why not just interface with the library using JNI?"  We decided to port the code because we must support Unix and 64-bit environments, and the library specifically fails on all our Unix machines.  We do have the source, so we could modify it... but then we'd be forced to deliver and maintain it, which carries its own set of headaches.  So I'm working on 20,000 <acronym title="Source Lines Of Code">SLOC</acronym>.&#13;
-</p><p>&#13;
-(Anybody wondered why the site has been so quiet for so long?  It's because <i>I'm porting 20,000 SLOC of <b>OLD</b> C++ to Java</i>.)&#13;
-</p><p>&#13;
-Most of the code has been pretty straightforward.  There have been the usual problems with C++ unsigned types, which don't have any corresponding Java type, as well as a bit of pointer arithmetic confusion.  When I get confused, I just write a quick test program and make sure the C++ does what I expect.&#13;
-</p><p>&#13;
-The thing that blew my mind today was the weird use of the <a href="http://www.codeproject.com/Articles/18855/20-issues-of-porting-C-code-on-the-64-bit-platform#IDA1YK0D">"magic number"</a> 0x80000000.&#13;
-</p><a id="extended"></a><p>&#13;
-Here's the code I found.  It relates to a sliding bitmask, and verifying that blocks of data are received from the network in the proper order (names have been changed for my protection):&#13;
-</p>&#13;
-[code]&#13;
-// "Windowed" delta calculation&#13;
-unsigned long diff = block_id - lowest_pending_id;&#13;
-if ((diff &gt; 0x80000000) &#13;
-    || ((diff == 0x80000000) &amp;&amp; (block_id &gt; lowest_pending_id))) &#13;
-{&#13;
-    if (num_mask_bits &lt; (lowest_pending_id - block_id)) &#13;
-    {&#13;
-        return INVALID_ID;&#13;
-    } &#13;
-    else &#13;
-    {&#13;
-        return COMPLETED;&#13;
-    }&#13;
-}&#13;
-[/code]&#13;
-<p>&#13;
-I figured the "window" the comment talked about was 0x80000000 blocks you had to hold on to in case an earlier block arrived in the wrong order.  I started mindlessly converting everything into Java, carefully applying bit operations and casts to ensure that the arithmetic worked as expected.&#13;
-</p><p>&#13;
-In my defense, I was a little stunned from <b>twenty thousand lines</b> of underscores and braces.  It's amazing how much you can get accustomed to your own conventions.  (My project specifies that we shall put opening braces on the same line and create variable namesInCamelCase.)&#13;
-</p><p>&#13;
-Eventually, I took another swig of water, and my blood pressure increased enough to circulate oxygen back into my starving brain.  0x80000000 is a <b>LOT</b> of blocks.  About 2 billion of them, in fact.  Each block had been defined as 4K; that meant I was looking at holding <b><i>8 trillion bytes</i></b> of stale data around, just <b>hoping</b> for an out-of-sequence block to arrive on the network.&#13;
-</p><p>&#13;
-The machines these guys were working with in 1997 didn't even <i>have</i> 8 GB of memory, let alone a <i>spare</i> 8 GB to use as a buffer.  Heck, <b><i>I</i></b> don't have 8 GB of memory, and my machine is 15 years newer than theirs!&#13;
-</p><p>&#13;
-Well... 10 years newer.  I do work for the Army, after all.  You might think we'd get all the newest gadgets and latest technology, especially in wartime, but no.  In fact, I'm lucky to be close enough to see the technological edge.  Most Army guys have to work with tech so old their grandparents wouldn't have blinked at it.&#13;
-</p><p>&#13;
-Anyway. &#13;
-</p><p>&#13;
- I started looking at those subtractions again.  Surely they must be checking for an edge case somewhere.  &#13;
-</p><p>&#13;
-Well, surely <code>diff &gt; 0x80000000</code> shouldn't be any problem.  That would happen if the block_id was MUCH bigger than lowest_pending_id.  But then, the revelation: it would also happen when block_id was <b>less than</b> lowest_pending_id!&#13;
-</p><p>&#13;
-An example, in case one of my non-programming friends is reading.  Suppose the block_id is 1, and the lowest_pending_id is 2.  Then block_id - lowest_pending_id is -1.  But these are <b>unsigned</b> long integers; they can't hold -1!  What's a computer to do?  &#13;
-</p><p>&#13;
-It returns 0xFFFFFFFF.  (Or as many FFs as your long integer is... long.)  The biggest possible number.  That's because... well, because that's what computers do.  I could explain base 2, twos complement representation, and all the weird mathematics that goes into making computers work, or you could just take my word for it.  This article's long enough; just trust me and let's move on.&#13;
-</p><p>&#13;
-The big conclusion is that ANY TIME a negative number is needed, the "leftmost" bit of the number is set.  For a 32-bit number, that's 0x80000000.  &#13;
-</p><p>&#13;
-So if block_id &lt; lowest_pending_id, then diff &gt; 0x80000000.  <b>They were checking for a negative difference!</b>&#13;
-</p><p>&#13;
-But what about the second half?  When could the diff exactly equal 0x80000000, while block_id &gt; lowest_pending_id?  Nothing sprang directly to mind, so... I wrote a program to check.&#13;
-</p>&#13;
-[code]&#13;
-#include <stdio.h>&#13;
-#include <stdlib.h>&#13;
-#include <stdint.h>&#13;
-&#13;
-int main(int argc, char**argv) {&#13;
-    uint32_t a = 0x01;&#13;
-    uint32_t b = 0x02;&#13;
-    uint32_t diff = a - b;&#13;
-&#13;
-    // Quick sanity test, prints:&#13;
-    // 0x00000001 - 0x00000002 == 0xffffffff&#13;
-    fprintf(stderr, "%08x - %08x == %08x\n", a, b, diff);&#13;
-&#13;
-    // Search for a case where a &gt; b and a - b = 0x80000000&#13;
-    bool first = true;&#13;
-    for (a = 0x01; a &lt;= 0xFFFFFFFF; a++) {&#13;
-        if (a == 0x01) {&#13;
-           if (first) first = false; else break;&#13;
-        }&#13;
-        for (b = a - 1; b &lt; a; b--) {&#13;
-            diff = a - b;&#13;
-            if (diff == 0x80000000) {&#13;
-                fprintf(stdout, "\n%08x - %08x == %08x\n", a, b, diff);&#13;
-            }&#13;
-        }&#13;
-    }&#13;
-}&#13;
-[/code]&#13;
-<p>&#13;
-IT RAN FOR <b>HOURS</b>.  Of course.  It's checking around 8,000,000,000,000,000,000 pairs of numbers; it's gonna take a while.  &#13;
+<p>
+I'm porting some old C++ code to Java.  How old?  So old that it doesn't just assume a <code>long</code> is 32 bits, it actually <i>checks to make sure</i> and bails if not.  That's 1997 or so, by my guess.
+</p><p>
+I can already hear the programmers in the audience asking, "Why not just interface with the library using JNI?"  We decided to port the code because we must support Unix and 64-bit environments, and the library specifically fails on all our Unix machines.  We do have the source, so we could modify it... but then we'd be forced to deliver and maintain it, which carries its own set of headaches.  So I'm working on 20,000 <acronym title="Source Lines Of Code">SLOC</acronym>.
+</p><p>
+(Anybody wondered why the site has been so quiet for so long?  It's because <i>I'm porting 20,000 SLOC of <b>OLD</b> C++ to Java</i>.)
+</p><p>
+Most of the code has been pretty straightforward.  There have been the usual problems with C++ unsigned types, which don't have any corresponding Java type, as well as a bit of pointer arithmetic confusion.  When I get confused, I just write a quick test program and make sure the C++ does what I expect.
+</p><p>
+The thing that blew my mind today was the weird use of the <a href="http://www.codeproject.com/Articles/18855/20-issues-of-porting-C-code-on-the-64-bit-platform#IDA1YK0D">"magic number"</a> 0x80000000.
+</p><a id="extended"></a><p>
+Here's the code I found.  It relates to a sliding bitmask, and verifying that blocks of data are received from the network in the proper order (names have been changed for my protection):
 </p>
-<p>&#13;
-I left that running, just in case it was about to finish, and wrote a copy that only checked 32,768 values (if my calculations are correct).  THAT ran a LOT faster.  &#13;
+[code]
+// "Windowed" delta calculation
+unsigned long diff = block_id - lowest_pending_id;
+if ((diff &gt; 0x80000000) 
+    || ((diff == 0x80000000) &amp;&amp; (block_id &gt; lowest_pending_id))) 
+{
+    if (num_mask_bits &lt; (lowest_pending_id - block_id)) 
+    {
+        return INVALID_ID;
+    } 
+    else 
+    {
+        return COMPLETED;
+    }
+}
+[/code]
+<p>
+I figured the "window" the comment talked about was 0x80000000 blocks you had to hold on to in case an earlier block arrived in the wrong order.  I started mindlessly converting everything into Java, carefully applying bit operations and casts to ensure that the arithmetic worked as expected.
+</p><p>
+In my defense, I was a little stunned from <b>twenty thousand lines</b> of underscores and braces.  It's amazing how much you can get accustomed to your own conventions.  (My project specifies that we shall put opening braces on the same line and create variable namesInCamelCase.)
+</p><p>
+Eventually, I took another swig of water, and my blood pressure increased enough to circulate oxygen back into my starving brain.  0x80000000 is a <b>LOT</b> of blocks.  About 2 billion of them, in fact.  Each block had been defined as 4K; that meant I was looking at holding <b><i>8 trillion bytes</i></b> of stale data around, just <b>hoping</b> for an out-of-sequence block to arrive on the network.
+</p><p>
+The machines these guys were working with in 1997 didn't even <i>have</i> 8 GB of memory, let alone a <i>spare</i> 8 GB to use as a buffer.  Heck, <b><i>I</i></b> don't have 8 GB of memory, and my machine is 15 years newer than theirs!
+</p><p>
+Well... 10 years newer.  I do work for the Army, after all.  You might think we'd get all the newest gadgets and latest technology, especially in wartime, but no.  In fact, I'm lucky to be close enough to see the technological edge.  Most Army guys have to work with tech so old their grandparents wouldn't have blinked at it.
+</p><p>
+Anyway. 
+</p><p>
+ I started looking at those subtractions again.  Surely they must be checking for an edge case somewhere.  
+</p><p>
+Well, surely <code>diff &gt; 0x80000000</code> shouldn't be any problem.  That would happen if the block_id was MUCH bigger than lowest_pending_id.  But then, the revelation: it would also happen when block_id was <b>less than</b> lowest_pending_id!
+</p><p>
+An example, in case one of my non-programming friends is reading.  Suppose the block_id is 1, and the lowest_pending_id is 2.  Then block_id - lowest_pending_id is -1.  But these are <b>unsigned</b> long integers; they can't hold -1!  What's a computer to do?  
+</p><p>
+It returns 0xFFFFFFFF.  (Or as many FFs as your long integer is... long.)  The biggest possible number.  That's because... well, because that's what computers do.  I could explain base 2, twos complement representation, and all the weird mathematics that goes into making computers work, or you could just take my word for it.  This article's long enough; just trust me and let's move on.
+</p><p>
+The big conclusion is that ANY TIME a negative number is needed, the "leftmost" bit of the number is set.  For a 32-bit number, that's 0x80000000.  
+</p><p>
+So if block_id &lt; lowest_pending_id, then diff &gt; 0x80000000.  <b>They were checking for a negative difference!</b>
+</p><p>
+But what about the second half?  When could the diff exactly equal 0x80000000, while block_id &gt; lowest_pending_id?  Nothing sprang directly to mind, so... I wrote a program to check.
 </p>
-<p>&#13;
-And it told me that the only time the second half happens, under <a href="http://c0x.coding-guidelines.com/6.2.5.html#496">C99 unsigned subtraction rules</a>, is when the block_id is 0x80000000 greater than the lowest_pending_id.&#13;
+[code]
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+int main(int argc, char**argv) {
+    uint32_t a = 0x01;
+    uint32_t b = 0x02;
+    uint32_t diff = a - b;
+
+    // Quick sanity test, prints:
+    // 0x00000001 - 0x00000002 == 0xffffffff
+    fprintf(stderr, "%08x - %08x == %08x\n", a, b, diff);
+
+    // Search for a case where a &gt; b and a - b = 0x80000000
+    bool first = true;
+    for (a = 0x01; a &lt;= 0xFFFFFFFF; a++) {
+        if (a == 0x01) {
+           if (first) first = false; else break;
+        }
+        for (b = a - 1; b &lt; a; b--) {
+            diff = a - b;
+            if (diff == 0x80000000) {
+                fprintf(stdout, "\n%08x - %08x == %08x\n", a, b, diff);
+            }
+        }
+    }
+}
+[/code]
+<p>
+IT RAN FOR <b>HOURS</b>.  Of course.  It's checking around 8,000,000,000,000,000,000 pairs of numbers; it's gonna take a while.  
 </p>
-<p>&#13;
-<acronym title="WTF?">Whiskey Tango Foxtrot?</acronym> (As they say around here.)  What's so special about that number that it needs to be checked specifically?&#13;
+<p>
+I left that running, just in case it was about to finish, and wrote a copy that only checked 32,768 values (if my calculations are correct).  THAT ran a LOT faster.  
 </p>
-<p>&#13;
-Well, <a href="http://flash-gordon.me.uk/ansi.c.txt">the older ANSI C / C89 standard</a> doesn't really have anything to say about subtracting unsigned numbers.  And they <i>were</i> supposed to be writing portable code (despite the travesty with the byte length of their variables).  Maybe it's a special condition that only applies to their particular compiler.  In that case, I could just ignore that part of their code.&#13;
+<p>
+And it told me that the only time the second half happens, under <a href="http://c0x.coding-guidelines.com/6.2.5.html#496">C99 unsigned subtraction rules</a>, is when the block_id is 0x80000000 greater than the lowest_pending_id.
 </p>
-<p>&#13;
-That was a little too convenient, so I searched their code for the magic number, and found it all over the place.  Many were checked for (a &lt; b) instead of (a &gt; b).&#13;
+<p>
+<acronym title="WTF?">Whiskey Tango Foxtrot?</acronym> (As they say around here.)  What's so special about that number that it needs to be checked specifically?
 </p>
-<p>&#13;
-I modified my tiny checker to look at all 65,536 pairs of values.  And I discovered that you hit 0x80000000 <b>any</b> time the two values are that far apart, <b>regardless of which one is bigger</b>!  For instance, (0x90,000,000 - 0x10,000,000) and (0x10,000,000 - 0x90,000,000) are both 0x80,000,000!  (Commas added for readability.)&#13;
+<p>
+Well, <a href="http://flash-gordon.me.uk/ansi.c.txt">the older ANSI C / C89 standard</a> doesn't really have anything to say about subtracting unsigned numbers.  And they <i>were</i> supposed to be writing portable code (despite the travesty with the byte length of their variables).  Maybe it's a special condition that only applies to their particular compiler.  In that case, I could just ignore that part of their code.
 </p>
-<p>&#13;
-So, to check if (a &lt; b), you could check if (a - b &gt;= 0x80000000)... but then you'd also catch 0x90000000 - 0x10000000.  So you actually need to check (a - b &gt;= 0x80000000) || (a - b == 0x80000000 &amp;&amp; a &lt; b).&#13;
+<p>
+That was a little too convenient, so I searched their code for the magic number, and found it all over the place.  Many were checked for (a &lt; b) instead of (a &gt; b).
 </p>
-<p>&#13;
-<b><i>The whole thing is one giant comparison check!</i></b>  I can just use <code>if (block_id &lt; lowest_pending_id)</code>!&#13;
+<p>
+I modified my tiny checker to look at all 65,536 pairs of values.  And I discovered that you hit 0x80000000 <b>any</b> time the two values are that far apart, <b>regardless of which one is bigger</b>!  For instance, (0x90,000,000 - 0x10,000,000) and (0x10,000,000 - 0x90,000,000) are both 0x80,000,000!  (Commas added for readability.)
 </p>
-<p>&#13;
-I'm still confused over the instances where they check (a &gt; b).  I'm betting it's a bug, caused by an incorrect copy of the earlier (a &lt; b) code.  They never get block IDs anywhere near that high, anyway, so they'd never hit that code.&#13;
+<p>
+So, to check if (a &lt; b), you could check if (a - b &gt;= 0x80000000)... but then you'd also catch 0x90000000 - 0x10000000.  So you actually need to check (a - b &gt;= 0x80000000) || (a - b == 0x80000000 &amp;&amp; a &lt; b).
+</p>
+<p>
+<b><i>The whole thing is one giant comparison check!</i></b>  I can just use <code>if (block_id &lt; lowest_pending_id)</code>!
+</p>
+<p>
+I'm still confused over the instances where they check (a &gt; b).  I'm betting it's a bug, caused by an incorrect copy of the earlier (a &lt; b) code.  They never get block IDs anywhere near that high, anyway, so they'd never hit that code.
 </p></stdint.h></stdlib.h></stdio.h>

@@ -155,42 +155,42 @@ excerpt_separator: <a id="extended"></a>
 <a class="serendipity_image_link" href="/progress/media/screenshots/bouml.png">
 <!-- s9ymdb:890 -->
   <img class="serendipity_image_left" width="110" height="95" style="float: left; border: 0px; padding-left: 5px; padding-right: 5px;" src="/progress/media/screenshots/bouml.s9yThumb.png" alt="" />
-</a><p>&#13;
-<a href="/progress/archives/329-Rating-UML-Editors.html">I'm rating UML editors</a> while I look for a good one.  This week's candidate: <a href="http://bouml.free.fr/">BOUML</a>.  &#13;
-</p><p>&#13;
-To be as objective as possible, let's go over the list of criteria I made earlier.&#13;
-</p><p>&#13;
-<i>Edit 2009-04-10:</i> BOUML has been updated since my first review.  I was originally quite disappointed, and made a rather harsh acronym from its name.  While I still don't think BOUML meets my minimum qualifications, it's a heck of a lot better than the other editors I've tried.  I've updated the review to reflect BOUML's new capabilities.&#13;
-</p><a id="extended"></a><p>&#13;
-<u>Class and Sequence Diagrams:</u> <b>Good.</b>  Some of my coworkers would like to have the explicit return added automatically, but the point of a sequence diagram is to crystallize your thinking, not to record every detail.  &#13;
-</p><p>&#13;
-<u>Configurable Display:</u> <b>Unsatisfactory.</b>  You can certainly make pretty displays in BOUML:  the colors are configurable both globally and per instance, you can determine whether the full method definition is displayed on the message line, and so on.  But that's about it.  I'd like some more control over alignment, particularly where the text goes on the message line.  I'd also like method arguments to be checked and highlighted.&#13;
-</p><p>&#13;
-<u>Group Selection and Movement:</u> <b>Satisfactory.</b>  You can make a multiple selection in BOUML using either a rectangular drag or a ctrl-select.  The items you select (and their associated labels and lines) move together appropriately.  This was extremely helpful when I needed to rearrange my class diagram, for instance.&#13;
-</p><p>&#13;
-However, the selection is very iffy.  When I have an association or other graphic selected, and I click my mouse near one of its points, I expect to move that point.  BOUML decided I wanted to move the nearby message line.  I wound up moving the message line out of the way, adjusting my association line, and putting the message line back.  And I kept having similar problems throughout the process.  Rather frustrating.&#13;
-</p><p>&#13;
-<u>Infinite Undo:</u> <b>Fail.</b>  Undo is an all-or-nothing test, so far as I'm concerned.  BOUML allows you to undo certain actions, but not all actions.  This was <i>particularly</i> frustrating when I moved things I had accidentally selected.  Sometimes BOUML would let me undo to put them back; sometimes I had to do it manually.  When I'm experimenting with the puzzle of class placement, I need the undo.&#13;
-</p><p>&#13;
-<u>Supports Synchronous, Asynchronous, and Reflexive Messages:</u> <b>Very Good.</b>  I think I'd like to be able to adjust the size of a reflexive arrow, but that's not a problem.  At least it's supported!  &#13;
-</p><p>&#13;
-<u>Dynamic Document Size:</u> <b>Unsatisfactory.</b>  BOUML is apparently designed for printing, as it restricts your document to common page sizes.  When my sequence diagrams exceeded that size, the classes were cut off.  I had to fool around with page sizes, and I don't know the difference betweeen A5 and A4.  At least the diagram wasn't lost, only clipped.  It might even have saved the clipped portion when I exported as PNG, but I never tried to export a diagram that was partially clipped.&#13;
-</p><p>&#13;
-I eventually found a page size that fit my diagram, but eventually I'm going to need something that BOUML can't support.  Of course, by that point, it's almost impossible to read the diagram, and it really ought to be split into multiple diagrams.  Nevertheless, I recommend allowing arbitrary page sizes.&#13;
-</p><p>&#13;
-<u>Scrolling:</u> <b>Very good.</b>  The new version of BOUML (4.12.1) scrolls as I drag a message line to far-off lifelines or as I drag a class or lifeline across the screen.  This is exactly what I need to complete complicated models.  I'd appreciate a control for scrolling speed, or at least scrolling slow when I'm farther from the edge than when I'm right on top of it.&#13;
-</p><p>&#13;
-<u>Shared Data Model:</u> <b>Very Good.</b>  The data model is actually displayed in a sidebar, so you can make changes to it no matter what diagram you're in.  You should go back and check your class diagrams afterwards, or you might find your classes are all overlapping from the extra methods you added.  My only nit-pick is that typing a new method name for a message should have brought up the appropriate editor so I could add it to the receiving class.  But that's minor.&#13;
-</p><p>&#13;
-<u>Supports Large Projects:</u> <b>Outstanding!</b>  BOUML imported my entire work project, comprising thousands of classes, in just a few minutes.  It gave me a progress indicator so I didn't feel lonely.  Afterwards, working with the classes was just as fast as the tiny subset I had tested earlier.  Clearly large projects and import operations are a strong point in BOUML's favor.&#13;
-</p><p>&#13;
-On the niceties front, BOUML does support alignment operations for some of its objects, but not spacing or distribution.  BOUML claims to generate code in multiple languages.  Each dialog kept the Java that it would've generated, and it looked pretty good.&#13;
-</p><p>&#13;
-Ubuntu isn't up to date on BOUML.  Usually Debian is behind, but Sid has the latest.  I downloaded the sources from the arakhne repository and built it on my own (aptitude update, aptitude build-dep bouml, apt-get -b source bouml, wait).  &#13;
-</p><p>&#13;
-One improvement over the last version I tried is the capability to import saved projects.  I was so upset at BOUML the first time I couldn't reload a project I had worked on for an hour.  That's minimal functionality!  This version had no problems at all.&#13;
-</p><p>&#13;
-Of note, BOUML 4.12.1 loaded my old (practically ancient, by computer standards) 4.4 project without even a hiccup.  Nice job with backwards compatibility, Mr. Pages!&#13;
-</p><p>&#13;
-All in all, BOUML didn't meet my requirements.  However, it's the best I've found so far.  For small projects, it can make very pretty diagrams rather easily and quickly.  For large projects, its exceptional code import capabilities and coordinated data model helps reduce errors and makes data entry a lot easier.  Until I find something better, this is the tool I'll be using for my serious work.&#13;
+</a><p>
+<a href="/progress/archives/329-Rating-UML-Editors.html">I'm rating UML editors</a> while I look for a good one.  This week's candidate: <a href="http://bouml.free.fr/">BOUML</a>.  
+</p><p>
+To be as objective as possible, let's go over the list of criteria I made earlier.
+</p><p>
+<i>Edit 2009-04-10:</i> BOUML has been updated since my first review.  I was originally quite disappointed, and made a rather harsh acronym from its name.  While I still don't think BOUML meets my minimum qualifications, it's a heck of a lot better than the other editors I've tried.  I've updated the review to reflect BOUML's new capabilities.
+</p><a id="extended"></a><p>
+<u>Class and Sequence Diagrams:</u> <b>Good.</b>  Some of my coworkers would like to have the explicit return added automatically, but the point of a sequence diagram is to crystallize your thinking, not to record every detail.  
+</p><p>
+<u>Configurable Display:</u> <b>Unsatisfactory.</b>  You can certainly make pretty displays in BOUML:  the colors are configurable both globally and per instance, you can determine whether the full method definition is displayed on the message line, and so on.  But that's about it.  I'd like some more control over alignment, particularly where the text goes on the message line.  I'd also like method arguments to be checked and highlighted.
+</p><p>
+<u>Group Selection and Movement:</u> <b>Satisfactory.</b>  You can make a multiple selection in BOUML using either a rectangular drag or a ctrl-select.  The items you select (and their associated labels and lines) move together appropriately.  This was extremely helpful when I needed to rearrange my class diagram, for instance.
+</p><p>
+However, the selection is very iffy.  When I have an association or other graphic selected, and I click my mouse near one of its points, I expect to move that point.  BOUML decided I wanted to move the nearby message line.  I wound up moving the message line out of the way, adjusting my association line, and putting the message line back.  And I kept having similar problems throughout the process.  Rather frustrating.
+</p><p>
+<u>Infinite Undo:</u> <b>Fail.</b>  Undo is an all-or-nothing test, so far as I'm concerned.  BOUML allows you to undo certain actions, but not all actions.  This was <i>particularly</i> frustrating when I moved things I had accidentally selected.  Sometimes BOUML would let me undo to put them back; sometimes I had to do it manually.  When I'm experimenting with the puzzle of class placement, I need the undo.
+</p><p>
+<u>Supports Synchronous, Asynchronous, and Reflexive Messages:</u> <b>Very Good.</b>  I think I'd like to be able to adjust the size of a reflexive arrow, but that's not a problem.  At least it's supported!  
+</p><p>
+<u>Dynamic Document Size:</u> <b>Unsatisfactory.</b>  BOUML is apparently designed for printing, as it restricts your document to common page sizes.  When my sequence diagrams exceeded that size, the classes were cut off.  I had to fool around with page sizes, and I don't know the difference betweeen A5 and A4.  At least the diagram wasn't lost, only clipped.  It might even have saved the clipped portion when I exported as PNG, but I never tried to export a diagram that was partially clipped.
+</p><p>
+I eventually found a page size that fit my diagram, but eventually I'm going to need something that BOUML can't support.  Of course, by that point, it's almost impossible to read the diagram, and it really ought to be split into multiple diagrams.  Nevertheless, I recommend allowing arbitrary page sizes.
+</p><p>
+<u>Scrolling:</u> <b>Very good.</b>  The new version of BOUML (4.12.1) scrolls as I drag a message line to far-off lifelines or as I drag a class or lifeline across the screen.  This is exactly what I need to complete complicated models.  I'd appreciate a control for scrolling speed, or at least scrolling slow when I'm farther from the edge than when I'm right on top of it.
+</p><p>
+<u>Shared Data Model:</u> <b>Very Good.</b>  The data model is actually displayed in a sidebar, so you can make changes to it no matter what diagram you're in.  You should go back and check your class diagrams afterwards, or you might find your classes are all overlapping from the extra methods you added.  My only nit-pick is that typing a new method name for a message should have brought up the appropriate editor so I could add it to the receiving class.  But that's minor.
+</p><p>
+<u>Supports Large Projects:</u> <b>Outstanding!</b>  BOUML imported my entire work project, comprising thousands of classes, in just a few minutes.  It gave me a progress indicator so I didn't feel lonely.  Afterwards, working with the classes was just as fast as the tiny subset I had tested earlier.  Clearly large projects and import operations are a strong point in BOUML's favor.
+</p><p>
+On the niceties front, BOUML does support alignment operations for some of its objects, but not spacing or distribution.  BOUML claims to generate code in multiple languages.  Each dialog kept the Java that it would've generated, and it looked pretty good.
+</p><p>
+Ubuntu isn't up to date on BOUML.  Usually Debian is behind, but Sid has the latest.  I downloaded the sources from the arakhne repository and built it on my own (aptitude update, aptitude build-dep bouml, apt-get -b source bouml, wait).  
+</p><p>
+One improvement over the last version I tried is the capability to import saved projects.  I was so upset at BOUML the first time I couldn't reload a project I had worked on for an hour.  That's minimal functionality!  This version had no problems at all.
+</p><p>
+Of note, BOUML 4.12.1 loaded my old (practically ancient, by computer standards) 4.4 project without even a hiccup.  Nice job with backwards compatibility, Mr. Pages!
+</p><p>
+All in all, BOUML didn't meet my requirements.  However, it's the best I've found so far.  For small projects, it can make very pretty diagrams rather easily and quickly.  For large projects, its exceptional code import capabilities and coordinated data model helps reduce errors and makes data entry a lot easier.  Until I find something better, this is the tool I'll be using for my serious work.
 </p>

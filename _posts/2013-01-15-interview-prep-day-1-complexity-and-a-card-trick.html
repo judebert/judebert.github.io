@@ -26,36 +26,36 @@ tags:
 comments: []
 excerpt_separator: <a id="extended"></a>
 ---
-<p>&#13;
-My interview contact had warned me that I would be asked about the complexity of my algorithms.  I remember "big-O" notation, and I think I know how to calculate it, but just in case I checked online again.  It really is pretty simple... as long as you don't get recursive.  It's basically O(n) for loops, O(n*n) for embedded loops, and O(log n) if you can divide the problem up so you don't have to calculate <i>every friggen' value</i>.  There are lots of resources online; you can find them by searching for "algorithm complexity".&#13;
-</p><p>&#13;
-The brain teaser interview question today was awesome.  It's a <a href="http://www.techinterview.org/post/526296398/card-trick-without-the-trick">card trick from techinterview</a>.  &#13;
-</p><p>&#13;
-You choose five cards from a standard 52-card deck.  No forcing, no tricks: you honestly choose any five cards.  You hand them to me; I pick one and hand it back to you.  I re-order the remaining four cards and hand them, all face-down, to my wife, Eri.  She looks at them and tells you what your card is.  &#13;
-</p><p>&#13;
-No sleight-of-hand or other trickery is used.  I encoded the suit and rank of your card <b>entirely</b> in the order of the four cards I handed to Eri.&#13;
-</p><p>&#13;
-How does the encoding work?&#13;
-</p><a id="extended"></a><p>&#13;
-I had trouble with scheduling for this one.  There were kids to take care of and all kinds of other problems.  But I had it all worked out by the end of the day, and the kids had a lot of fun with it, too.&#13;
-</p><p>&#13;
-It only took me a few minutes to figure out how to encode the suit.  Hint: <span class="spoiler">It's the socks-in-the-dryer problem.  To get a pair of socks out of a dryer, in the dark, where there are [i]n[/i] colors of socks, you have to pull <i>n</i> + 1 socks out.</span>&#13;
-</p><p>&#13;
-See?  That gives me a guarantee: <span class="spoiler">since there are four suits, the five cards you handed me must contain at least one "pair" of cards with the same suit.</span>  With that in mind, I choose one for your card, and use <span class="spoiler">the other one of the same suit</span> as the top card, which tells Eri the suit.&#13;
-</p><p>&#13;
-So, now that I've communicated the suit, I've got three cards left to encode which of the 13 cards in that suit is yours.  <span class="spoiler">Well, 12 cards.  Eri's got one of them, so she knows that's not yours.</span>   &#13;
-</p><p>&#13;
-The problem is, three cards can only be arranged in three-factorial ways.  That's 3*2*1 = 6 ways to specify 13 <span class="spoiler">12, see above</span> possible cards.&#13;
-</p><p>&#13;
-I considered multiple ways to get more arrangements.  For instance, many cards are not symmetric.  Could I encode extra information based on their orientation?  No, not all cards are asymmetric, and I had no guarantee that I'd have even ONE asymmetric card.  Could the hand I used to pass the cards be significant?  Or could I pass some face-up and some face-down?  No, the trick can be accomplished using only the order of the cards.&#13;
-</p><p>&#13;
-Then I have the big revelation: <span class="spoiler">If I consider the cards to be <b>cyclic</b>, two cards are never more than 6 away.  For instance, given the 2 and the 10, it looks like I have to encode a difference of 8.  But if I treat the cards as cyclic, the 2 is also a 15.  That's a difference of only 5.</span>&#13;
-</p><p>&#13;
-So now I just encode the remaining three cards to encode that difference, and I'm done.  <span class="spoiler">Of course, Eri and I also have to agree beforehand on the encoding, and in which direction we'll be counting.<span>  Here's the encoding we decided on: <span class="spoiler">Assume trumps in spades, then hearts, then clubs, then diamonds.  Now every card has an absolute order.  If the first card is the highest, we're talking about the two highest values: 5 and 6.  Likewise, the middle card first encodes either 3 or 4, and the lowest card first encodes either 1 or 2.  The next card chooses which of the available values to choose: if it's the highest remaining card, use the highest value.  (The last card is necessary to demonstrate which value is "middle".)  Once you've got the value, count up.</span>&#13;
-</span></span></p><p>&#13;
-How about an example?&#13;
-</p><p>&#13;
-Here's a "tough" one: you pass me all the eights and the Ace of Spades.  <span class="spoiler">If I pass you the back the matching-suit eight, I'll have to give Eri the ace, and she'll have to count up 7 cards.  I can't encode 7.  So I have to pass you the ace.  I consider your ace to be a fourteen; I pass Eri the matching eight, and encode the other three eights for "count up 6": highest, middle, lowest.  That's Eight of Hearts, Eight of Clubs, Eight of Diamonds.  Eri sees the Eight of Spades on top, so she knows your card is a spade.  She decodes the other eights into "6", adds 6 to her 8, and gets 14.  Then she cycles that down by 13, so it's a 1.  Tah-dah: Ace of Spades.</span>&#13;
-</p><p>&#13;
-Neat, huh?  I enjoyed this one a lot.&#13;
+<p>
+My interview contact had warned me that I would be asked about the complexity of my algorithms.  I remember "big-O" notation, and I think I know how to calculate it, but just in case I checked online again.  It really is pretty simple... as long as you don't get recursive.  It's basically O(n) for loops, O(n*n) for embedded loops, and O(log n) if you can divide the problem up so you don't have to calculate <i>every friggen' value</i>.  There are lots of resources online; you can find them by searching for "algorithm complexity".
+</p><p>
+The brain teaser interview question today was awesome.  It's a <a href="http://www.techinterview.org/post/526296398/card-trick-without-the-trick">card trick from techinterview</a>.  
+</p><p>
+You choose five cards from a standard 52-card deck.  No forcing, no tricks: you honestly choose any five cards.  You hand them to me; I pick one and hand it back to you.  I re-order the remaining four cards and hand them, all face-down, to my wife, Eri.  She looks at them and tells you what your card is.  
+</p><p>
+No sleight-of-hand or other trickery is used.  I encoded the suit and rank of your card <b>entirely</b> in the order of the four cards I handed to Eri.
+</p><p>
+How does the encoding work?
+</p><a id="extended"></a><p>
+I had trouble with scheduling for this one.  There were kids to take care of and all kinds of other problems.  But I had it all worked out by the end of the day, and the kids had a lot of fun with it, too.
+</p><p>
+It only took me a few minutes to figure out how to encode the suit.  Hint: <span class="spoiler">It's the socks-in-the-dryer problem.  To get a pair of socks out of a dryer, in the dark, where there are [i]n[/i] colors of socks, you have to pull <i>n</i> + 1 socks out.</span>
+</p><p>
+See?  That gives me a guarantee: <span class="spoiler">since there are four suits, the five cards you handed me must contain at least one "pair" of cards with the same suit.</span>  With that in mind, I choose one for your card, and use <span class="spoiler">the other one of the same suit</span> as the top card, which tells Eri the suit.
+</p><p>
+So, now that I've communicated the suit, I've got three cards left to encode which of the 13 cards in that suit is yours.  <span class="spoiler">Well, 12 cards.  Eri's got one of them, so she knows that's not yours.</span>   
+</p><p>
+The problem is, three cards can only be arranged in three-factorial ways.  That's 3*2*1 = 6 ways to specify 13 <span class="spoiler">12, see above</span> possible cards.
+</p><p>
+I considered multiple ways to get more arrangements.  For instance, many cards are not symmetric.  Could I encode extra information based on their orientation?  No, not all cards are asymmetric, and I had no guarantee that I'd have even ONE asymmetric card.  Could the hand I used to pass the cards be significant?  Or could I pass some face-up and some face-down?  No, the trick can be accomplished using only the order of the cards.
+</p><p>
+Then I have the big revelation: <span class="spoiler">If I consider the cards to be <b>cyclic</b>, two cards are never more than 6 away.  For instance, given the 2 and the 10, it looks like I have to encode a difference of 8.  But if I treat the cards as cyclic, the 2 is also a 15.  That's a difference of only 5.</span>
+</p><p>
+So now I just encode the remaining three cards to encode that difference, and I'm done.  <span class="spoiler">Of course, Eri and I also have to agree beforehand on the encoding, and in which direction we'll be counting.<span>  Here's the encoding we decided on: <span class="spoiler">Assume trumps in spades, then hearts, then clubs, then diamonds.  Now every card has an absolute order.  If the first card is the highest, we're talking about the two highest values: 5 and 6.  Likewise, the middle card first encodes either 3 or 4, and the lowest card first encodes either 1 or 2.  The next card chooses which of the available values to choose: if it's the highest remaining card, use the highest value.  (The last card is necessary to demonstrate which value is "middle".)  Once you've got the value, count up.</span>
+</span></span></p><p>
+How about an example?
+</p><p>
+Here's a "tough" one: you pass me all the eights and the Ace of Spades.  <span class="spoiler">If I pass you the back the matching-suit eight, I'll have to give Eri the ace, and she'll have to count up 7 cards.  I can't encode 7.  So I have to pass you the ace.  I consider your ace to be a fourteen; I pass Eri the matching eight, and encode the other three eights for "count up 6": highest, middle, lowest.  That's Eight of Hearts, Eight of Clubs, Eight of Diamonds.  Eri sees the Eight of Spades on top, so she knows your card is a spade.  She decodes the other eights into "6", adds 6 to her 8, and gets 14.  Then she cycles that down by 13, so it's a 1.  Tah-dah: Ace of Spades.</span>
+</p><p>
+Neat, huh?  I enjoyed this one a lot.
 </p>
