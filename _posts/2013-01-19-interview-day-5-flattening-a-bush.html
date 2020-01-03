@@ -56,110 +56,110 @@ This works in O(n) time, rather than O(2n)... not a big improvement, but more ef
 In cases where the depth of the bush is not expected to be large, I'd like to use the recursive function.  And I really like the elegance of flattening the child behind the parent; it's looks like the diagramming I did in English class.  I'll use an iterative method to create the array in main(), just to show off that I can do it both ways.
 </p>[code]
 public class BushNode {
-	public String value = null;
-	public BushNode next = null;
-	public BushNode prev = null;
-	public BushNode child = null;
+    public String value = null;
+    public BushNode next = null;
+    public BushNode prev = null;
+    public BushNode child = null;
 
-	public BushNode(String value) {
-		this.value = value;
-	}
-	
+    public BushNode(String value) {
+        this.value = value;
+    }
+    
 }
 [/code][code]
 public class Bush {
-	public BushNode head = null;
-	public BushNode tail = null;
-	
-	/**
-	 * Print out the bush with braces around sublists.
-	 * @param top The top of the bush
-	 */
-	public void printBush(BushNode top) {
-		System.out.print(top.value + " ");
-		if (top.child != null) {
-			System.out.print("{ ");
-			printBush(top.child);
-			System.out.print("} ");
-		}
-		if (top.next != null) {
-			printBush(top.next);
-		}
-	}
-	
-	/**
-	 * Driver to create a bush and flatten it
-	 * @param args A single string of the form { A B { C { D E F } G } H { I J } K },
-	 * where each brace indicates the start of a child list.  In this case, A
-	 * has no children, while B has a child list of two elements, including 
-	 * an element C with a three-element child list of its own.
-	 */
-	public static void main(String args[]) {
-		Bush bush = new Bush();
-		String list = "{ A B { C { D E F } G } H { I J } K }";
-		if (args.length &gt; 0) {
-			list = args[0];
-		}
-		if (!list.startsWith("{")) {
-			System.out.println("First character of list must be an opening brace!");
-			System.exit(-1);
-		}
-		if (!list.endsWith("}")) {
-			System.out.println("Last character of list must be a closing brace!");
-			System.exit(-2);
-		}
-		list = list.substring(1, list.length() - 1);
-		BushNode curr = null;
-		boolean firstChild = true;
-		LinkedList<bushnode> levelStack = new LinkedList<bushnode>();
-		StringTokenizer t = new StringTokenizer(list, " ");
-		while (t.hasMoreElements()) {
-		    String tok = t.nextToken();
-		    if (tok.equals("{")) {
-		    	// We need to start a new sublist
-		    	if (firstChild) {
-		    		System.out.println("Invalid argument: list without parent!");
-		    		System.exit(-5);
-		    	}
-		    	firstChild = true;
-		    	levelStack.push(curr);
-		    } else if (tok.equals("}")) {
-		    	// This sublist is finished!
-		    	try {
-		    		curr = levelStack.pop();
-		    	} catch (NoSuchElementException e) {
-		    		System.out.println("Invalid argument: no start for list end!");
-		    		System.exit(-4);
-		    	}
-		    } else {
-		    	if (firstChild) {
-		    		// First element in a new list
-		    		if (curr == null) {
-		    			// The first element in the whole list
-		    			bush.head = curr = new BushNode(tok);
-		    		} else {
-		    			// First element in a sublist of the current element
-						curr.child = new BushNode(tok);
-						curr = curr.child;
-		    		}
-		    		firstChild = false;
-		    	} else {
-		    		// Just another element in the current list
-					curr.next = new BushNode(tok);
-					curr.next.prev = curr;
-					curr = curr.next;
-		    	}
-		    }
-		}
-		// All done with elements.  Pop up to the top level and set the tail.
-		System.out.print("{ ");
-		bush.printBush(bush.head);
-		System.out.println("} ");
-		System.out.println("Flattenning...");
-		Flatten f = new Flatten();
-		f.flatten(bush);
-		f.printFlattenedBush(bush);
-	}
+    public BushNode head = null;
+    public BushNode tail = null;
+    
+    /**
+     * Print out the bush with braces around sublists.
+     * @param top The top of the bush
+     */
+    public void printBush(BushNode top) {
+        System.out.print(top.value + " ");
+        if (top.child != null) {
+            System.out.print("{ ");
+            printBush(top.child);
+            System.out.print("} ");
+        }
+        if (top.next != null) {
+            printBush(top.next);
+        }
+    }
+    
+    /**
+     * Driver to create a bush and flatten it
+     * @param args A single string of the form { A B { C { D E F } G } H { I J } K },
+     * where each brace indicates the start of a child list.  In this case, A
+     * has no children, while B has a child list of two elements, including 
+     * an element C with a three-element child list of its own.
+     */
+    public static void main(String args[]) {
+        Bush bush = new Bush();
+        String list = "{ A B { C { D E F } G } H { I J } K }";
+        if (args.length &gt; 0) {
+            list = args[0];
+        }
+        if (!list.startsWith("{")) {
+            System.out.println("First character of list must be an opening brace!");
+            System.exit(-1);
+        }
+        if (!list.endsWith("}")) {
+            System.out.println("Last character of list must be a closing brace!");
+            System.exit(-2);
+        }
+        list = list.substring(1, list.length() - 1);
+        BushNode curr = null;
+        boolean firstChild = true;
+        LinkedList<bushnode> levelStack = new LinkedList<bushnode>();
+        StringTokenizer t = new StringTokenizer(list, " ");
+        while (t.hasMoreElements()) {
+            String tok = t.nextToken();
+            if (tok.equals("{")) {
+                // We need to start a new sublist
+                if (firstChild) {
+                    System.out.println("Invalid argument: list without parent!");
+                    System.exit(-5);
+                }
+                firstChild = true;
+                levelStack.push(curr);
+            } else if (tok.equals("}")) {
+                // This sublist is finished!
+                try {
+                    curr = levelStack.pop();
+                } catch (NoSuchElementException e) {
+                    System.out.println("Invalid argument: no start for list end!");
+                    System.exit(-4);
+                }
+            } else {
+                if (firstChild) {
+                    // First element in a new list
+                    if (curr == null) {
+                        // The first element in the whole list
+                        bush.head = curr = new BushNode(tok);
+                    } else {
+                        // First element in a sublist of the current element
+                        curr.child = new BushNode(tok);
+                        curr = curr.child;
+                    }
+                    firstChild = false;
+                } else {
+                    // Just another element in the current list
+                    curr.next = new BushNode(tok);
+                    curr.next.prev = curr;
+                    curr = curr.next;
+                }
+            }
+        }
+        // All done with elements.  Pop up to the top level and set the tail.
+        System.out.print("{ ");
+        bush.printBush(bush.head);
+        System.out.println("} ");
+        System.out.println("Flattenning...");
+        Flatten f = new Flatten();
+        f.flatten(bush);
+        f.printFlattenedBush(bush);
+    }
 
 }
 [/code][code]
@@ -167,54 +167,54 @@ public class Bush {
  * Flatten a doubly-linked list with child lists (which I call a Bush).
  */
 public class Flatten {
-	
-	/**
-	 * Traverse the bush; whenever a node has a child, attach the child and 
-	 * its siblings after the parent in the top list.
-	 * 
-	 * This algorithm has the advantage of visiting each node only once, 
-	 * although it requires additional space to accommodate the recursion.
-	 * @param bush The bush to flatten
-	 */
-	public void flatten(Bush bush) {
-		bush.tail = flattenAndFindTail(bush.head);
-	}
-	
-	public BushNode flattenAndFindTail(BushNode node) {
-		BushNode curr = null;
-		BushNode next = node;
-		do {
-			curr = next;
-			if (curr.child != null) {
-				BushNode subTail = flattenAndFindTail(curr.child);
-				subTail.next = curr.next;
-				if (curr.next != null) {
-					curr.next.prev = subTail;
-				}
-				curr.next = curr.child;
-				curr.child.prev = curr;
-				curr = subTail;
-			}
-			// Nothing to flatten here
-			next = curr.next;
-		} while (next != null);
-		return curr;
-	}
-	
-	/**
-	 * Print the Bush, ignoring any children.
-	 * @param bush The bush to print
-	 */
-	public void printFlattenedBush(Bush bush) {
-		BushNode curr = bush.head;
-		System.out.print("_ ");
-		while (curr != null) {
-			System.out.print(curr.value + " ");
-			curr = curr.next;
-		}
-		System.out.println("_");
-	}
-	
+    
+    /**
+     * Traverse the bush; whenever a node has a child, attach the child and 
+     * its siblings after the parent in the top list.
+     * 
+     * This algorithm has the advantage of visiting each node only once, 
+     * although it requires additional space to accommodate the recursion.
+     * @param bush The bush to flatten
+     */
+    public void flatten(Bush bush) {
+        bush.tail = flattenAndFindTail(bush.head);
+    }
+    
+    public BushNode flattenAndFindTail(BushNode node) {
+        BushNode curr = null;
+        BushNode next = node;
+        do {
+            curr = next;
+            if (curr.child != null) {
+                BushNode subTail = flattenAndFindTail(curr.child);
+                subTail.next = curr.next;
+                if (curr.next != null) {
+                    curr.next.prev = subTail;
+                }
+                curr.next = curr.child;
+                curr.child.prev = curr;
+                curr = subTail;
+            }
+            // Nothing to flatten here
+            next = curr.next;
+        } while (next != null);
+        return curr;
+    }
+    
+    /**
+     * Print the Bush, ignoring any children.
+     * @param bush The bush to print
+     */
+    public void printFlattenedBush(Bush bush) {
+        BushNode curr = bush.head;
+        System.out.print("_ ");
+        while (curr != null) {
+            System.out.print(curr.value + " ");
+            curr = curr.next;
+        }
+        System.out.println("_");
+    }
+    
 }
 [/code]<p>
 Pretty swanky, eh?  

@@ -149,21 +149,21 @@ $max = 1;
 
 class timer
 {
-	var $_start;
-	var $_current;
-	function timer()
-	{
-		$this-&gt;_start = array_sum(explode(' ', microtime()));
-	}
-	function tick()
-	{
-		$this-&gt;_current = round((array_sum(explode(' ', microtime()))-$this-&gt;_start)*1000, 0);
-		return $this-&gt;_current;
-	}
-	function reset()
-	{
-		$this-&gt;timer();
-	}
+    var $_start;
+    var $_current;
+    function timer()
+    {
+        $this-&gt;_start = array_sum(explode(' ', microtime()));
+    }
+    function tick()
+    {
+        $this-&gt;_current = round((array_sum(explode(' ', microtime()))-$this-&gt;_start)*1000, 0);
+        return $this-&gt;_current;
+    }
+    function reset()
+    {
+        $this-&gt;timer();
+    }
 }
 
 print &lt;&lt;&lt;EOS
@@ -188,7 +188,7 @@ EOS;
 print('calculating a very long string using only single-quote concatenation...');
 $single_quote_timer = new timer();
 for($i = 0; $i &lt; $numtimes; $i++) {
-	$outstr = 'literal' . $n . $data . $int . $data . $float . $n;
+    $outstr = 'literal' . $n . $data . $int . $data . $float . $n;
 }
 $single_quote_timer = $single_quote_timer-&gt;tick();
 if ($single_quote_timer &gt; $max) { $max = $single_quote_timer; }
@@ -199,7 +199,7 @@ $single_quote_outstr = $outstr;
 print('calculating the same string using a large double-quoted concatenation...');
 $double_quote_timer = new timer();
 for($i = 0; $i &lt; $numtimes; $i++) {
-	$outstr = "literal$n$data$int$data$float$n";
+    $outstr = "literal$n$data$int$data$float$n";
 }
 $double_quote_timer = $double_quote_timer-&gt;tick();
 if ($double_quote_timer &gt; $max) { $max = $double_quote_timer; }
@@ -210,7 +210,7 @@ $double_quote_outstr = $outstr;
 print('calculating the same string using a heredoc...');
 $heredoc_timer = new timer();
 for($i = 0; $i &lt; $numtimes; $i++) {
-	$outstr =&lt;&lt;&lt;EOS
+    $outstr =&lt;&lt;&lt;EOS
 literal$n$data$int$data$float$n
 EOS;
 }
@@ -223,7 +223,7 @@ $heredoc_outstr = $outstr;
 print('calculating the same string using an sprintf()...');
 $sprintf_timer = new timer();
 for($i = 0; $i &lt; $numtimes; $i++) {
-	$outstr = sprintf('literal%s%s%d%s%f%s', $n, $data, $int, $data, $float, $n);
+    $outstr = sprintf('literal%s%s%d%s%f%s', $n, $data, $int, $data, $float, $n);
 }
 $sprintf_timer = $sprintf_timer-&gt;tick();
 if ($sprintf_timer &gt; $max) { $max = $sprintf_timer; }
@@ -234,7 +234,7 @@ $sprintf_outstr = $outstr;
 print('calculating the same string using an sprintf() with positional params...');
 $pos_sprintf_timer = new timer();
 for($i = 0; $i &lt; $numtimes; $i++) {
-	$outstr = sprintf('literal%s%5$s%2$d%3$s%4$f%s', $n, $int, $data, $float, $data, $n);
+    $outstr = sprintf('literal%s%5$s%2$d%3$s%4$f%s', $n, $int, $data, $float, $data, $n);
 }
 $pos_sprintf_timer = $pos_sprintf_timer-&gt;tick();
 if ($pos_sprintf_timer &gt; $max) { $max = $pos_sprintf_timer; }

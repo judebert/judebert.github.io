@@ -84,87 +84,87 @@ package pascalcups;
  *
  */
 public class Attempt1 {
-	public static void main(String args[]) {
-		int row = -1;
-		int cup = -1;
-		double water = -1.0;
-		if (args.length &lt; 3) {
-			usage();
-			System.exit(-1);
-		}
-		try {
-			row = Integer.valueOf(args[0]);
-		} catch (NumberFormatException e) {
-			System.out.println("Error getting row of cup! " + e);
-			usage();
-			System.exit(-2);
-		}
-		try {
-			cup = Integer.valueOf(args[1]);
-		} catch (NumberFormatException e) {
-			System.out.println("Error getting index of cup! " + e);
-			usage();
-			System.exit(-3);
-		}
-		try {
-			water = Float.valueOf(args[2]);
-		} catch (NumberFormatException e) {
-			System.out.println("Error getting amount of water! " + e);
-			usage();
-			System.exit(-4);
-		}
-		if (row &lt; 0 || cup &lt; 0) {
-			System.out.println("Row and cup must be at least 0!");
-			System.exit(-5);
-		}
-		System.out.println("Finding water in cup " + cup + " in row " 
+    public static void main(String args[]) {
+        int row = -1;
+        int cup = -1;
+        double water = -1.0;
+        if (args.length &lt; 3) {
+            usage();
+            System.exit(-1);
+        }
+        try {
+            row = Integer.valueOf(args[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Error getting row of cup! " + e);
+            usage();
+            System.exit(-2);
+        }
+        try {
+            cup = Integer.valueOf(args[1]);
+        } catch (NumberFormatException e) {
+            System.out.println("Error getting index of cup! " + e);
+            usage();
+            System.exit(-3);
+        }
+        try {
+            water = Float.valueOf(args[2]);
+        } catch (NumberFormatException e) {
+            System.out.println("Error getting amount of water! " + e);
+            usage();
+            System.exit(-4);
+        }
+        if (row &lt; 0 || cup &lt; 0) {
+            System.out.println("Row and cup must be at least 0!");
+            System.exit(-5);
+        }
+        System.out.println("Finding water in cup " + cup + " in row " 
                   + row + " from pouring " + water + " cupfuls into top cup...");
-		double through = pouredInto(row, cup, water);
-		System.out.println("" + Math.min(1.0, through));
-	}
-	
-	private static void usage() {
-		System.out.println("This program finds the amount of liquid in a " 
+        double through = pouredInto(row, cup, water);
+        System.out.println("" + Math.min(1.0, through));
+    }
+    
+    private static void usage() {
+        System.out.println("This program finds the amount of liquid in a " 
                   + "particular cup in a pyramid.");
-		System.out.println("You must provide the row and index of the "
+        System.out.println("You must provide the row and index of the "
                   + "cup, as well as the number of ");
-		System.out.println("cupfuls of water poured into the top cup.");
-		System.out.println("We're all programmers here: the top cup is "
+        System.out.println("cupfuls of water poured into the top cup.");
+        System.out.println("We're all programmers here: the top cup is "
                   + "the 0th cup in the 0th row.");
-	}
-	
-	private static double pouredInto(int row, int cup, double total) {
-		double volume = 0.0;
-		// The top cup tries to hold all the water, and spills over
-		if (row == 0 &amp;&amp; cup == 0) {
-			System.out.println("I (0,0) got a total of " + total + " cupfuls.");
-			return total;
-		}
-		// Rather than error, just assume a 'virtual cup' that holds nothing
-		// Note that each row has (row + 1) cups, with (row) the highest index. 
-		if (cup &lt; 0 || cup &gt; row) {
-			return 0.0;
-		}
-		// I get half the overflow of my parents.
-		double overflow = 0.0;
-		double left = pouredInto(row - 1, cup - 1, total);
-		if (left &gt; 1.0) {
-			overflow = (left - 1) / 2;
-			volume += overflow;
-			System.out.println("My left cup (" + (row - 1) + "," 
+    }
+    
+    private static double pouredInto(int row, int cup, double total) {
+        double volume = 0.0;
+        // The top cup tries to hold all the water, and spills over
+        if (row == 0 &amp;&amp; cup == 0) {
+            System.out.println("I (0,0) got a total of " + total + " cupfuls.");
+            return total;
+        }
+        // Rather than error, just assume a 'virtual cup' that holds nothing
+        // Note that each row has (row + 1) cups, with (row) the highest index. 
+        if (cup &lt; 0 || cup &gt; row) {
+            return 0.0;
+        }
+        // I get half the overflow of my parents.
+        double overflow = 0.0;
+        double left = pouredInto(row - 1, cup - 1, total);
+        if (left &gt; 1.0) {
+            overflow = (left - 1) / 2;
+            volume += overflow;
+            System.out.println("My left cup (" + (row - 1) + "," 
                           + (cup - 1) + ") contributed " + overflow + " cupfuls.");
-		}
-		double right = pouredInto(row - 1, cup, total);
-		if (right &gt; 1.0) {
-			overflow = (right - 1) / 2;
-			volume += overflow;
-			System.out.println("My right cup (" + (row - 1) + "," + cup 
+        }
+        double right = pouredInto(row - 1, cup, total);
+        if (right &gt; 1.0) {
+            overflow = (right - 1) / 2;
+            volume += overflow;
+            System.out.println("My right cup (" + (row - 1) + "," + cup 
                           + ") contributed " + overflow + " cupfuls.");
-		}
-		System.out.println("I (" + row + "," + cup + ") got a total of " 
+        }
+        System.out.println("I (" + row + "," + cup + ") got a total of " 
                   + volume + " cupfuls.");
-		return volume;
-	}
+        return volume;
+    }
 }
 [/code]<p>
 Well, that does get me zero storage.  Unless the stack counts -- which it does, so I really ought to remove that useless "total" parameter.  </p><p>

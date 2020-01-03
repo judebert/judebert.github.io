@@ -45,73 +45,73 @@ Well, you debug and live to code another day.
  * Flatten a doubly-linked list with child lists.
  */
 public class FlattenReversibly {
-	
-	/**
-	 * Traverse the bush; whenever a node has a child, attach the child and 
-	 * its siblings after the tail in the top list.
-	 * 
-	 * Although this algorithm visits each of the child nodes twice, it has
-	 * the advantage of being more easily reversible, since each child is 
-	 * tacked on immediately after the preceding child list.  Therefore, 
-	 * the start of a child is the end of the preceding list; just sever
-	 * the link to the previous to know where the list goes.
-	 * @param bush The bush to flatten
-	 */
-	public void flatten(Bush bush) {
-		BushNode curr = bush.head;
-		while (curr != null) {
-			if (curr.child != null) {
-				bush.tail.next = curr.child;
-				curr.child.prev = bush.tail;
-				while (bush.tail.next != null) {
-					bush.tail = bush.tail.next;
-				}
-			}
-			curr = curr.next;
-		}
-	}
-	
-	/**
-	 * Returns a Bush previously flattened by FlattenReversibly.flatten to
-	 * its original state.
-	 * @param bush A Bush that has been flattened.
-	 */
-	public void unflatten(Bush bush) {
-		unflattenNode(bush.head);
-		// The tail has been ALL messed up
-		for (bush.tail = bush.head; 
-				bush.tail.next != null; 
-				bush.tail = bush.tail.next);
-	}
-	public void unflattenNode(BushNode node) {
-		BushNode curr = node;
-		while (curr != null) {
-			if (curr.child != null) {
-				// Break this child off from the previous list
-				curr.child.prev.next = null;
-				curr.child.prev = null;
-				// This contains the actual child list and all lists 
-				// after it.  Break them up appropriately, too.
-				unflattenNode(curr.child);
-			}
-			curr = curr.next;
-		}
-	}
-	
-	/**
-	 * Print the Bush, ignoring any children.
-	 * @param bush The bush to print
-	 */
-	public void printFlattenedBush(Bush bush) {
-		BushNode curr = bush.head;
-		System.out.print("_ ");
-		while (curr != null) {
-			System.out.print(curr.value + " ");
-			curr = curr.next;
-		}
-		System.out.println("_");
-	}
-	
+    
+    /**
+     * Traverse the bush; whenever a node has a child, attach the child and 
+     * its siblings after the tail in the top list.
+     * 
+     * Although this algorithm visits each of the child nodes twice, it has
+     * the advantage of being more easily reversible, since each child is 
+     * tacked on immediately after the preceding child list.  Therefore, 
+     * the start of a child is the end of the preceding list; just sever
+     * the link to the previous to know where the list goes.
+     * @param bush The bush to flatten
+     */
+    public void flatten(Bush bush) {
+        BushNode curr = bush.head;
+        while (curr != null) {
+            if (curr.child != null) {
+                bush.tail.next = curr.child;
+                curr.child.prev = bush.tail;
+                while (bush.tail.next != null) {
+                    bush.tail = bush.tail.next;
+                }
+            }
+            curr = curr.next;
+        }
+    }
+    
+    /**
+     * Returns a Bush previously flattened by FlattenReversibly.flatten to
+     * its original state.
+     * @param bush A Bush that has been flattened.
+     */
+    public void unflatten(Bush bush) {
+        unflattenNode(bush.head);
+        // The tail has been ALL messed up
+        for (bush.tail = bush.head; 
+                bush.tail.next != null; 
+                bush.tail = bush.tail.next);
+    }
+    public void unflattenNode(BushNode node) {
+        BushNode curr = node;
+        while (curr != null) {
+            if (curr.child != null) {
+                // Break this child off from the previous list
+                curr.child.prev.next = null;
+                curr.child.prev = null;
+                // This contains the actual child list and all lists 
+                // after it.  Break them up appropriately, too.
+                unflattenNode(curr.child);
+            }
+            curr = curr.next;
+        }
+    }
+    
+    /**
+     * Print the Bush, ignoring any children.
+     * @param bush The bush to print
+     */
+    public void printFlattenedBush(Bush bush) {
+        BushNode curr = bush.head;
+        System.out.print("_ ");
+        while (curr != null) {
+            System.out.print(curr.value + " ");
+            curr = curr.next;
+        }
+        System.out.println("_");
+    }
+    
 }
 [/code]<p>
 Of course, I updated yesterday's driver code to use the FlattenReversibly class, and to unflatten after it was done printing the flattened Bush.  Everything works as expected.  In the interview, I'll definitely want to pay more attention to edge cases, though.

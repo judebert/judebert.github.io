@@ -26,159 +26,159 @@ comments:
     programmers assigned colours when graphing fractals... until now.  Cheers!
 ---
 <div style="background:url(/progress/media/brotback.gif)">
-	<h1>Fractal Primer</h1>
-	<a name="intro" id="intro"></a>
-	<h2>Introduction</h2>
-	<p>
-	Welcome to Judebert's How to Make a Mandelbrot.  This is a tutorial on how to make fractal
-	images on your computer, including Mandelbrot sets.  I'll show you the math, include some
-	source code fragments, and generally help you along.  I assume you already know a programming 
-	language like C, but I'll refresh you on the math as we go.
-	</p>
+    <h1>Fractal Primer</h1>
+    <a name="intro" id="intro"></a>
+    <h2>Introduction</h2>
+    <p>
+    Welcome to Judebert's How to Make a Mandelbrot.  This is a tutorial on how to make fractal
+    images on your computer, including Mandelbrot sets.  I'll show you the math, include some
+    source code fragments, and generally help you along.  I assume you already know a programming 
+    language like C, but I'll refresh you on the math as we go.
+    </p>
 <p>
-	To understand fractals, you must understand complex numbers.  I've included a quick
-	refresher course.  To avoid boring anyone, you can skip over the stuff you already know,
-	straight to the stuff you're looking for:
-	</p>
+    To understand fractals, you must understand complex numbers.  I've included a quick
+    refresher course.  To avoid boring anyone, you can skip over the stuff you already know,
+    straight to the stuff you're looking for:
+    </p>
 <ul>
-		<li>
+        <li>
 <a href="#assume">Conventions</a>
-		</li>
+        </li>
 <li>
 <a href="#complex">Complex Number Primer</a>
-		</li>
+        </li>
 <li>
 <a href="#plane">The Complex Plane</a> and the magnitude of a complex number
-		</li>
+        </li>
 <li>
 <a href="#formula">The Formula for a Mandelbrot Set</a>
-		</li>
+        </li>
 <li>
 <a href="#other">Suggested Improvements</a>
-		</li>
+        </li>
 <li>
 <a href="#links">Other Fractal Resources</a>
-	</li>
+    </li>
 </ul>
-	<p>
-	<a name="assume" id="assume"></a>
-	</p>
+    <p>
+    <a name="assume" id="assume"></a>
+    </p>
 <h2>Conventions</h2>
-	I don't want to include a lot of graphics, so I've got to set up some conventions.
-	<p>
-	Multiplication will be represented by the asterisk: \*.  For instance, 3 \* 6 = 18.
-	</p>
+    I don't want to include a lot of graphics, so I've got to set up some conventions.
+    <p>
+    Multiplication will be represented by the asterisk: \*.  For instance, 3 \* 6 = 18.
+    </p>
 <p>
-	When I want the square root of a number, I'll write sqrt(), like in C.  For instance, sqrt(4) = 2.
-	</p>
+    When I want the square root of a number, I'll write sqrt(), like in C.  For instance, sqrt(4) = 2.
+    </p>
 <p>
-	When I want the square of a number, I'll write **2.  For instance, 2**2 = 4.  I'll also use this 
-	for other exponents, like cubing: 2**3 = 8.
-	</p>
+    When I want the square of a number, I'll write **2.  For instance, 2**2 = 4.  I'll also use this 
+    for other exponents, like cubing: 2**3 = 8.
+    </p>
 <p>
-	I'll write examples on their own lines, to make them easier to follow.
-	</p>
+    I'll write examples on their own lines, to make them easier to follow.
+    </p>
 <p>
-	<a name="complex" id="complex"></a>
-	</p>
+    <a name="complex" id="complex"></a>
+    </p>
 <h2>Complex Numbers</h2>
-	A complex number is a number including the square root of -1.  If you remember your algebra, you
-	know that any number sqared is positive; therefore no known number squared can result in -1, since
-	it is negative.  Since it doesn't exist, but we have to use it to solve some mathematical problems,
-	we call it "imaginary."  We have to use sqrt(-1) often enough that we've given it a special symbol,
-	based on the fact that it's imaginary: <i>i</i>.
-	<p>
-	Since <i>i</i> is an imaginary number, we couldn't just subtract it from other numbers.  What is 
-	2 - <i>i</i>?  Well, it's not 1.  It's not 3.  It's not any number we could actually 
-	name.  Therefore we just call it (2 - <i>i</i>).  Same thing goes for addition, multiplication, 
-	division, anything.  You might notice that (2 - <i>i</i>) has more two parts: the <i>real</i> part,
-	which is 2, and the <i>imaginary</i> part, which is <i>i</i>.  Since this number contains more parts
-	than a simple number, we call it a "complex" number.
-	</p>
+    A complex number is a number including the square root of -1.  If you remember your algebra, you
+    know that any number sqared is positive; therefore no known number squared can result in -1, since
+    it is negative.  Since it doesn't exist, but we have to use it to solve some mathematical problems,
+    we call it "imaginary."  We have to use sqrt(-1) often enough that we've given it a special symbol,
+    based on the fact that it's imaginary: <i>i</i>.
+    <p>
+    Since <i>i</i> is an imaginary number, we couldn't just subtract it from other numbers.  What is 
+    2 - <i>i</i>?  Well, it's not 1.  It's not 3.  It's not any number we could actually 
+    name.  Therefore we just call it (2 - <i>i</i>).  Same thing goes for addition, multiplication, 
+    division, anything.  You might notice that (2 - <i>i</i>) has more two parts: the <i>real</i> part,
+    which is 2, and the <i>imaginary</i> part, which is <i>i</i>.  Since this number contains more parts
+    than a simple number, we call it a "complex" number.
+    </p>
 <p>
-	Dealing with these numbers is not as difficult as it sounds.  Consider trying to add two complex 
-	numbers.  To complete this mind-bogglingly complex calculation, simply add the parts together.  
-	Like this:</p>
+    Dealing with these numbers is not as difficult as it sounds.  Consider trying to add two complex 
+    numbers.  To complete this mind-bogglingly complex calculation, simply add the parts together.  
+    Like this:</p>
 <pre>
-	(2 + <i>i</i>)
-	+(1 + <i>i</i>)
-	-- --------------
-	(3 + 2<i>i</i>)
+    (2 + <i>i</i>)
+    +(1 + <i>i</i>)
+    -- --------------
+    (3 + 2<i>i</i>)
       </pre>
-	That's all.  This example gives you an glimpse at multiplication, too:  just like for any other
-	number, 2<i>i</i> is the same as <i>i</i> + <i>i</i>.  
-	<p>
-	Note that you can add complex and simple numbers, too.  This is easy because you can think of a 
-	simple number as a complex number with the <i>i</i> set to 0.  For instance, 5 can be thought of as
-	(5 + 0<i>i</i>).  So to add (2 + <i>i</i>) and 5, you could do this:</p>
+    That's all.  This example gives you an glimpse at multiplication, too:  just like for any other
+    number, 2<i>i</i> is the same as <i>i</i> + <i>i</i>.  
+    <p>
+    Note that you can add complex and simple numbers, too.  This is easy because you can think of a 
+    simple number as a complex number with the <i>i</i> set to 0.  For instance, 5 can be thought of as
+    (5 + 0<i>i</i>).  So to add (2 + <i>i</i>) and 5, you could do this:</p>
 <pre>
-	(2 +  <i>i</i>)
-	+(5 + 0<i>i</i>)
-	----------------
-	(7 +  <i>i</i>)
+    (2 +  <i>i</i>)
+    +(5 + 0<i>i</i>)
+    ----------------
+    (7 +  <i>i</i>)
       </pre>
-	<p>
-	Here's another example:</p>
+    <p>
+    Here's another example:</p>
 <pre>
-	(2 + <i>i</i>)
-	+(1 - <i>i</i>)
-	---------------
-	(3 + 0<i>i</i>), which is 3. 
+    (2 + <i>i</i>)
+    +(1 - <i>i</i>)
+    ---------------
+    (3 + 0<i>i</i>), which is 3. 
       </pre>
-	Got it?  Good.  The same thing works for subtraction.
-	<p>
-	Now for multiplication.  As you recall from above, <i>i</i> is sqrt(-1); therefore <i>i</i>**2, or 
-	<i>i</i> squared, is -1.  This is simple, so I'll only say it one more time:  since sqrt(x)**2 (the
-	square root of x, squared) is x, <i>i</i>**2 is sqrt(-1)**2, which is -1.  Thus ends the lesson in
-	definitions and identities.
-	</p>
+    Got it?  Good.  The same thing works for subtraction.
+    <p>
+    Now for multiplication.  As you recall from above, <i>i</i> is sqrt(-1); therefore <i>i</i>**2, or 
+    <i>i</i> squared, is -1.  This is simple, so I'll only say it one more time:  since sqrt(x)**2 (the
+    square root of x, squared) is x, <i>i</i>**2 is sqrt(-1)**2, which is -1.  Thus ends the lesson in
+    definitions and identities.
+    </p>
 <p>
-	The tricky part is multiplying complex numbers.  For instance, what is </p>
+    The tricky part is multiplying complex numbers.  For instance, what is </p>
 <pre>
-	(2 + <i>i</i>) \* (1 + 2<i>i</i>)?
-			</pre>
-	Well, the thing to do here is to remember your algebra.  This is the same thing as <pre>
-	(2 + x) \* (1 + 2x)
+    (2 + <i>i</i>) \* (1 + 2<i>i</i>)?
+            </pre>
+    Well, the thing to do here is to remember your algebra.  This is the same thing as <pre>
+    (2 + x) \* (1 + 2x)
       </pre>
   which you can multiply with the FOIL method.  Certainly you remember FOIL.  FOIL stands for First, 
   Outer, Inner, Last -- the way you multiply polynomials.  In this case: <pre>
-	(2 + x) \* (1 + 2x)
-	The First terms are 2 and 1.             2 \* 1  =  2.
-	The Outer terms are 2 (again) and 2x.    2 \* 2x = 4x.  
-	The Inner terms are x and 1.             x \* 1  =  x.
-	The Last  terms are x and 2x.            x \* 2x = 2x**2.
-			</pre>
+    (2 + x) \* (1 + 2x)
+    The First terms are 2 and 1.             2 \* 1  =  2.
+    The Outer terms are 2 (again) and 2x.    2 \* 2x = 4x.  
+    The Inner terms are x and 1.             x \* 1  =  x.
+    The Last  terms are x and 2x.            x \* 2x = 2x**2.
+            </pre>
   So we wind up with 2 + 4x + x + 2x**2, which when added together make 2 + 5x + 2x**2.  Curses,
   FOILed again!  :)
-	<p>
+    <p>
   Well, the original question was about multiplying two complex numbers; so we substitute <i>i</i>
   for the x and get 2 + 5<i>i</i> + 2<i>i</i>**2.  And, as you recall from the start of the
   discussion, <i>i</i>**2 is -1, so the 2<i>i</i>**2 is best written as -2.  That changes the 
   polynomial a bit, to 2 + 5<i>i</i> + (-2), which is 0 + 5<i>i</i>, or just 5<i>i</i>, if you like.
-	</p>
+    </p>
 <p>
   If you got lost, go back and read it again.  This is important to the whole idea of fractals.
-	</p>
+    </p>
 <p>
   <a name="squarei" id="squarei"></a>
   One last note before moving on:  there's a simpler way to see the outcome when you square a
   polynomial.  Here it is, using no numbers, all letters:</p>
 <pre>
-	(a + bx) \* (a + bx)
-	The First terms are a and a.             a \* a  = a**2
-	The Outer terms are a (again) and bx.    a \* bx = abx.
-	The Inner terms are bx and a.            bx \* a = abx.
-	The Last  terms are bx and bx.           bx \* bx = (b**2)(x**2)
+    (a + bx) \* (a + bx)
+    The First terms are a and a.             a \* a  = a**2
+    The Outer terms are a (again) and bx.    a \* bx = abx.
+    The Inner terms are bx and a.            bx \* a = abx.
+    The Last  terms are bx and bx.           bx \* bx = (b**2)(x**2)
       </pre>
   So we wind up with a**2 + 2abx + (b**2)(x**2).  With complex numbers, that x is actually <i>i</i>, so 
   (x**2) is going to be (<i>i</i>**2), which is -1 (as you recall), so we <em>actually</em> wind up with
   a**2 + 2ab<i>i</i> - b**2.  It's best to write this with the real numbers on the left, and the 
   imaginary numbers on the right, just like a complex number.  The final formula is:
-	<p>
+    <p>
   (a + b<i>i</i>)**2 = a**2 - b**2 + 2ab<i>i</i>.
-	</p>
+    </p>
 
-	<a name="plane" id="plane"></a>
+    <a name="plane" id="plane"></a>
   <h2>The Complex Plane</h2>
   The Mandelbrot uses a complex plane; all fractals do.  
   <img width="100" height="100" src="/progress/media/axis.gif" alt="A Number Plane" align="right" />   
@@ -191,7 +191,7 @@ comments:
   That makes it easy to place complex numbers on the plane.  For instance, (2 - <i>i</i>) could be
   drawn as a point at (2, -1).  (-2 + 3<i>i</i>) could be drawn as a point at (-2, 3).  This is going
   to come in handy in just a moment.
-	</p>
+    </p>
 <p>
   <img width="100" height="100" src="/progress/media/magnitude.gif" alt="Magnitude of a Complex Number" align="right" />
   Finally, the last idea about complex numbers and the complex plane you need to know: <b>magnitude</b>.
@@ -200,10 +200,10 @@ comments:
   which lies at (3, 4) on the complex plane, has a magnitude of: </p>
 <pre>
 
-	3**2 + 4**2 = magnitude**2
-	9 + 16 = magnitude**2
-	25 = magnitude**2
-	5 = magnitude
+    3**2 + 4**2 = magnitude**2
+    9 + 16 = magnitude**2
+    25 = magnitude**2
+    5 = magnitude
   </pre> for a magnitude of 5.  
   
 
@@ -213,67 +213,67 @@ comments:
   Benoit Mandelbrot noticed that if you square the number, then add it on to your figure, and kept
   doing that forever, the number will either become infinitely large or it will tend to go towards
   0.  The formula looks like this:<pre>
-	z = z**2 + c
-	or more computerish
-	z = last_z**2 + c.
+    z = z**2 + c
+    or more computerish
+    z = last_z**2 + c.
       </pre>
   Consider (2, 0) for example.  We start z and last_z at 0, and set c to (2 + 0<i>i</i>).  Then:<pre>
-	0: last_z**2 + c = 
-	0**2 + (2 + 0<i>i</i>), which is 
-	(2 + 0<i>i</i>).  
-	</pre>So now we set last_z to (2 + 0<i>i</i>) and try again.  I'll use the <a href="#squarei">simple 
+    0: last_z**2 + c = 
+    0**2 + (2 + 0<i>i</i>), which is 
+    (2 + 0<i>i</i>).  
+    </pre>So now we set last_z to (2 + 0<i>i</i>) and try again.  I'll use the <a href="#squarei">simple 
       formula for squaring complex numbers</a> that we developed above:<pre>
 
-	1: last_z**2 + c =
-	(2 + 0<i>i</i>)**2 + c = 
-	(4 - 0 + 0<i>i</i>) + c = 
-	(4 + 0<i>i</i>) + (2 + 0<i>i</i>) = 
-	(6 + 0<i>i</i>). 
+    1: last_z**2 + c =
+    (2 + 0<i>i</i>)**2 + c = 
+    (4 - 0 + 0<i>i</i>) + c = 
+    (4 + 0<i>i</i>) + (2 + 0<i>i</i>) = 
+    (6 + 0<i>i</i>). 
       </pre> So now we set last_z to 6 and try again.  
-	It's easy to see that this is going to get really big really fast, so let's just leave it here and
-	say that it's going to become infinitely large.
-	<p>
-	That was the easy example.  For a harder one, consider (0, -1).  We start z and last z at
-	0, then set c to (0 - <i>i</i>).  Then: </p>
+    It's easy to see that this is going to get really big really fast, so let's just leave it here and
+    say that it's going to become infinitely large.
+    <p>
+    That was the easy example.  For a harder one, consider (0, -1).  We start z and last z at
+    0, then set c to (0 - <i>i</i>).  Then: </p>
 <pre>
 
-	0: last_z**2 + c =
-	0**2 + (0 - <i>i</i>) = 
-	(0 - <i>i</i>).
+    0: last_z**2 + c =
+    0**2 + (0 - <i>i</i>) = 
+    (0 - <i>i</i>).
       </pre>In the future, you advanced mathematicians can just start with last_z = c, since that's 
-	the way it's always going to work out.  Next step! Set last_z to (0 - <i>i</i>) and do it again: <pre>
-	1: last_z**2 + c = 
-	(0 - <i>i</i>)**2 + c =
-	(0 - 1 + 0<i>i</i>) + c =
-	(-1 + 0<i>i</i>) + c =
-	(-1 + 0<i>i</i>) + (0 - <i>i</i>) =
-	(-1 - <i>i</i>)
-	</pre>So far so good.  Let's try another iteration.  Set last_z to (-1 - <i>i</i>) and: <pre>
+    the way it's always going to work out.  Next step! Set last_z to (0 - <i>i</i>) and do it again: <pre>
+    1: last_z**2 + c = 
+    (0 - <i>i</i>)**2 + c =
+    (0 - 1 + 0<i>i</i>) + c =
+    (-1 + 0<i>i</i>) + c =
+    (-1 + 0<i>i</i>) + (0 - <i>i</i>) =
+    (-1 - <i>i</i>)
+    </pre>So far so good.  Let's try another iteration.  Set last_z to (-1 - <i>i</i>) and: <pre>
 
-	2: last_z**2 + c =
-	(-1 - <i>i</i>)**2 + c =
-	(1 - 1 + 2<i>i</i>) + c = 
-	(0 + 2<i>i</i>) + c = 
-	(0 + 2<i>i</i>) + (0 - <i>i</i>) =
-	(0 + <i>i</i>)
+    2: last_z**2 + c =
+    (-1 - <i>i</i>)**2 + c =
+    (1 - 1 + 2<i>i</i>) + c = 
+    (0 + 2<i>i</i>) + c = 
+    (0 + 2<i>i</i>) + (0 - <i>i</i>) =
+    (0 + <i>i</i>)
       </pre>Still no guess.  We can't tell what's going to happen yet.  I'll skip the math examples and
-	just let you know what the next few iterations will give us:<pre>
-	3: (-1 - <i>i</i>)
-	4: ( 0 + <i>i</i>)
-	5: (-1 - <i>i</i>)
-	6: ( 0 + <i>i</i>)
-	7: (-1 - <i>i</i>)
+    just let you know what the next few iterations will give us:<pre>
+    3: (-1 - <i>i</i>)
+    4: ( 0 + <i>i</i>)
+    5: (-1 - <i>i</i>)
+    6: ( 0 + <i>i</i>)
+    7: (-1 - <i>i</i>)
       </pre> Anyone see a pattern developing?  This is going to keep up all day.  As we iterate infinite
   times, this number goes towards 0.
-	<p>
+    <p>
   Obviously it's nice to have a computer to do all this figuring for us.  I'll leave the programming
   to you; come up with a nice representation of complex numbers and use it.  Or get a fractal program
   that already does this stuff for you.
-	</p>
+    </p>
 <p>
   For these examples, we could tell intuitively whether they would become infinitely large.  But
   the computer will need some rules.  How can the computer tell if we're going infinite?
-	</p>
+    </p>
 <p>
   Some lucky mathematician already solved this problem for us.  He proved that if the magnitude of
   a complex number was greater than 2, then it would go to infinity when used in Mandelbrot's 
@@ -282,7 +282,7 @@ comments:
   just as we suspected.  (Another note for the advanced mathematicians:  why bother to take the
   square root?  You get the square of the magnitude along the way; just check to see if its greater
   than 4.)
-	</p>
+    </p>
 <p>
   <img width="133" height="100" src="/progress/media/mand1.gif" alt="black and white Mandelbrot example" align="left" />
   This is where the pretty picture comes in.  We can see the Mandelbrot set will never go farther up,
@@ -290,21 +290,21 @@ comments:
   than 2.  So we start at (-2, 2) and work pixel-by-pixel towards
   (2, -2).  If the number goes to infinity (magnitude &gt; 2) we draw a point there and move on.  If it
   doesn't, we draw a black point (or don't draw the point at all) and move on.
-	</p>
+    </p>
 <p>
   Wait... what about the ones that don't go to infinity?
-	</p>
+    </p>
 <p>
   Their magnitude never goes over 2, so if we only check for numbers getting too big 
   we'll be stuck working complex
   multiplication all day.  Computers are fast, but an endless loop is still an endless loop.  You'll
   never get to infinity, no matter how fast you run.
-	</p>
+    </p>
 <p>
   So we'd better limit how long we're willing to work this problem.  If after, say, 100 calculations
   your number <i>still</i> hasn't reached a magnitude of 2, we'll guess that it's on its way to 0 and
   draw it black.
-	</p>
+    </p>
 <p>
   This also gives us a nice way to add color to our picture.  
   <img width="200" height="150" src="/progress/media/mand2.gif" alt="color Mandelbrot example" align="right" />
@@ -314,41 +314,41 @@ comments:
   faster pixels could be closer to white (or blue, or whatever) while the slower ones get darker and
   darker.  (Actually it looks better the other way, with faster pixels dark and slower pixels bright,
   but who cares?  Color it however you like it.)  The pixels that never escape we color black.
-	</p>
+    </p>
 <p>
   That gives you the classic Mandelbrot, right there on your screen.  Cool, huh?
-	</p>
+    </p>
 
   <a name="other" id="other"></a>
   <h2>Anything else?</h2>
   There are a few things you should be careful about if you intend to take this any farther.
-	<p>
+    <p>
   We've been working with integers; the Mandelbrot set we draw works with real numbers.  Like
   (1.5768293 + 0.2836589<i>i</i>).  Computers are great, aren't they?  If you're drawing from (-2, 2)
   to (2, -2), then your number plane is 4.0 across.  If you've got 640 pixels accross the screen,
   then you want to start at -2.0 and add (4.0 / 640) = 0.00625 each time until you get to 2.  Get the
   idea?  That's how all these examples were drawn.
-	</p>
+    </p>
 <p>
   Why just draw from (-2, 2) to (2, -2)?  That shows you the whole set.  It's pretty, but... there
   are more interesting things farther down.  Try drawing from (-0.5, 2) to (0.5, 1.0).  Or other
   places.  Just be careful: some of those places that look black aren't really black.  They're pixels
-	that would have gone to infinity if we waited longer (they're escaping <em>really</em> slowly).  
-	Try 150, 1000, 1500, 10000 iterations.  It'll
+    that would have gone to infinity if we waited longer (they're escaping <em>really</em> slowly).  
+    Try 150, 1000, 1500, 10000 iterations.  It'll
   take longer, but you'll get to see more of the Mandelbrot set, and in better detail, too.
-	</p>
+    </p>
 <p>
   If you try more iterations than you have colors, you could run into trouble.  For instance, if you
   have a table of 256 colors, and you find a pixel that escapes after 300 iterations, what color do
   you paint it?  Maybe you should try to map the iterations into a colormap differently.  You could
   spread the iterations through the color bands.  Or find a way to map into 24 bit color.
-	</p>
+    </p>
 <p>
   While we're on the subject, why use the iterations to color the pixels?  I only mentioned it because
   it's simple and easy.  You could use the magnitude of the pixel when it escaped as its color.  Or you 
   could use the iteration as the red component, the magnitude as the blue component, and the start 
   number as the green.  What the hell; it can't be worse than some of the stuff I've tried.
-	</p>
+    </p>
 <p>
   <a href="/progress/media/bigjulia.gif"><img width="200" height="150" src="/progress/media/julia.gif" alt="Julia picture" align="left" /></a>
   <b>Julia sets</b>.  A Julia set has the same formula as the Mandelbrot set.  The only difference is
@@ -369,5 +369,5 @@ comments:
   <p>
   Have fun!  Can't wait to see what you come up with!<br />
   <a href="#index">Back to the Top</a>
-	</p>
+    </p>
 </div>
