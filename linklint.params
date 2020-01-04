@@ -1,1 +1,6 @@
--http -host localhost:4000 -limit 10000 -doc /tmp/linklint -htmlonly /@
+-http
+-host localhost:4000
+-limit 10000
+-doc /tmp/linklint
+-htmlonly
+/@

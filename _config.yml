@@ -6,7 +6,7 @@ header_pages:
   - {title: Contraction Timer, url: /progress/palm/ctimer/ctimer.html}
   - {title: About Judebert, url: /progress/about.html}
 paginate: 5
-paginate_path: "/progress/archives/P:num"
+paginate_path: "/progress/archives/P:num/"
 excerpt_separator: ''
 exclude: 
   - judebert_progress.sql
