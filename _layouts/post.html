@@ -20,18 +20,77 @@ layout: default
   </div>
 
   <div class="post-footer">
+    &lt;/post&gt;
+    {%- assign trackbacks = 0 -%}
+    {%- assign humanComments = 0 -%}
+    {%- if page.comments and page.comments.size > 0 -%}
+    {%- for comment in page.comments -%}
+      {%- if comment.author_url contains "judebert.com" and
+             comment.author_url contains "/progress/" and
+             comment.author_url contains ".html" -%}
+        {%- assign trackbacks = trackbacks | plus: 1 -%}
+      {%- else -%}
+        {%- assign humanComments = humanComments | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- endif -%}
+
+    <div class="post-comments">
+      <div><a id="comments">&nbsp;</a></div>
+    {%- if humanComments > 0 -%}
+      Legacy comments:
+    {%- endif -%}
+    {%- for comment in page.comments -%}
+      {%- if comment.author_url contains "judebert.com" and
+             comment.author_url contains "/progress/" and
+             comment.author_url contains ".html" -%}
+        <!-- Trackback filtered -->
+      {%- else -%}
+      <div class="comment">
+        <div class="author">
+          {%- if comment.author_url and comment.author_url != '' -%}
+          <a href="{{comment.author_url}}">{{ comment.author }}</a>
+          {%- else -%}
+          {{ comment.author }}
+          {%- endif -%}
+        </div>
+        <div class="comment-content">{{ comment.content }}</div>
+      </div>
+      {%- endif -%}
+    {%- endfor -%}
+
     {%- if site.disqus.shortname -%}
       {%- include disqus_comments.html -%}
     {%- endif -%}
+    </div>
+
+    <div>Related posts:</div>
+    <nav class="trackbacks">
+      <div class="related-title">
+          Related by Mention
+      </div>
+      {%- if trackbacks == 0 -%}
+        Not mentioned in other posts.
+      {%- else -%}
+        <ul class="comment trackback">
+        {%- for comment in page.comments -%}
+          {%- if comment.author_url contains "judebert.com" and
+                 comment.author_url contains "/progress/" and
+                 comment.author_url contains ".html" -%}
+          <li><a href="{{ comment.author_url }}">{{ comment.author_url }}</a></li>
+          {%- endif -%}
+        {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </nav>
 
     <nav class="post-categories">
       <div class="related-title">
+        Related by Categories
+      </div>
       {%- if page.categories == false or page.categories.size == 0 -%}
-        This page has not been categorized.
-      </div>
+        No posts in related categories.
       {%- else -%}
-        Related posts by categories
-      </div>
         {%- for cat in page.categories -%}
           {%- assign prevpost = nil -%}
           {%- assign nextpost = nil -%}
@@ -63,14 +122,14 @@ layout: default
         {%- endfor -%}
       {%- endif -%}
     </nav>
+
     <nav class="post-tags">
       <div class="related-title">
+        Related by Tags
+      </div>
       {%- if page.tags == false or page.tags.size == 0 -%}
-        This post has not been tagged.
-      </div>
+        No posts with related tags.
       {%- else -%}
-        Related posts by tags
-      </div>
         {%- for tag in page.tags -%}
           {%- assign prevpost = nil -%}
           {%- assign nextpost = nil -%}
