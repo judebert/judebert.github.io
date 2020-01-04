@@ -40,12 +40,14 @@ hierarchy      ['Roshambo'] = []
 hierarchy  ['Stories'] = []
 hierarchy  ['The Attic'] = []
 hierarchy  ['Tutorials'] = []
+
 def normalize_tags(tag):
   result = []
   for key in hierarchy[tag]:
     result.extend(normalize_tags(key))
   result.insert(0, tag)
   return result
+
 category_tags = {}
 for key in hierarchy:
   category_tags[key] = ', '.join(normalize_tags(key))
@@ -53,14 +55,18 @@ for key in hierarchy:
 filenames = glob.glob(post_dir + '*html')
 
 all_post_categories = []
-for filename in filenames:
-    f = open(filename, 'r')
-    docs = yaml.safe_load_all(f)
-    post_data = next(docs)
-    file_categories = post_data['categories']
-    all_post_categories.extend(file_categories)
-    f.close()
-all_post_categories = set(all_post_categories)
+# Add all categories, even if they're empty
+for key in hierarchy:
+    all_post_categories.append(key)
+# Add all the categories in all the posts
+#for filename in filenames:
+#    f = open(filename, 'r')
+#    docs = yaml.safe_load_all(f)
+#    post_data = next(docs)
+#    file_categories = post_data['categories']
+#    all_post_categories.extend(file_categories)
+#    f.close()
+#all_post_categories = set(all_post_categories)
 
 old_category_files = glob.glob(category_dir + '*.md')
 for category_file in old_category_files:
