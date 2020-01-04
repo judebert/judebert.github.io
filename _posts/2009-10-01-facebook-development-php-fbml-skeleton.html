@@ -41,38 +41,42 @@ Then there's the additional problem of users who don't allow you to see their us
 I put together a skeleton that takes care of all these issues for FBML pages (I don't think it'll work for iFrame pages).  Read on for the code.
 </p><a id="extended"></a><p>First, we need to include some variables.  For instance, you'll need to know your Facebook app id, API key, and secret.  (I call these $fbappid, $fbapikey, and $fbsecret, respectively.)  I keep these in a separate file, which I name config.inc.php.  It looks like this:
 </p>
-[code]// Facebook stuff
+{% highlight php %}
+// Facebook stuff
 $fbappid = '<the app="" id="">';
 $fbcanvas = '<url of="" the="" app="" canvas="" page="">';
 $fbapikey = '<the app="" api="" key="">';
 $fbsecret = '<the app="" secret="">';
-[/code]
+{% endhighlight %}
 <p>You'll fill out your app's data, of course, which you can find in it's Developer profile.  Include the data in the main program with a simple require statement:
 </p>
-[code]require_once('config.inc.php');
-[/code]
+{% highlight php %}
+require_once('config.inc.php');
+{% endhighlight %}
 <p>Now we start checking for weird cases.  For instance, some joker might examine the code and figure out where you keep your server.  And then he'll visit you directly.  Hence, this bit of code:
 </p>
-[code]// Anyone who visits my server directly gets redirected to my FB profile page
+{% highlight php %}
+// Anyone who visits my server directly gets redirected to my FB profile page
 if (!isset($_SERVER['HTTP_X_FB_USER_REMOTE_ADDR'])) {
     $app_profile = "http://www.facebook.com/apps/application.php?id=$fbappid";
     header('Location: ' . $app_profile);
     http_redirect($app_profile);
     exit;
 }
-[/code]
+{% endhighlight %}
 <p>If the user has created a bookmark for your app, he might visit while he's not logged in to Facebook.  That'll never do!  We'd better check for that, which Facebook indicates by setting 'fb_sig_logged_out_facebook' in the GET or POST variables:
 </p>
-[code]
+{% highlight php %}
 // Logged-out users get a nice error message
 if (isset($_REQUEST['fb_sig_logged_out_facebook'])) {
     echo "<error message="You must log in!">Please log in above to use <application-name></application-name></error>";
     exit;
 }
-[/code]
+{% endhighlight %}
 <p>Having covered the instant-failure cases, we can move on to the complicated cases.  For these, we'll have to create a Facebook object and try to retrieve the user's ID.  The user might be just visiting the canvas page, in which case we'd like to give him a preview of the app, with all the functionality we can provide.  Alternatively, he might be a "logged in" user: a user who has given us additional permissions, and who can therefore access all our app's features.  You call get_canvas_user() to get the ID for the casual user, and get_logged_in_user() for the full user:
 </p>
-[code]require_once 'facebook.php';
+{% highlight php %}
+require_once 'facebook.php';
 $facebook = new Facebook($fbapikey, $fbsecret);
 
 // Find Facebook user ID
@@ -83,11 +87,12 @@ if (empty($user_id)) {
     // Is this an authorized user?
     $user_id = $facebook-&gt;get_loggedin_user();
 }
-[/code]
+{% endhighlight %}
 <p>
 Unfortunately, this doesn't cover <b>quite</b> all the possibilities.  If the user came from a non-Facebook page, the user ID won't be set at all, and we'll need him to click a link to get within the Facebook structure.  If the user's privacy settings are restrictively high, the ID won't be set either, and he'll need to allow us to access his data.  But how can we tell the difference?  Easy: if he came from a Facebook page, '_fb_fromhash' is set.
 </p>
-[code]if (empty($user_id)) {
+{% highlight php %}
+if (empty($user_id)) {
     // We're on the canvas page, it should be Facebook framed.  
     // Make certain.  Could redirect us.
     $facebook-&gt;require_frame();  
@@ -107,10 +112,10 @@ Unfortunately, this doesn't cover <b>quite</b> all the possibilities.  If the us
         exit;
     }
 }
-[/code]
+{% endhighlight %}
 <p>
 Once we've gotten pas this point, we're guaranteed to have a valid user ID in the $user_id variable.  We can carry on with the actual application.  We might want to save the user ID for later.
 </p>
 <p>
 Put it all together, and you get a nice skeleton for an FBML Facebook app.  I'm using this skeleton with my first Facebook app, which I hope to release soon.
-</p></appname></the></the></url></the>
+</p>
