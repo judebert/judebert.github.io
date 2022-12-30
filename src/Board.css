@@ -1,0 +1,6 @@
+.Board {
+    display: grid;
+    width: 90vmin;
+    aspect-ratio: 1/1;
+    gap: 2px;
+}

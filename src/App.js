@@ -1,25 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import Board from './Board.js';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    state = {
+        size: 9,
+        history: [Array(9 * 9).fill(null)],
+        step: 0,
+        icons: [0, 1],
+    };
+    render() {
+        let current = this.state.history[this.state.step].slice();
+        return (
+            <div className="App">
+              <header className="App-header">
+                Ringer
+              </header>
+              <section className="App-content">
+                <Board size={this.state.size} cells={current} icons={this.state.icons}/>
+              </section>
+            </div>
+        );
+    };
 }
 
 export default App;
