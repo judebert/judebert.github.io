@@ -11,7 +11,11 @@ class Board extends React.Component {
         for (var y = 0; y < this.props.size; y++) {
             for (var x = 0; x < this.props.size; x++) {
                 let index = y * this.props.size + x;
-                cells.push(<Cell coords={[x, y]} icons={this.props.icons} value={this.props.cells[index]}/>);
+                cells.push(<Cell coords={[x, y]}
+                    icons={this.props.icons}
+                    value={this.props.cells[index]}
+                    onClick={(x, y) => this.props.onClick(x, y)}
+                />);
             }
         }
 
