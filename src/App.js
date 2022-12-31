@@ -7,7 +7,8 @@ class App extends React.Component {
         size: 9,
         history: [Array(9 * 9).fill(0)],
         step: 0,
-        icons: [' ', '😡', '😠', '😟'],
+        icons: 'ringer-monochrome',
+        depth: 2,
     };
 
     // Increment all the cells in a ring around (x, y)
@@ -25,7 +26,7 @@ class App extends React.Component {
             const ringX = (x + dx + size) % size;
             const ringY = (y + dy + size) % size;
             const index = ringY * size + ringX;
-            current[index] = (current[index] + 1) % this.state.icons.length;
+            current[index] = (current[index] + 1) % this.state.depth;
         }
         history.push(current);
         this.setState({
