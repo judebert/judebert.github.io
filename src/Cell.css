@@ -1,3 +1,4 @@
 .Cell {
+    -webkit-appearance: none;
     font-size: 100%;
 }
