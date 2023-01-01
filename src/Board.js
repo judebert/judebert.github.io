@@ -7,11 +7,13 @@ import './Board.css';
 // when it's NOT square. I wind up with a giant gutter in one dimension.
 class Board extends React.Component {
     render() {
+        let size = this.props.size;
         let cells = [];
-        for (var y = 0; y < this.props.size; y++) {
-            for (var x = 0; x < this.props.size; x++) {
-                let index = y * this.props.size + x;
+        for (var y = 0; y < size; y++) {
+            for (var x = 0; x < size; x++) {
+                let index = y * size + x;
                 cells.push(<Cell coords={[x, y]}
+                    key={`board${size}x${size}-${x}-${y}`}
                     icons={this.props.icons}
                     value={this.props.cells[index]}
                     onClick={(x, y) => this.props.onClick(x, y)}

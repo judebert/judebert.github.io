@@ -1,0 +1,18 @@
+.BoardPrefs {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.DemoCells {
+    height: 1em;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1em;
+    grid-template-columns: repeat(5, 1em);
+    justify-content: center;
+}
+
+.BoardPrefs label {
+    padding-right: 0.5em;
+}
