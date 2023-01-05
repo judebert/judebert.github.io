@@ -8,43 +8,65 @@
     -webkit-appearance: none;
     padding: 0;
     font-size: 100%;
-    background-size: 100%;
     margin: var(--cell-gap);
+    position: relative;
+    border: solid 2px white;
 }
 
-.Cell-step-0 {
+/* Stacking context gets created when the cell is transformed.
+ * Moving all display to the ::after element, to maintain a bottom/glow and top/image
+ * display during transforms like wiggle or flip.
+ */
+.Cell::after, .Cell::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    z-index: 1;
+}
+
+.Cell-step-0, .Cell-step-2, .Cell-step-4 {
+    animation: flip 0.3s linear;
+}
+
+.Cell-step-1, .Cell-step-3 {
+    animation: flipback 0.3s linear;
+}
+
+.Cell-step-0::after {
     background-position: 0 0;
 }
 
-.Cell-step-1 {
+.Cell-step-1::after {
     background-position: 0 -100%;
 }
 
-.Cell-step-2 {
+.Cell-step-2::after {
     background-position: 0 -200%;
 }
 
-.Cell-step-3 {
+.Cell-step-3::after {
     background-position: 0 -300%;
 }
 
-.Cell-step-4 {
+.Cell-step-4::after {
     background-position: 0 -400%;
 }
 
-.icons-ringer-emojis {
+.icons-ringer-emojis::after {
     background-image: url("/public/ringer-emojis.png");
 }
 
-.icons-ringer-monochrome {
+.icons-ringer-monochrome::after {
     background-image: url("/public/ringer-monochrome.png");
 }
 
-/* If this doesn't work, consider using outline-color instead */
-.Cell-hint::before, .Cell-undo::before {
-    content: '';
-    display: block;
-    position: relative;
+/* If this doesn't work on any platform, consider using outline-color instead */
+.Cell::before {
     left: calc(-1 * var(--cell-underside-offset));
     top: calc(-1 * var(--cell-underside-offset));
     width: calc(100% + 2 * var(--cell-underside-offset));
@@ -58,7 +80,19 @@
 }
 
 .Cell-undo::before {
-    background: radial-gradient(#ddd, #ddd 30%, #111 50%, #111) center center;
+    background: repeating-radial-gradient(#ddd, #ddd 10%, #111 20%) center center;
+    opacity: 0.7;
+    animation: none;
+}
+
+.Cell-undo-1::before {
+    background: repeating-radial-gradient(#ddd, #ddd 10%, #111 20%) center center;
+    animation: none;
+}
+
+.Cell-hint.Cell-undo::before, .Cell-hint.Cell-undo-1::before {
+    background: radial-gradient(#ff0102, #ffabff 30%, #010615 50%, #010615) center center;
+    animation: flow 2s linear infinite;
 }
 
 @keyframes flow {
@@ -70,5 +104,47 @@
     }
     100% {
         background-size: 100% 100%;
+    }
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotate(0deg);
+    }
+    5% {
+        transform: rotate(5deg);
+    }
+    10% {
+        transform: rotate(-5deg);
+    }
+    15% {
+        transform: rotate(5deg);
+    }
+    20% {
+        transform: rotate(-5deg);
+    }
+    25% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(180deg);
+    }
+}
+
+@keyframes flipback {
+    0% {
+        transform: rotateY(180deg);
+    }
+    100% {
+        transform: rotateY(0deg);
     }
 }

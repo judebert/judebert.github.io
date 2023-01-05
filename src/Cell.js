@@ -5,11 +5,14 @@ import './Cell.css';
 class Cell extends React.Component {
     render() {
         let classes = [`Cell`,  `Cell-step-${this.props.value}`, `icons-${this.props.icons}`];
-        // Can only be a hint or an undo/redo, not both
+        // Can't be both a hint and a redo
         if (this.props.hint > 0) {
             classes.push(`Cell-hint`);
         } else if (this.props.future > 0) {
-            classes.push(`Cell-undo`);
+            classes.push(this.props.future === 1 ? `Cell-redo-1` : `Cell-redo`);
+        }
+        if (this.props.past > 0) {
+            classes.push(this.props.past === 1 ? `Cell-undo-1` : `Cell-undo`);
         }
         let classNames = classes.join(' ');
         return (

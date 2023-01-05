@@ -12,6 +12,7 @@ class App extends React.Component {
         icons: 'ringer-monochrome',
         depth: 2,
         revealHints: false,
+        solved: true,
         next: {
             size: 9,
             icons: 'ringer-monochrome',
@@ -21,14 +22,17 @@ class App extends React.Component {
     };
 
     newGame() {
+        let start = this.shuffle(this.state.next.shuffles, this.state.next.size, this.state.next.depth);
+        let solved = this.solves(start, this.state.next.size, this.state.next.depth);
         this.setState({
             size: this.state.next.size,
             icons: this.state.next.icons,
             depth: this.state.next.depth,
-            start: this.shuffle(this.state.next.shuffles, this.state.next.size, this.state.next.depth),
+            start: start,
             history: [],
             revealHints: false,
             step: 0,
+            solved: solved,
         });
     }
 
@@ -40,7 +44,7 @@ class App extends React.Component {
 
     handleHints() {
         this.setState({
-            revealHints: true,
+            revealHints: !this.state.revealHints,
         });
     }
 
@@ -50,8 +54,11 @@ class App extends React.Component {
         let step = this.state.step;
         let start = this.state.start;
         let history = this.state.history.slice(0, step + 1);
+        let past = this.orderFrom(history, size, 'forward');
+        let future = this.orderFrom(this.state.history.slice(step), size, 'reverse');
         let grid = this.gridFrom(start.concat(history), size, depth);
-        let hints = this.state.revealHints ? this.hintsFrom(start.concat(history), size, depth) : [];
+        let hints = this.state.revealHints ? this.depthFrom(start.concat(history), size, depth) : [];
+        let revealButtonText = this.state.revealHints ? 'Hide solution' : 'Reveal solution';
         return (
             <div className="App">
               <header className="App-header">
@@ -63,7 +70,7 @@ class App extends React.Component {
                 <div className="BoardButtons">
                     <button className="NewBoard"
                         onClick={() => this.newGame()}>New Board!</button>
-                    <button className="Hints" onClick={() => this.handleHints()}>Reveal solution</button>
+                    <button className="Hints" onClick={() => this.handleHints()}>{revealButtonText}</button>
                 </div>
               </header>
               <section className="App-content">
@@ -71,6 +78,8 @@ class App extends React.Component {
                   cells={grid}
                   icons={this.state.icons}
                   hints={hints}
+                  past={past}
+                  future={future}
                   onClick={(x, y) => this.makeMove(x, y)}
                 />
               </section>
@@ -84,8 +93,12 @@ class App extends React.Component {
         this.setState({
             history: history,
             step: step,
+            solved: this.solves(this.state.start.concat(history), this.state.size, this.state.depth),
         });
     }
+
+    // TODO: Pull these into a BoardLogic class or something
+    // They're not UI, they're logic.
 
     // Increment all the cells in a ring around (x, y) *mutating* the given grid
     // assuming the grid is of size and depth
@@ -118,6 +131,11 @@ class App extends React.Component {
         return moves;
     }
 
+    solves(moves, size, depth) {
+        let grid = this.gridFrom(moves, size, depth);
+        return grid.every((cell) => cell === cell[0]);
+    }
+
     gridFrom(moves, size, depth) {
         let grid = new Array(size * size).fill(0);
         for (var [x, y] of moves) {
@@ -126,14 +144,24 @@ class App extends React.Component {
         return grid;
     }
 
-    hintsFrom(moves, size, depth) {
-        let hints = new Array(size * size).fill(0);
+    depthFrom(moves, size, depth) {
+        let depths = new Array(size * size).fill(0);
         for (var [x, y] of moves) {
             let index = y * size + x;
-            hints[index]++;
-            hints[index] %= depth;
+            depths[index]++;
+            depths[index] %= depth;
         }
-        return hints;
+        return depths;
+    }
+
+    orderFrom(moves, size, reverse) {
+        let order = new Array(size * size).fill(0);
+        for (var i = 0; i < moves.length; i++) {
+            let [x, y] = moves[i];
+            let index = y * size + x;
+            order[index] = reverse === 'reverse' ? i + 1 : moves.length - i; 
+        }
+        return order;
     }
 }
 

@@ -9,17 +9,22 @@ class Board extends React.Component {
     render() {
         let size = this.props.size;
         let hints = this.props.hints;
+        let past = this.props.past;
+        let future = this.props.future;
         let cells = [];
         for (var y = 0; y < size; y++) {
             for (var x = 0; x < size; x++) {
                 let index = y * size + x;
                 let hintDepth = hints.length > index ? hints[index] : 0;
+                let pastDepth = past.length > index ? past[index] : 0;
+                let futureDepth = future.length > index ? future[index] : 0;
                 cells.push(<Cell coords={[x, y]}
                     key={`board${size}x${size}-${x}-${y}`}
                     icons={this.props.icons}
                     value={this.props.cells[index]}
                     hint={hintDepth}
-                    future={0}
+                    past={pastDepth}
+                    future={futureDepth}
                     onClick={(x, y) => this.props.onClick(x, y)}
                 />);
             }
