@@ -1,8 +1,15 @@
+:root {
+    --cell-gap: 2px;
+    --cell-border: 2px;
+    --cell-underside-offset: calc(var(--cell-gap) + var(--cell-border));
+}
+
 .Cell {
     -webkit-appearance: none;
     padding: 0;
     font-size: 100%;
     background-size: 100%;
+    margin: var(--cell-gap);
 }
 
 .Cell-step-0 {
@@ -31,4 +38,37 @@
 
 .icons-ringer-monochrome {
     background-image: url("/public/ringer-monochrome.png");
+}
+
+/* If this doesn't work, consider using outline-color instead */
+.Cell-hint::before, .Cell-undo::before {
+    content: '';
+    display: block;
+    position: relative;
+    left: calc(-1 * var(--cell-underside-offset));
+    top: calc(-1 * var(--cell-underside-offset));
+    width: calc(100% + 2 * var(--cell-underside-offset));
+    height: calc(100% + 2 * var(--cell-underside-offset));
+    z-index: -1;
+    animation: flow 2s linear infinite;
+}
+
+.Cell-hint::before {
+    background: radial-gradient(#fbff00, #ffffab 30%, #010615 50%, #010615) center center;
+}
+
+.Cell-undo::before {
+    background: radial-gradient(#ddd, #ddd 30%, #111 50%, #111) center center;
+}
+
+@keyframes flow {
+    0% {
+        background-size: 100% 100%;
+    }
+    50% {
+        background-size: 400% 400%;
+    }
+    100% {
+        background-size: 100% 100%;
+    }
 }

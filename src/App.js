@@ -11,6 +11,7 @@ class App extends React.Component {
         step: 0,
         icons: 'ringer-monochrome',
         depth: 2,
+        revealHints: false,
         next: {
             size: 9,
             icons: 'ringer-monochrome',
@@ -26,6 +27,7 @@ class App extends React.Component {
             depth: this.state.next.depth,
             start: this.shuffle(this.state.next.shuffles, this.state.next.size, this.state.next.depth),
             history: [],
+            revealHints: false,
             step: 0,
         });
     }
@@ -36,6 +38,12 @@ class App extends React.Component {
         });
     }
 
+    handleHints() {
+        this.setState({
+            revealHints: true,
+        });
+    }
+
     render() {
         let size = this.state.size;
         let depth = this.state.depth;
@@ -43,6 +51,7 @@ class App extends React.Component {
         let start = this.state.start;
         let history = this.state.history.slice(0, step + 1);
         let grid = this.gridFrom(start.concat(history), size, depth);
+        let hints = this.state.revealHints ? this.hintsFrom(start.concat(history), size, depth) : [];
         return (
             <div className="App">
               <header className="App-header">
@@ -54,12 +63,14 @@ class App extends React.Component {
                 <div className="BoardButtons">
                     <button className="NewBoard"
                         onClick={() => this.newGame()}>New Board!</button>
+                    <button className="Hints" onClick={() => this.handleHints()}>Reveal solution</button>
                 </div>
               </header>
               <section className="App-content">
                 <Board size={this.state.size}
                   cells={grid}
                   icons={this.state.icons}
+                  hints={hints}
                   onClick={(x, y) => this.makeMove(x, y)}
                 />
               </section>
@@ -113,6 +124,16 @@ class App extends React.Component {
             this.ring(x, y, grid, size, depth);
         }
         return grid;
+    }
+
+    hintsFrom(moves, size, depth) {
+        let hints = new Array(size * size).fill(0);
+        for (var [x, y] of moves) {
+            let index = y * size + x;
+            hints[index]++;
+            hints[index] %= depth;
+        }
+        return hints;
     }
 }
 
