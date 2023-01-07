@@ -1,7 +1,13 @@
+:root {
+    --color-background: #282c34;
+    --color-active: #484c54;
+    --color-highlight: #585cd4;
+}
+
 .App {
   height: 100vh;
   width: 100vw;
-  background-color: #282c34;
+  background-color: var(--color-background);
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -12,7 +18,16 @@
   text-align: center;
 }
 
-.App-header {
+@media (orientation: landscape) {
+  .App-header {
+      width: calc(95vmax - 100vmin);
+  }
+}
+
+@media (orientation: portrait) {
+  .App-header {
+      height: calc(95vmax - 100vmin);
+  }
 }
 
 .App-content {

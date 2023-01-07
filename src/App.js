@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import Board from './Board.js';
 import BoardPrefs from './BoardPrefs.js';
+import Tabs from './Tabs.js';
 
 class App extends React.Component {
     state = {
@@ -63,15 +64,24 @@ class App extends React.Component {
             <div className="App">
               <header className="App-header">
                 <h1>Ringer</h1>
-                <BoardPrefs
-                    prefs={this.state.next}
-                    onPrefChange={this.handlePrefChange.bind(this)}
-                />
-                <div className="BoardButtons">
-                    <button className="NewBoard"
+                <Tabs name="options">
+                  <div label="Info" id="info-tab">
+                    Tap any cell to flip the ring of cells around it.
+                    The whole board is a ring, too: flipping a cell outside an edge flips the cell on the opposite edge!
+                    Can you get all the cells to match?
+                  </div>
+                  <div label="Options" id="option-tab">
+                    <BoardPrefs
+                      prefs={this.state.next}
+                      onPrefChange={this.handlePrefChange.bind(this)}>
+                    </BoardPrefs>
+                    <div className="BoardButtons">
+                      <button className="NewBoard"
                         onClick={() => this.newGame()}>New Board!</button>
-                    <button className="Hints" onClick={() => this.handleHints()}>{revealButtonText}</button>
-                </div>
+                      <button className="Hints" onClick={() => this.handleHints()}>{revealButtonText}</button>
+                    </div>
+                  </div>
+                </Tabs>
               </header>
               <section className="App-content">
                 <Board size={this.state.size}
