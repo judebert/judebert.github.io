@@ -80,8 +80,6 @@
 }
 
 .Cell-undo::before {
-    background: repeating-radial-gradient(#ddd, #ddd 10%, #111 20%) center center;
-    opacity: 0.7;
     animation: none;
 }
 
