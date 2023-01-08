@@ -53,6 +53,13 @@ class App extends React.Component {
         });
     }
 
+    handleReset() {
+        this.setState({
+            step: 0,
+            history: [],
+        });
+    }
+
     animate() {
         this.setState({
             frame: this.state.frame + 1,
@@ -92,10 +99,13 @@ class App extends React.Component {
                     <div className="BoardButtons">
                       <button className="NewBoard"
                         onClick={() => this.newGame()}>New Board!</button>
-                      <button className="Hints" onClick={() => this.handleHints()}>{revealButtonText}</button>
                     </div>
                   </div>
                 </Tabs>
+                <div className="solving-buttons">
+                  <button className="Hints" onClick={() => this.handleHints()}>{revealButtonText}</button>
+                  <button className="Reset" onClick={() => this.handleReset()}>Reset</button>
+                </div>
               </header>
               <section className="App-content">
                 <Board size={this.state.size}
@@ -117,6 +127,7 @@ class App extends React.Component {
         let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
         let timer = this.state.timer;
         if (solved) {
+            clearInterval(this.state.timer);
             timer = setInterval(() => this.animate(), 250);
         }
         this.setState({
@@ -124,6 +135,7 @@ class App extends React.Component {
             step: step,
             solved: solved,
             timer: timer,
+            frame: 0,
         });
 
     }
