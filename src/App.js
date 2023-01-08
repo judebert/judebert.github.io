@@ -14,15 +14,18 @@ class App extends React.Component {
         depth: 2,
         revealHints: false,
         solved: true,
+        frame: 0,
+        timer: null,
         next: {
             size: 9,
             icons: 'ringer-monochrome',
             depth: 2,
-            shuffles: 0,
+            shuffles: 8,
         },
     };
 
     newGame() {
+        if (this.state.timer) { clearInterval(this.state.timer); }
         let start = this.shuffle(this.state.next.shuffles, this.state.next.size, this.state.next.depth);
         let solved = this.solves(start, this.state.next.size, this.state.next.depth);
         this.setState({
@@ -34,6 +37,7 @@ class App extends React.Component {
             revealHints: false,
             step: 0,
             solved: solved,
+            frame: 0,
         });
     }
 
@@ -49,6 +53,12 @@ class App extends React.Component {
         });
     }
 
+    animate() {
+        this.setState({
+            frame: this.state.frame + 1,
+        });
+    }
+
     render() {
         let size = this.state.size;
         let depth = this.state.depth;
@@ -57,7 +67,11 @@ class App extends React.Component {
         let history = this.state.history.slice(0, step + 1);
         let past = this.orderFrom(history, size, 'forward');
         let future = this.orderFrom(this.state.history.slice(step), size, 'reverse');
-        let grid = this.gridFrom(start.concat(history), size, depth);
+        let solved = this.state.solved;
+        let frame = this.state.frame;
+        let grid = solved && step > 0
+            ? this.animatedGrid(frame, size, depth)
+            : this.gridFrom(start.concat(history), size, depth);
         let hints = this.state.revealHints ? this.depthFrom(start.concat(history), size, depth) : [];
         let revealButtonText = this.state.revealHints ? 'Hide solution' : 'Reveal solution';
         return (
@@ -87,9 +101,9 @@ class App extends React.Component {
                 <Board size={this.state.size}
                   cells={grid}
                   icons={this.state.icons}
-                  hints={hints}
-                  past={past}
-                  future={future}
+                  hints={solved ? [] : hints}
+                  past={solved ? [] : past}
+                  future={solved ? [] : future}
                   onClick={(x, y) => this.makeMove(x, y)}
                 />
               </section>
@@ -100,11 +114,18 @@ class App extends React.Component {
     makeMove(x, y) {
         let step = this.state.step + 1;
         let history = this.state.history.slice(0, step).concat([[x, y]]);
+        let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
+        let timer = this.state.timer;
+        if (solved) {
+            timer = setInterval(() => this.animate(), 250);
+        }
         this.setState({
             history: history,
             step: step,
-            solved: this.solves(this.state.start.concat(history), this.state.size, this.state.depth),
+            solved: solved,
+            timer: timer,
         });
+
     }
 
     // TODO: Pull these into a BoardLogic class or something
@@ -143,7 +164,8 @@ class App extends React.Component {
 
     solves(moves, size, depth) {
         let grid = this.gridFrom(moves, size, depth);
-        return grid.every((cell) => cell === cell[0]);
+        let response = grid.every((cell) => cell === grid[0]);
+        return response;
     }
 
     gridFrom(moves, size, depth) {
@@ -172,6 +194,39 @@ class App extends React.Component {
             order[index] = reverse === 'reverse' ? i + 1 : moves.length - i; 
         }
         return order;
+    }
+
+    animatedGrid(frame, size, depth) {
+        // TODO: choose or pass an animation
+        let display;
+        frame = frame % (size * 4);
+        let stage = Math.floor(frame / (size * 2));
+        switch (stage) {
+            default:
+            case 0: 
+                // Stage 0: SE fill
+                frame = frame % (size * 2);
+                display = new Array(size * size).fill(0);
+                for (var y = 0; y <= frame && y < size; y++) {
+                    for (var x = 0; x <= (frame - y) && x < size; x++) {
+                        let index = y * size + x;
+                        display[index] = 1;
+                    }
+                }
+                break;
+            case 1:
+                // Stage 1: SE clear
+                frame = frame % (size * 2);
+                display = new Array(size * size).fill(1);
+                for (var y = 0; y <= frame && y < size; y++) {
+                    for (var x = 0; x <= (frame - y) && x < size; x++) {
+                        let index = y * size + x;
+                        display[index] = 0;
+                    }
+                }
+                break;
+        }
+        return display;
     }
 }
 
