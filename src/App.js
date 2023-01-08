@@ -219,8 +219,8 @@ class App extends React.Component {
                 // Stage 0: SE fill
                 frame = frame % (size * 2);
                 display = new Array(size * size).fill(0);
-                for (var y = 0; y <= frame && y < size; y++) {
-                    for (var x = 0; x <= (frame - y) && x < size; x++) {
+                for (let y = 0; y <= frame && y < size; y++) {
+                    for (let x = 0; x <= (frame - y) && x < size; x++) {
                         let index = y * size + x;
                         display[index] = 1;
                     }
@@ -230,8 +230,8 @@ class App extends React.Component {
                 // Stage 1: SE clear
                 frame = frame % (size * 2);
                 display = new Array(size * size).fill(1);
-                for (var y = 0; y <= frame && y < size; y++) {
-                    for (var x = 0; x <= (frame - y) && x < size; x++) {
+                for (let y = 0; y <= frame && y < size; y++) {
+                    for (let x = 0; x <= (frame - y) && x < size; x++) {
                         let index = y * size + x;
                         display[index] = 0;
                     }

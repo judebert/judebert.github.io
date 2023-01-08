@@ -22,7 +22,7 @@ class Tabs extends React.Component {
             const rootId = child.props.id;
             const labelId = `${rootId}.label`;
             const inputId = `${rootId}.radio`;
-            const startCheck = index == 0;
+            const startCheck = index === 0;
             return (
               <React.Fragment key={child.props.label}>
                 <input key={inputId} id={inputId} name={this.props.name} type="radio" defaultChecked={startCheck}/>
