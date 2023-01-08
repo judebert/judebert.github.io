@@ -1,7 +1,8 @@
 .BoardPrefs {
     display: flex;
     flex-direction: column;
-    text-align: left;
+    justify-content: center;
+    align-content: center;
 }
 
 .DemoCells {
