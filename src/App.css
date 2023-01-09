@@ -18,6 +18,15 @@
   text-align: center;
 }
 
+.App-header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: none;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
 @media (orientation: landscape) {
   .App-header {
       width: calc(95vmax - 100vmin);
@@ -26,7 +35,7 @@
 
 @media (orientation: portrait) {
   .App-header {
-      height: calc(95vmax - 100vmin);
+      max-height: calc(95vmax - 100vmin);
   }
 }
 
