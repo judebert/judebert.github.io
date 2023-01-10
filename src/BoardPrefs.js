@@ -30,8 +30,8 @@ class BoardPrefs extends React.Component {
         let prefs = this.props.prefs;
         this.props.onPrefChange({
             size: parseInt(prefs.size),
-            depth: event.target.value,
-            icons: parseInt(prefs.icons),
+            depth: parseInt(event.target.value),
+            icons: prefs.icons,
             shuffles: parseInt(prefs.shuffles),
         });
     }
