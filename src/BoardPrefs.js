@@ -49,16 +49,17 @@ class BoardPrefs extends React.Component {
     render() {
         let prefs = this.props.prefs;
         let demoCells = [];
-        for (var i = 0; i < prefs.depth; i++) {
+        for (let i = 0; i < prefs.depth; i++) {
+            let key = `DemoCell${i}`;
             demoCells.push(
-                <Cell value={i} icons={prefs.icons} />
+                <Cell key={key} value={i} icons={prefs.icons} />
             ); 
         }
         return (
             <div className="BoardPrefs">
-                <div className="BoardSizePrefs">
-                    <label>Board Size</label>
-                    <select value={prefs.size} onChange={(e) => this.handleSizeChange(e)}>
+                <div className="BoardSizePrefs" key="BoardSizePrefs">
+                    <label key="BoardSizeLabel">Board Size</label>
+                    <select key="BoardSizeSelect" value={prefs.size} onChange={(e) => this.handleSizeChange(e)}>
                         <option value="5">5x5</option>
                         <option value="6">6x6</option>
                         <option value="7">7x7</option>
@@ -69,23 +70,24 @@ class BoardPrefs extends React.Component {
                         <option value="12">12x12</option>
                     </select>
                 </div>
-                <div className="BoardIconPrefs">
-                    <label>Icons</label>
-                    <select value={prefs.depth} onChange={(e) => this.handleDepthChange(e)}>
+                <div className="BoardIconPrefs" key="BoardIconPrefs">
+                    <label key="BoardIconLabel">Icons</label>
+                    <select key="BoardDepthSelect" value={prefs.depth} onChange={(e) => this.handleDepthChange(e)}>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
-                    <select value={prefs.icons} onChange={(e) => this.handleIconChange(e)}>
+                    <select key="BoardIconSelect" value={prefs.icons} onChange={(e) => this.handleIconChange(e)}>
                         <option value="ringer-monochrome">monochrome</option>
                         <option value="ringer-emojis">emojis</option>
                     </select>
-                    <div className="DemoCells">
+                    <div key="BoardIconDemoCells" className="DemoCells">
                         {demoCells}
                     </div>
                 </div>
                 <ShufflePrefs
+                    key="ShufflePrefs"
                     value={prefs.shuffles}
                     size={prefs.size}
                     depth={prefs.depth}
