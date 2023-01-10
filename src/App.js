@@ -166,11 +166,17 @@ class App extends React.Component {
         } else {
             moves = existing.slice(); 
         }
-        for (var i = 0; i < times; i++) {
+        let board = this.gridFrom(moves, size, depth);
+        for (var i = 0; i < 1000 && moves.length < times; i++) {
             const x = Math.floor(Math.random() * size);
             const y = Math.floor(Math.random() * size);
-            moves.push([x, y]);
+            let index = y * size + x;
+            if (board[index] < depth - 1) {
+                moves.push([x, y]);
+                this.ring(x, y, board, size, depth);
+            }
         }
+        console.log(`${moves.length} shuffles in ${i} tries`);
         return moves;
     }
 
