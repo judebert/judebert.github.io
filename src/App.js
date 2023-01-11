@@ -13,6 +13,9 @@ class App extends React.Component {
         goal: 0,
         step: 0,
         moves: 0,
+        elapsed: 0,
+        prevTime: 0,
+        boardTimer: null,
         icons: 'ringer-monochrome',
         depth: 2,
         revealHints: false,
@@ -29,11 +32,16 @@ class App extends React.Component {
 
     newGame() {
         if (this.state.timer) { clearInterval(this.state.timer); }
+        if (this.state.boardTimer) { clearInterval(this.state.boardTimer); }
         let start = this.shuffle(this.state.next.shuffles, this.state.next.size, this.state.next.depth);
         // Still a *minute* chance that the start moves could solve the board, I guess. 
         let solved = this.solves(start, this.state.next.size, this.state.next.depth);
         let depths = this.depthFrom(start, this.state.next.size, this.state.next.depth);
         let goal = this.clickDistance(depths, this.state.next.depth);
+        let boardTimer = null;
+        if (!solved) {
+            boardTimer = setInterval(() => this.handleSolveTimer(), 500);
+        }
         this.setState({
             size: this.state.next.size,
             icons: this.state.next.icons,
@@ -43,9 +51,21 @@ class App extends React.Component {
             goal: goal,
             step: 0,
             moves: 0,
+            elapsed: 0,
+            prevTime: window.performance.now(),
+            boardTimer: boardTimer,
             revealHints: false,
             solved: solved,
             frame: 0,
+        });
+    }
+
+    handleSolveTimer() {
+        let now = window.performance.now();
+        let subElapsed = now - this.state.prevTime;
+        this.setState({
+            elapsed: this.state.elapsed + subElapsed,
+            prevTime: now
         });
     }
 
@@ -115,7 +135,12 @@ class App extends React.Component {
                   <button className="Hints" onClick={() => this.handleHints()}>{revealButtonText}</button>
                   <button className="Reset" onClick={() => this.handleReset()}>Reset</button>
                 </div>
-                <ScoreBoard moves={this.state.moves} goal={this.state.goal}/>
+                <ScoreBoard
+                    moves={this.state.moves}
+                    goal={this.state.goal}
+                    elapsed={this.state.elapsed}
+                    solved={solved}
+                />
               </header>
               <section className="App-content">
                 <Board size={this.state.size}
@@ -139,6 +164,7 @@ class App extends React.Component {
         let timer = this.state.timer;
         if (solved) {
             clearInterval(this.state.timer);
+            clearInterval(this.state.boardTimer);
             timer = setInterval(() => this.animate(), 250);
         }
         this.setState({
