@@ -3,13 +3,16 @@ import React from 'react';
 import Board from './Board.js';
 import BoardPrefs from './BoardPrefs.js';
 import Tabs from './Tabs.js';
+import ScoreBoard from './ScoreBoard.js';
 
 class App extends React.Component {
     state = {
         size: 9,
         start: [],
         history: [],
+        goal: 0,
         step: 0,
+        moves: 0,
         icons: 'ringer-monochrome',
         depth: 2,
         revealHints: false,
@@ -27,15 +30,20 @@ class App extends React.Component {
     newGame() {
         if (this.state.timer) { clearInterval(this.state.timer); }
         let start = this.shuffle(this.state.next.shuffles, this.state.next.size, this.state.next.depth);
+        // Still a *minute* chance that the start moves could solve the board, I guess. 
         let solved = this.solves(start, this.state.next.size, this.state.next.depth);
+        let depths = this.depthFrom(start, this.state.next.size, this.state.next.depth);
+        let goal = this.clickDistance(depths, this.state.next.depth);
         this.setState({
             size: this.state.next.size,
             icons: this.state.next.icons,
             depth: this.state.next.depth,
             start: start,
             history: [],
-            revealHints: false,
+            goal: goal,
             step: 0,
+            moves: 0,
+            revealHints: false,
             solved: solved,
             frame: 0,
         });
@@ -56,6 +64,7 @@ class App extends React.Component {
     handleReset() {
         this.setState({
             step: 0,
+            moves: 0,
             history: [],
         });
     }
@@ -106,6 +115,7 @@ class App extends React.Component {
                   <button className="Hints" onClick={() => this.handleHints()}>{revealButtonText}</button>
                   <button className="Reset" onClick={() => this.handleReset()}>Reset</button>
                 </div>
+                <ScoreBoard moves={this.state.moves} goal={this.state.goal}/>
               </header>
               <section className="App-content">
                 <Board size={this.state.size}
@@ -123,6 +133,7 @@ class App extends React.Component {
 
     makeMove(x, y) {
         let step = this.state.step + 1;
+        let moves = this.state.moves + 1;
         let history = this.state.history.slice(0, step).concat([[x, y]]);
         let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
         let timer = this.state.timer;
@@ -133,11 +144,11 @@ class App extends React.Component {
         this.setState({
             history: history,
             step: step,
+            moves: moves,
             solved: solved,
             timer: timer,
             frame: 0,
         });
-
     }
 
     // TODO: Pull these into a BoardLogic class or something
@@ -165,7 +176,7 @@ class App extends React.Component {
         // 0 0 0
         // 0 1 0
         // 0 0 0
-        let clicks = board.reduce((sum, cellDepth) => sum + ((depth - cellDepth) % depth), 0);
+        let clicks = this.clickDistance(board, depth);
         // Shuffle until we reach the right number of clicks
         for (var i = 0; i < 1000 && clicks < times; i++) {
             const x = Math.floor(Math.random() * size);
@@ -182,6 +193,10 @@ class App extends React.Component {
         let moves = board.flatMap((cellDepth, index) =>
             Array(cellDepth).fill([index % size, Math.floor(index / size)]));
         return moves;
+    }
+
+    clickDistance(clicks, depth) {
+        return clicks.reduce((sum, cellDepth) => sum + ((depth - cellDepth) % depth), 0);
     }
 
     solves(moves, size, depth) {
