@@ -11,7 +11,7 @@ class ShufflePrefs extends React.Component {
     render() {
         return(
             <div className="ShufflePrefs">
-                <label>Shuffles</label>
+                <label>Moves Left</label>
                 <input type="number"
                     value={this.props.value}
                     min={0}

@@ -160,23 +160,27 @@ class App extends React.Component {
     }
 
     shuffle(times, size, depth, existing) {
-        let moves;
-        if (existing === undefined) {
-            moves = [];
-        } else {
-            moves = existing.slice(); 
-        }
-        let board = this.gridFrom(moves, size, depth);
-        for (var i = 0; i < 1000 && moves.length < times; i++) {
+        // How many clicks will it take to solve the board right now?
+        let board = this.depthFrom(existing || [], size, depth);
+        // 0 0 0
+        // 0 1 0
+        // 0 0 0
+        let clicks = board.reduce((sum, cellDepth) => sum + ((depth - cellDepth) % depth), 0);
+        // Shuffle until we reach the right number of clicks
+        for (var i = 0; i < 1000 && clicks < times; i++) {
             const x = Math.floor(Math.random() * size);
             const y = Math.floor(Math.random() * size);
             let index = y * size + x;
-            if (board[index] < depth - 1) {
-                moves.push([x, y]);
-                this.ring(x, y, board, size, depth);
+            // Don't *solve* a cell; only make it deeper
+            if (board[index] !== 1) {
+                board[index] = (board[index] + depth - 1) % depth;
+                clicks++;
             }
         }
-        console.log(`${moves.length} shuffles in ${i} tries`);
+        console.log(`Shuffled to ${clicks} moves in ${i} tries`);
+        // Turn that into a list of moves (order doesn't matter!)
+        let moves = board.flatMap((cellDepth, index) =>
+            Array(cellDepth).fill([index % size, Math.floor(index / size)]));
         return moves;
     }
 
