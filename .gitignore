@@ -2,3 +2,26 @@ _site
 Gemfile.lock
 .DS_Store
 *.sql
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/apps/*/node_modules
+/apps/*/.pnp
+/apps/*/.pnp.js
+
+# testing
+/apps/*/coverage
+
+# production
+/apps/*/build
+
+# misc
+/apps/*/.env.local
+/apps/*/.env.development.local
+/apps/*/.env.test.local
+/apps/*/.env.production.local
+
+/apps/*/npm-debug.log*
+/apps/*/yarn-debug.log*
+/apps/*/yarn-error.log*

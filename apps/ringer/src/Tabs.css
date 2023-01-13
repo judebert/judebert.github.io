@@ -1,0 +1,41 @@
+.Tabs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 95%;
+    background-image: repeating-linear-gradient(60deg, var(--color-background) 5%, var(--color-active) 10%, var(--color-background) 15%);
+}
+
+.Tabs > input[type=radio] {
+    display: none;
+}
+
+.Tabs > label {
+    order: 1;
+    padding: 0.5em 1em;
+    border: 2px solid var(--color-active);
+    cursor: pointer;
+    flex-grow: 1;
+    /* Flex display allows HTML and Material icons */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Tabs > .Tab {
+    order: 99;
+    width: 100%;
+    display: none;
+}
+
+.Tabs > input[type=radio]:checked + label {
+    border-top: 2px solid var(--color-highlight);
+    background: var(--color-active);
+}
+
+.Tabs > input[type=radio]:checked + label + .Tab {
+    background: var(--color-active);
+    display: block;
+}

@@ -1,0 +1,61 @@
+:root {
+    --color-background: #282c34;
+    --color-active: #484c54;
+    --color-highlight: #888cf4;
+}
+
+.App {
+  background-color: var(--color-background);
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  text-align: center;
+}
+
+.App-header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (orientation: landscape) {
+  .App {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow: scroll;
+  }
+  .App-header {
+      min-width: 15em;
+      width: calc(95vmax - 100vmin);
+      margin-right: 1rem;
+      margin-left: 1rem;
+  }
+  .App-content {
+      margin-right: 1rem;
+  }
+}
+
+@media (orientation: portrait) {
+  .App {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      overflow: scroll;
+  }
+  .App-header {
+      height: auto;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+  }
+  .App-content {
+      margin-bottom: 1rem;
+  }
+}
+
+.App-content {
+}

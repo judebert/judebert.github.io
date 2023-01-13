@@ -1,0 +1,8 @@
+.Board {
+    display: grid;
+    width: 90vmin;
+    aspect-ratio: 1/1;
+    /* Assign a z-index so we can stack glowing borders under the cells */
+    position: relative;
+    z-index: 0;
+}
