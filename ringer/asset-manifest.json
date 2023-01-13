@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/ringer/static/css/main.3b928994.css",
+    "main.js": "/ringer/static/js/main.bf1631bb.js",
+    "static/media/ringer-emojis.png": "/ringer/static/media/ringer-emojis.1c5c390f5ac46400d91e.png",
+    "index.html": "/ringer/index.html",
+    "main.3b928994.css.map": "/ringer/static/css/main.3b928994.css.map",
+    "main.bf1631bb.js.map": "/ringer/static/js/main.bf1631bb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3b928994.css",
+    "static/js/main.bf1631bb.js"
+  ]
+}
