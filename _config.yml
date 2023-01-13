@@ -18,6 +18,7 @@ exclude:
   - index.html.old
   - judeberts.lst
   - images.txt
+  - apps
 collections:
   categorized:
     output: true
