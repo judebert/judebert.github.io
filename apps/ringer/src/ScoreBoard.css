@@ -1,0 +1,23 @@
+.ScoreBoard {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow: scroll;
+    justify-content: safe center;
+    align-items: center;
+}
+
+.ScoreBoard.solving {
+    color: var(--color-highlight);
+}
+
+.ScoreBoard h3 {
+    margin: 0.5rem 0.1rem;
+    display: block;
+}
+
+.ScoreBoard h4 {
+    margin: 0.5rem 0.1rem;
+    display: block;
+}
