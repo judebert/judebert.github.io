@@ -72,11 +72,21 @@
     width: calc(100% + 2 * var(--cell-underside-offset));
     height: calc(100% + 2 * var(--cell-underside-offset));
     z-index: -1;
-    animation: flow 2s linear infinite;
 }
 
+.Cell-hint {
+    border-color: transparent;
+}
+
+/* With unspecified or percent background-size, percent background-position has no effect on linear gradients. */
 .Cell-hint::before {
-    background: radial-gradient(#fbff00, #ffffab 30%, #010615 50%, #010615) center center;
+    background-image: repeating-linear-gradient(30deg,
+        var(--color-highlight),
+        var(--color-highlight) 10%,
+        white 10%,
+        white 20%
+        );
+    animation: wiggle 2s linear infinite;
 }
 
 .Cell-undo::before {
@@ -89,19 +99,17 @@
 }
 
 .Cell-hint.Cell-undo::before, .Cell-hint.Cell-undo-1::before {
-    background: radial-gradient(#ff0102, #ffabff 30%, #010615 50%, #010615) center center;
-    animation: flow 2s linear infinite;
+    background-image: repeating-linear-gradient(45deg,
+        #ff0102, #ffabff 10%, var(--color-active) 10%, var(--color-active) 20%);
+    animation: wiggle 2s linear infinite;
 }
 
 @keyframes flow {
     0% {
-        background-size: 100% 100%;
-    }
-    50% {
-        background-size: 400% 400%;
+        background-position: 0 0;
     }
     100% {
-        background-size: 100% 100%;
+        background-position: 100% 0;
     }
 }
 
