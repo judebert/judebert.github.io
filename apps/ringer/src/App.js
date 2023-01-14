@@ -213,6 +213,7 @@ class App extends React.Component {
         }
     }
 
+    // Adds clicks to the given board until it can be solved in `times` clicks.
     shuffle(times, size, depth, existing) {
         // How many clicks will it take to solve the board right now?
         let board = this.depthFrom(existing || [], size, depth);
@@ -238,16 +239,19 @@ class App extends React.Component {
         return moves;
     }
 
+    // Returns the number of clicks required to solve the board.
     clickDistance(clicks, depth) {
         return clicks.reduce((sum, cellDepth) => sum + ((depth - cellDepth) % depth), 0);
     }
 
+    // Returns true if the moves solve the board.
     solves(moves, size, depth) {
         let grid = this.gridFrom(moves, size, depth);
         let response = grid.every((cell) => cell === grid[0]);
         return response;
     }
 
+    // Returns displayed board, where all the squares *around* the `moves` have been flipped.
     gridFrom(moves, size, depth) {
         let grid = new Array(size * size).fill(0);
         for (var [x, y] of moves) {
@@ -256,6 +260,8 @@ class App extends React.Component {
         return grid;
     }
 
+    // Returns a "hit map" of the board after applying the moves.
+    // Indicates how many clicks were made at each cell, looping back to 0 after reaching depth.
     depthFrom(moves, size, depth) {
         let depths = new Array(size * size).fill(0);
         for (var [x, y] of moves) {
@@ -266,6 +272,11 @@ class App extends React.Component {
         return depths;
     }
 
+    // Returns a map of cells (by index) to their most recent click in the `moves`.
+    // Early clicks are overwritten by later ones, unless `reverse` is set to `'reverse'`,
+    // in which case later clicks are overwritten by earlier ones.
+    // Essentially, tells you that "the user clicked the cell at (3, 2) on their 3rd move".
+    // TODO: *Why* do I need this? TWO WAYS?
     orderFrom(moves, size, reverse) {
         let order = new Array(size * size).fill(0);
         for (var i = 0; i < moves.length; i++) {
