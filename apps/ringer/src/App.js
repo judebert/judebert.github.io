@@ -18,7 +18,7 @@ class App extends React.Component {
         boardTimer: null,
         icons: 'ringer-monochrome',
         depth: 2,
-        revealHints: false,
+        hintIndex: -1,
         solved: true,
         frame: 0,
         timer: null,
@@ -54,7 +54,7 @@ class App extends React.Component {
             elapsed: 0,
             prevTime: window.performance.now(),
             boardTimer: boardTimer,
-            revealHints: false,
+            hintIndex: -1,
             solved: solved,
             frame: 0,
         });
@@ -76,8 +76,19 @@ class App extends React.Component {
     }
 
     handleHints() {
+        let start = this.state.start;
+        let history = this.state.history;
+        let size = this.state.size;
+        let depth = this.state.depth;
+        // What still needs to be clicked?
+        let hints = this.depthFrom(start.concat(history), size, depth);
+        let mistakes = history.filter(([x, y]) => hints[y * size + x] !== 0);
+        let misses = start.filter(([x, y]) => hints[y * size + x] !== 0);
+        let hintIndex = mistakes.length > 0 ? mistakes[0][1] * size + mistakes[0][0] :
+            misses.length > 0 ? misses[0][1] * size + misses[0][0] : -1;
         this.setState({
-            revealHints: !this.state.revealHints,
+            hintIndex: hintIndex,
+            moves: this.state.moves + 1,
         });
     }
 
@@ -108,8 +119,11 @@ class App extends React.Component {
         let grid = solved && step > 0
             ? this.animatedGrid(frame, size, depth)
             : this.gridFrom(start.concat(history), size, depth);
-        let hints = this.state.revealHints ? this.depthFrom(start.concat(history), size, depth) : [];
-        let revealButtonText = this.state.revealHints ? 'Hide solution' : 'Reveal solution';
+        let hints = new Array(size * size).fill(0);
+        let hintIndex = this.state.hintIndex;
+        if (hintIndex >= 0) {
+            hints[hintIndex] = this.depthFrom(start.concat(history), size, depth)[hintIndex];
+        }
         return (
             <div className="App">
               <header className="App-header">
@@ -132,7 +146,9 @@ class App extends React.Component {
                   </div>
                 </Tabs>
                 <div className="solving-buttons">
-                  <button className="Hints" onClick={() => this.handleHints()}>{revealButtonText}</button>
+                  <button className="Hints" onClick={() => this.handleHints()} disabled={solved || hintIndex >= 0}>
+                      Hint?
+                  </button>
                   <button className="Reset" onClick={() => this.handleReset()}>Reset</button>
                 </div>
                 <ScoreBoard
@@ -172,6 +188,7 @@ class App extends React.Component {
             step: step,
             moves: moves,
             solved: solved,
+            hintIndex: (solved || this.state.hintIndex === y * this.state.size + x) ? -1 : this.state.hintIndex,
             timer: timer,
             frame: 0,
         });
