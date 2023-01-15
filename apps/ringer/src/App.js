@@ -18,7 +18,7 @@ class App extends React.Component {
         boardTimer: null,
         icons: 'ringer-monochrome',
         depth: 2,
-        hintIndex: -1,
+        hints: [],
         solved: true,
         frame: 0,
         timer: null,
@@ -54,7 +54,7 @@ class App extends React.Component {
             elapsed: 0,
             prevTime: window.performance.now(),
             boardTimer: boardTimer,
-            hintIndex: -1,
+            hints: [],
             solved: solved,
             frame: 0,
         });
@@ -81,14 +81,17 @@ class App extends React.Component {
         let size = this.state.size;
         let depth = this.state.depth;
         // What still needs to be clicked?
-        let hints = this.depthFrom(start.concat(history), size, depth);
-        let mistakes = history.filter(([x, y]) => hints[y * size + x] !== 0);
-        let misses = start.filter(([x, y]) => hints[y * size + x] !== 0);
-        let hintIndex = mistakes.length > 0 ? mistakes[0][1] * size + mistakes[0][0] :
-            misses.length > 0 ? misses[0][1] * size + misses[0][0] : -1;
+        let clicked = this.bestSolution(start.concat(history), size, depth);
+        let mistakes = history.map(([x, y]) => this.toIndex(x, y, size)).filter((index) => clicked[index] !== 0);
+        let misses = clicked.map((distance, index) => index).filter((index) => clicked[index] !== 0);
+        let hintIndexes = mistakes.length > 0 ? mistakes :
+            misses.length > 0 ? misses.slice(0, 1) : [];
+        // Board is expecting a depth map, so we can make pretty indicators (some day)
+        let hints = new Array(size).fill(0);
+        hintIndexes.forEach((index) => hints[index] = clicked[index]);
         this.setState({
-            hintIndex: hintIndex,
-            moves: this.state.moves + 1,
+            hints: hints,
+            moves: this.state.moves + (mistakes.length > 0 ? 0 : 1),
         });
     }
 
@@ -97,6 +100,35 @@ class App extends React.Component {
             step: 0,
             moves: 0,
             history: [],
+            hints: [],
+        });
+    }
+
+    makeMove(x, y) {
+        let step = this.state.step + 1;
+        let moves = this.state.moves + 1;
+        let history = this.state.history.slice(0, step).concat([[x, y]]);
+        let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
+        let timer = this.state.timer;
+        if (solved) {
+            clearInterval(this.state.timer);
+            clearInterval(this.state.boardTimer);
+            timer = setInterval(() => this.animate(), 250);
+        }
+        let index = this.toIndex(x, y, this.state.size);
+        let hints = this.state.hints.slice();
+        if (hints && hints.length > index && hints[index] > 0) {
+            let depth = this.state.depth;
+            hints[index] = (hints[index] + depth + 1) % depth;
+        }
+        this.setState({
+            history: history,
+            step: step,
+            moves: moves,
+            solved: solved,
+            hints: hints,
+            timer: timer,
+            frame: 0,
         });
     }
 
@@ -119,11 +151,7 @@ class App extends React.Component {
         let grid = solved && step > 0
             ? this.animatedGrid(frame, size, depth)
             : this.gridFrom(start.concat(history), size, depth);
-        let hints = new Array(size * size).fill(0);
-        let hintIndex = this.state.hintIndex;
-        if (hintIndex >= 0) {
-            hints[hintIndex] = this.depthFrom(start.concat(history), size, depth)[hintIndex];
-        }
+        let hints = this.state.hints;
         return (
             <div className="App">
               <header className="App-header">
@@ -146,7 +174,7 @@ class App extends React.Component {
                   </div>
                 </Tabs>
                 <div className="solving-buttons">
-                  <button className="Hints" onClick={() => this.handleHints()} disabled={solved || hintIndex >= 0}>
+                  <button className="Hints" onClick={() => this.handleHints()} disabled={solved}>
                       Hint?
                   </button>
                   <button className="Reset" onClick={() => this.handleReset()}>Reset</button>
@@ -172,30 +200,12 @@ class App extends React.Component {
         );
     };
 
-    makeMove(x, y) {
-        let step = this.state.step + 1;
-        let moves = this.state.moves + 1;
-        let history = this.state.history.slice(0, step).concat([[x, y]]);
-        let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
-        let timer = this.state.timer;
-        if (solved) {
-            clearInterval(this.state.timer);
-            clearInterval(this.state.boardTimer);
-            timer = setInterval(() => this.animate(), 250);
-        }
-        this.setState({
-            history: history,
-            step: step,
-            moves: moves,
-            solved: solved,
-            hintIndex: (solved || this.state.hintIndex === y * this.state.size + x) ? -1 : this.state.hintIndex,
-            timer: timer,
-            frame: 0,
-        });
-    }
-
     // TODO: Pull these into a BoardLogic class or something
     // They're not UI, they're logic.
+    //
+    toIndex(x, y, size) {
+        return y * size + x;
+    }
 
     // Increment all the cells in a ring around (x, y) *mutating* the given grid
     // assuming the grid is of size and depth
@@ -213,12 +223,10 @@ class App extends React.Component {
         }
     }
 
+    // Adds clicks to the given board until it can be solved in `times` clicks.
     shuffle(times, size, depth, existing) {
         // How many clicks will it take to solve the board right now?
         let board = this.depthFrom(existing || [], size, depth);
-        // 0 0 0
-        // 0 1 0
-        // 0 0 0
         let clicks = this.clickDistance(board, depth);
         // Shuffle until we reach the right number of clicks
         for (var i = 0; i < 1000 && clicks < times; i++) {
@@ -238,16 +246,19 @@ class App extends React.Component {
         return moves;
     }
 
+    // Returns the number of clicks required to solve the board.
     clickDistance(clicks, depth) {
         return clicks.reduce((sum, cellDepth) => sum + ((depth - cellDepth) % depth), 0);
     }
 
+    // Returns true if the moves solve the board.
     solves(moves, size, depth) {
         let grid = this.gridFrom(moves, size, depth);
         let response = grid.every((cell) => cell === grid[0]);
         return response;
     }
 
+    // Returns displayed board, where all the squares *around* the `moves` have been flipped.
     gridFrom(moves, size, depth) {
         let grid = new Array(size * size).fill(0);
         for (var [x, y] of moves) {
@@ -256,6 +267,8 @@ class App extends React.Component {
         return grid;
     }
 
+    // Returns a "hit map" of the board after applying the moves.
+    // Indicates how many clicks were made at each cell, looping back to 0 after reaching depth.
     depthFrom(moves, size, depth) {
         let depths = new Array(size * size).fill(0);
         for (var [x, y] of moves) {
@@ -266,6 +279,11 @@ class App extends React.Component {
         return depths;
     }
 
+    // Returns a map of cells (by index) to their most recent click in the `moves`.
+    // Early clicks are overwritten by later ones, unless `reverse` is set to `'reverse'`,
+    // in which case later clicks are overwritten by earlier ones.
+    // Essentially, tells you that "the user clicked the cell at (3, 2) on their 3rd move".
+    // TODO: *Why* do I need this? TWO WAYS?
     orderFrom(moves, size, reverse) {
         let order = new Array(size * size).fill(0);
         for (var i = 0; i < moves.length; i++) {
@@ -274,6 +292,61 @@ class App extends React.Component {
             order[index] = reverse === 'reverse' ? i + 1 : moves.length - i; 
         }
         return order;
+    }
+
+    // Returns a depth grid with the least necessary clicks to make all depths equal.
+    bestSolution(moves, size, depth) {
+        // Describe how all cells have been clicked
+        let situation = this.depthFrom(moves, size, depth);
+        // Build a histogram of how far away each cell is from depth 0
+        let histogram = [];
+        for (let clickDepth = 0; clickDepth < depth; clickDepth++) {
+            histogram.push([]);
+        }
+        situation.forEach((height, index) => histogram[height].push(index));
+        // How far are the cells from each possible depth?
+        // For each target depth
+        let clicks = new Array(depth).fill(0);
+        for (let target = 0; target < depth; target++) {
+            clicks[target] = histogram.reduce(
+                (sum, cells, clicks) => (sum + cells.length * this._clicksAway(clicks, depth, target)),
+                0);
+        }
+        // We now know have many clicks to get a uniform depth for each target depth in clicks[target depth].
+        // Which is the closest?
+        let bestTarget = clicks.reduce((current, clicks, index, all) => clicks < all[current] ? index : current, 0);
+        // Convert the histogram to a depth-map of distance from the target
+        let solution = new Array(size * size).fill(0);
+        for (let clickDepth = 0; clickDepth < depth; clickDepth++) {
+            if (clickDepth === bestTarget) {
+                continue;
+            }
+            let distance = this._clicksAway(clickDepth, depth, bestTarget);
+            histogram[clickDepth].forEach((index) => solution[index] = distance);
+        }
+        return solution;
+    }
+
+    // Helper function showing how far a cell with a click-depth is from a given target,
+    // knowing that it wraps around at depth.
+    _clicksAway(clicks, depth, target) {
+        if (target === undefined) {
+            target = 0;
+        }
+        // Each cell at a given click-depth is (target - clicks) away from reaching the target.
+        // But cells can be deeper than the target clicks, leading to negative numbers. For instance,
+        // a cell with 2 clicks is -2 away from a target of 0. That converts to its positive 
+        // equivalent by adding the depth, then modulo the whole thing by depth.
+        // For a depth of 3, and a target of 0, each cell contributes by its clicks:
+        //     0 => 0 - 0 => 0 + 3 => 3 % 3 => 0
+        //     1 => 0 - 1 => -1 + 3 => 2 % 3 => 2
+        //     2 => 0 - 2 => -2 + 3 => 1 % 3 => 1
+        // If we're trying to get to 2, each cell contributes by its clicks:
+        //     0 => 2 - 0 => 2 + 3 => 5 % 3 => 2
+        //     1 => 2 - 1 => 1 + 3 => 4 % 3 => 1
+        //     2 => 2 - 2 => 0 + 3 => 3 % 3 => 0
+        // Lots of explanation for this quick calculation. 
+        return (target - clicks + depth) % depth;
     }
 
     animatedGrid(frame, size, depth) {
