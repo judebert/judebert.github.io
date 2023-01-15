@@ -81,9 +81,9 @@ class App extends React.Component {
         let size = this.state.size;
         let depth = this.state.depth;
         // What still needs to be clicked?
-        let clicked = this.depthFrom(start.concat(history), size, depth);
+        let clicked = this.bestSolution(start.concat(history), size, depth);
         let mistakes = history.map(([x, y]) => this.toIndex(x, y, size)).filter((index) => clicked[index] !== 0);
-        let misses = start.map(([x, y]) => this.toIndex(x, y, size)).filter((index) => clicked[index] !== 0);
+        let misses = clicked.map((distance, index) => index).filter((index) => clicked[index] !== 0);
         let hintIndexes = mistakes.length > 0 ? mistakes :
             misses.length > 0 ? misses.slice(0, 1) : [];
         // Board is expecting a depth map, so we can make pretty indicators (some day)
@@ -227,9 +227,6 @@ class App extends React.Component {
     shuffle(times, size, depth, existing) {
         // How many clicks will it take to solve the board right now?
         let board = this.depthFrom(existing || [], size, depth);
-        // 0 0 0
-        // 0 1 0
-        // 0 0 0
         let clicks = this.clickDistance(board, depth);
         // Shuffle until we reach the right number of clicks
         for (var i = 0; i < 1000 && clicks < times; i++) {
@@ -295,6 +292,61 @@ class App extends React.Component {
             order[index] = reverse === 'reverse' ? i + 1 : moves.length - i; 
         }
         return order;
+    }
+
+    // Returns a depth grid with the least necessary clicks to make all depths equal.
+    bestSolution(moves, size, depth) {
+        // Describe how all cells have been clicked
+        let situation = this.depthFrom(moves, size, depth);
+        // Build a histogram of how far away each cell is from depth 0
+        let histogram = [];
+        for (let clickDepth = 0; clickDepth < depth; clickDepth++) {
+            histogram.push([]);
+        }
+        situation.forEach((height, index) => histogram[height].push(index));
+        // How far are the cells from each possible depth?
+        // For each target depth
+        let clicks = new Array(depth).fill(0);
+        for (let target = 0; target < depth; target++) {
+            clicks[target] = histogram.reduce(
+                (sum, cells, clicks) => (sum + cells.length * this._clicksAway(clicks, depth, target)),
+                0);
+        }
+        // We now know have many clicks to get a uniform depth for each target depth in clicks[target depth].
+        // Which is the closest?
+        let bestTarget = clicks.reduce((current, clicks, index, all) => clicks < all[current] ? index : current, 0);
+        // Convert the histogram to a depth-map of distance from the target
+        let solution = new Array(size * size).fill(0);
+        for (let clickDepth = 0; clickDepth < depth; clickDepth++) {
+            if (clickDepth === bestTarget) {
+                continue;
+            }
+            let distance = this._clicksAway(clickDepth, depth, bestTarget);
+            histogram[clickDepth].forEach((index) => solution[index] = distance);
+        }
+        return solution;
+    }
+
+    // Helper function showing how far a cell with a click-depth is from a given target,
+    // knowing that it wraps around at depth.
+    _clicksAway(clicks, depth, target) {
+        if (target === undefined) {
+            target = 0;
+        }
+        // Each cell at a given click-depth is (target - clicks) away from reaching the target.
+        // But cells can be deeper than the target clicks, leading to negative numbers. For instance,
+        // a cell with 2 clicks is -2 away from a target of 0. That converts to its positive 
+        // equivalent by adding the depth, then modulo the whole thing by depth.
+        // For a depth of 3, and a target of 0, each cell contributes by its clicks:
+        //     0 => 0 - 0 => 0 + 3 => 3 % 3 => 0
+        //     1 => 0 - 1 => -1 + 3 => 2 % 3 => 2
+        //     2 => 0 - 2 => -2 + 3 => 1 % 3 => 1
+        // If we're trying to get to 2, each cell contributes by its clicks:
+        //     0 => 2 - 0 => 2 + 3 => 5 % 3 => 2
+        //     1 => 2 - 1 => 1 + 3 => 4 % 3 => 1
+        //     2 => 2 - 2 => 0 + 3 => 3 % 3 => 0
+        // Lots of explanation for this quick calculation. 
+        return (target - clicks + depth) % depth;
     }
 
     animatedGrid(frame, size, depth) {
