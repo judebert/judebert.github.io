@@ -1,0 +1,43 @@
+.Dialog {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.Dialog.asBlock {
+    display: block;
+}
+
+.Dialog-wrapper {
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+.Dialog-buttons {
+    position: sticky;
+    top: 0.25em;
+    margin-bottom: 0.25em;
+}
+
+.Dialog-main {
+    overflow: scroll;
+}
+
+.Dialog-buttons button {
+    font-size: 100%;
+    margin: 0.5em 0.25em;
+    flex-grow: 0;
+}
