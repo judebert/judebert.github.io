@@ -156,8 +156,8 @@ class App extends React.Component {
     }
 
     makeMove(x, y) {
-        let step = this.state.step + 1;
         let moves = this.state.moves + 1;
+        let step = this.state.step;
         let history = this.state.history.slice(0, step).concat([[x, y]]);
         let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
         let timer = this.state.timer;
@@ -176,13 +176,27 @@ class App extends React.Component {
         }
         this.setState({
             history: history,
-            step: step,
+            step: step + 1,
             moves: moves,
             solved: solved,
             showDialog: showDialog,
             hints: hints,
             timer: timer,
             frame: 0,
+        });
+    }
+
+    handleUndo() {
+        console.log(`Undo from ${this.state.step}/${this.state.history.length}`);
+        this.setState({
+            step: this.state.step - 1,
+        });
+    }
+
+    handleRedo() {
+        console.log(`Redo to ${this.state.step + 1}/${this.state.history.length}`);
+        this.setState({
+            step: this.state.step + 1,
         });
     }
 
@@ -196,8 +210,10 @@ class App extends React.Component {
         let size = this.state.size;
         let depth = this.state.depth;
         let step = this.state.step;
+        let canUndo = step > 0;
         let start = this.state.start;
-        let history = this.state.history.slice(0, step + 1);
+        let history = this.state.history.slice(0, step);
+        let canRedo = step < this.state.history.length;
         let past = this.orderFrom(history, size, 'forward');
         let future = this.orderFrom(this.state.history.slice(step), size, 'reverse');
         let solved = this.state.solved;
@@ -234,6 +250,12 @@ class App extends React.Component {
                   </div>
                 </Tabs>
                 <div className="solving-buttons">
+                  <button className="Undo" onClick={() => this.handleUndo()} disabled={!canUndo}>
+                      Undo
+                  </button>
+                  <button className="Redo" onClick={() => this.handleRedo()} disabled={!canRedo}>
+                      Redo
+                  </button>
                   <button className="Hints" onClick={() => this.handleHints()} disabled={solved}>
                       Hint?
                   </button>
