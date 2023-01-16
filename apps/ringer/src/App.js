@@ -4,6 +4,7 @@ import Board from './Board.js';
 import BoardPrefs from './BoardPrefs.js';
 import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
+import Dialog from './Dialog.js';
 
 class App extends React.Component {
     state = {
@@ -20,6 +21,7 @@ class App extends React.Component {
         depth: 2,
         hints: [],
         solved: true,
+        showDialog: false,
         frame: 0,
         timer: null,
         next: {
@@ -56,6 +58,7 @@ class App extends React.Component {
             boardTimer: boardTimer,
             hints: [],
             solved: solved,
+            showDialog: false,
             frame: 0,
         });
     }
@@ -95,12 +98,25 @@ class App extends React.Component {
         });
     }
 
-    handleReset() {
+    handleReset(resetTimer) {
+        let boardTimer = this.state.boardTimer;
+        clearInterval(boardTimer);
+        boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         this.setState({
             step: 0,
             moves: 0,
             history: [],
             hints: [],
+            boardTimer: boardTimer,
+            elapsed: 0,
+            prevTime: window.performance.now(),
+            showDialog: false,
+        });
+    }
+
+    handleDismissDialog() {
+        this.setState({
+            showDialog: false,
         });
     }
 
@@ -110,10 +126,12 @@ class App extends React.Component {
         let history = this.state.history.slice(0, step).concat([[x, y]]);
         let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
         let timer = this.state.timer;
+        let showDialog = this.state.showDialog;
         if (solved) {
             clearInterval(this.state.timer);
             clearInterval(this.state.boardTimer);
-            timer = setInterval(() => this.animate(), 250);
+            timer = setInterval(() => this.animate(), 150);
+            showDialog = true;
         }
         let index = this.toIndex(x, y, this.state.size);
         let hints = this.state.hints.slice();
@@ -126,6 +144,7 @@ class App extends React.Component {
             step: step,
             moves: moves,
             solved: solved,
+            showDialog: showDialog,
             hints: hints,
             timer: timer,
             frame: 0,
@@ -152,6 +171,12 @@ class App extends React.Component {
             ? this.animatedGrid(frame, size, depth)
             : this.gridFrom(start.concat(history), size, depth);
         let hints = this.state.hints;
+        let showDialog = this.state.showDialog;
+        let dialogButtons = Array.of(
+          <button className="Retry" key="retry" onClick={() => this.handleReset()}>Try Again</button>,
+          <button className="NewBoard" key="new" onClick={() => this.newGame()}>Next Puzzle</button>,
+          <button className="Dismiss" key="home" onClick={() => this.handleDismissDialog()}>Home</button>
+        );
         return (
             <div className="App">
               <header className="App-header">
@@ -196,6 +221,15 @@ class App extends React.Component {
                   onClick={(x, y) => this.makeMove(x, y)}
                 />
               </section>
+              <Dialog active={showDialog} buttons={dialogButtons}>
+                <ScoreBoard
+                    moves={this.state.moves}
+                    goal={this.state.goal}
+                    elapsed={this.state.elapsed}
+                    solved={solved}
+                />
+                <div>Game stats go here: moves, time, streaks...</div>
+              </Dialog>
             </div>
         );
     };

@@ -4,6 +4,11 @@
     --color-highlight: #888cf4;
 }
 
+/* Buttons and other inputs are tiny. WTH? */
+input, button, select {
+    font-size: 80%;
+}
+
 .App {
   background-color: var(--color-background);
   display: flex;

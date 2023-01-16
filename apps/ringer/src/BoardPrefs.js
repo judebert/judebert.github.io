@@ -69,22 +69,13 @@ class BoardPrefs extends React.Component {
                         <option value="11">11x11</option>
                         <option value="12">12x12</option>
                     </select>
-                </div>
-                <div className="BoardIconPrefs" key="BoardIconPrefs">
-                    <label key="BoardIconLabel">Icons</label>
+                    <label key="BoardIconLabel"> Base</label>
                     <select key="BoardDepthSelect" value={prefs.depth} onChange={(e) => this.handleDepthChange(e)}>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
-                    <select key="BoardIconSelect" value={prefs.icons} onChange={(e) => this.handleIconChange(e)}>
-                        <option value="ringer-monochrome">monochrome</option>
-                        <option value="ringer-emojis">emojis</option>
-                    </select>
-                    <div key="BoardIconDemoCells" className="DemoCells">
-                        {demoCells}
-                    </div>
                 </div>
                 <ShufflePrefs
                     key="ShufflePrefs"
