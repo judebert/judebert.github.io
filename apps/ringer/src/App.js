@@ -11,6 +11,7 @@ import seedrandom from 'seedrandom';
 class App extends React.Component {
     constructor(props) {
         super(props);
+
         let rng = seedrandom();
         let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
         rng = seedrandom(boardNum);
@@ -117,7 +118,6 @@ class App extends React.Component {
         let start = this.state.start;
         let history = this.state.history;
         let size = this.state.size;
-        let depth = this.state.depth;
         // What still needs to be clicked?
         let clicked = this.bestSolution(start.concat(history));
         let mistakes = history.map(([x, y]) => this.toIndex(x, y, size)).filter((index) => clicked[index] !== 0);
@@ -232,6 +232,7 @@ class App extends React.Component {
             <div className="App">
               <header className="App-header">
                 <h1>Ringer</h1>
+                <aside>{process.env.REACT_APP_VERSION}</aside>
                 <Tabs name="options">
                   <div label="Info" id="info-tab">
                     Tap any cell to flip the ring of cells around it.

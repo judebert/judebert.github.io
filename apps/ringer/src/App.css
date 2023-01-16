@@ -29,6 +29,10 @@ input, button, select {
     justify-content: center;
 }
 
+.App-header h1 {
+    margin-bottom: 0.1em;
+}
+
 @media (orientation: landscape) {
   .App {
       flex-direction: row;
