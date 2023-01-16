@@ -79,10 +79,8 @@ class BoardPrefs extends React.Component {
                 </div>
                 <ShufflePrefs
                     key="ShufflePrefs"
-                    value={prefs.shuffles}
-                    size={prefs.size}
-                    depth={prefs.depth}
-                    onChange={(e) => this.handleShuffleChange(e)}
+                    prefs={prefs}
+                    onChange={(prefs) => this.props.onPrefChange(prefs)}
                 />
             </div>
         );

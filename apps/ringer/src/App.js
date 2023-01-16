@@ -5,49 +5,70 @@ import BoardPrefs from './BoardPrefs.js';
 import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
 import Dialog from './Dialog.js';
+import seedrandom from 'seedrandom';
 
 class App extends React.Component {
-    state = {
-        size: 9,
-        start: [],
-        history: [],
-        goal: 0,
-        step: 0,
-        moves: 0,
-        elapsed: 0,
-        prevTime: 0,
-        boardTimer: null,
-        icons: 'ringer-monochrome',
-        depth: 2,
-        hints: [],
-        solved: true,
-        showDialog: false,
-        frame: 0,
-        timer: null,
-        next: {
-            size: 9,
+    constructor(props) {
+        super(props);
+        let rng = seedrandom();
+        let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
+        rng = seedrandom(boardNum);
+        let initSize = 9;
+        let initDepth = 2;
+        let initShuffles = 8;
+        this.state = {
+            rng: rng,
+            boardNum: boardNum,
+            size: initSize,
+            start: this.shuffle(boardNum, initShuffles, initSize, initDepth),
+            history: [],
+            goal: 0,
+            step: 0,
+            moves: 0,
+            elapsed: 0,
+            prevTime: 0,
+            boardTimer: null,
             icons: 'ringer-monochrome',
-            depth: 2,
-            shuffles: 8,
-        },
-    };
+            depth: initDepth,
+            hints: [],
+            solved: true,
+            showDialog: false,
+            frame: 0,
+            timer: null,
+            next: {
+                size: initSize,
+                icons: 'ringer-monochrome',
+                depth: initDepth,
+                shuffles: initShuffles,
+                boardNum: boardNum + 1,
+            },
+        };
+    }
 
     newGame() {
         if (this.state.timer) { clearInterval(this.state.timer); }
         if (this.state.boardTimer) { clearInterval(this.state.boardTimer); }
-        let start = this.shuffle(this.state.next.shuffles, this.state.next.size, this.state.next.depth);
+        let next = Object.assign({},  this.state.next);
+        let boardNum = next.boardNum;
+        let start = this.shuffle(
+            boardNum,
+            next.shuffles,
+            next.size,
+            next.depth);
         // Still a *minute* chance that the start moves could solve the board, I guess. 
-        let solved = this.solves(start, this.state.next.size, this.state.next.depth);
-        let depths = this.depthFrom(start, this.state.next.size, this.state.next.depth);
-        let goal = this.clickDistance(depths, this.state.next.depth);
+        let solved = this.solves(start, next.size, next.depth);
+        let depths = this.depthFrom(start, next.size, next.depth);
+        let goal = this.clickDistance(depths, next.depth);
         let boardTimer = null;
         if (!solved) {
             boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         }
+        next.boardNum++;
         this.setState({
-            size: this.state.next.size,
-            icons: this.state.next.icons,
-            depth: this.state.next.depth,
+            boardNum: boardNum,
+            size: next.size,
+            icons: next.icons,
+            depth: next.depth,
             start: start,
             history: [],
             goal: goal,
@@ -60,6 +81,7 @@ class App extends React.Component {
             solved: solved,
             showDialog: false,
             frame: 0,
+            next: next,
         });
     }
 
@@ -194,7 +216,7 @@ class App extends React.Component {
                     </BoardPrefs>
                     <div className="BoardButtons">
                       <button className="NewBoard"
-                        onClick={() => this.newGame()}>New Board!</button>
+                        onClick={() => this.newGame()}>Shuffle!</button>
                     </div>
                   </div>
                 </Tabs>
@@ -209,6 +231,7 @@ class App extends React.Component {
                     goal={this.state.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
+                    boardNum={this.state.boardNum}
                 />
               </header>
               <section className="App-content">
@@ -227,6 +250,7 @@ class App extends React.Component {
                     goal={this.state.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
+                    boardNum={this.state.boardNum}
                 />
                 <div>Game stats go here: moves, time, streaks...</div>
               </Dialog>
@@ -258,14 +282,15 @@ class App extends React.Component {
     }
 
     // Adds clicks to the given board until it can be solved in `times` clicks.
-    shuffle(times, size, depth, existing) {
+    shuffle(seed, times, size, depth, existing) {
+        let rng = seedrandom(seed);
         // How many clicks will it take to solve the board right now?
         let board = this.depthFrom(existing || [], size, depth);
         let clicks = this.clickDistance(board, depth);
         // Shuffle until we reach the right number of clicks
         for (var i = 0; i < 1000 && clicks < times; i++) {
-            const x = Math.floor(Math.random() * size);
-            const y = Math.floor(Math.random() * size);
+            const x = Math.floor(rng() * size);
+            const y = Math.floor(rng() * size);
             let index = y * size + x;
             // Don't *solve* a cell; only make it deeper
             if (board[index] !== 1) {
