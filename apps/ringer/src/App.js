@@ -1,53 +1,88 @@
 import './App.css';
 import React from 'react';
+import Ringer from './Ringer.js';
 import Board from './Board.js';
 import BoardPrefs from './BoardPrefs.js';
 import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
 import Dialog from './Dialog.js';
+import seedrandom from 'seedrandom';
 
 class App extends React.Component {
-    state = {
-        size: 9,
-        start: [],
-        history: [],
-        goal: 0,
-        step: 0,
-        moves: 0,
-        elapsed: 0,
-        prevTime: 0,
-        boardTimer: null,
-        icons: 'ringer-monochrome',
-        depth: 2,
-        hints: [],
-        solved: true,
-        showDialog: false,
-        frame: 0,
-        timer: null,
-        next: {
-            size: 9,
+    constructor(props) {
+        super(props);
+
+        let rng = seedrandom();
+        let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
+        rng = seedrandom(boardNum);
+        let initSize = 9;
+        let initDepth = 2;
+        let initShuffles = 8;
+        let initMoves = this.shuffle(boardNum, initShuffles, initSize, initDepth);
+        let ringer = new Ringer(initSize, initDepth);
+        let goal = ringer.bestSolution(initMoves).reduce((sum, current) => sum + current);
+        this.state = {
+            ringer: ringer,
+            rng: rng,
+            boardNum: boardNum,
+            size: initSize,
+            start: initMoves,
+            history: [],
+            goal: goal,
+            step: 0,
+            moves: 0,
+            elapsed: 0,
+            prevTime: window.performance.now(),
+            boardTimer: null,
             icons: 'ringer-monochrome',
-            depth: 2,
-            shuffles: 8,
-        },
-    };
+            depth: initDepth,
+            hints: [],
+            solved: true,
+            showDialog: false,
+            frame: 0,
+            timer: null,
+            next: {
+                size: initSize,
+                icons: 'ringer-monochrome',
+                depth: initDepth,
+                shuffles: initShuffles,
+                boardNum: boardNum + 1,
+            },
+        };
+    }
+
+    componentDidMount() {
+        this.setState({
+            boardTimer: setInterval(() => this.handleSolveTimer(), 500),
+        });
+    }
 
     newGame() {
         if (this.state.timer) { clearInterval(this.state.timer); }
         if (this.state.boardTimer) { clearInterval(this.state.boardTimer); }
-        let start = this.shuffle(this.state.next.shuffles, this.state.next.size, this.state.next.depth);
+        let next = Object.assign({},  this.state.next);
+        let ringer = new Ringer(next.size, next.depth);
+        let boardNum = next.boardNum;
+        let start = this.shuffle(
+            boardNum,
+            next.shuffles,
+            next.size,
+            next.depth);
         // Still a *minute* chance that the start moves could solve the board, I guess. 
-        let solved = this.solves(start, this.state.next.size, this.state.next.depth);
-        let depths = this.depthFrom(start, this.state.next.size, this.state.next.depth);
-        let goal = this.clickDistance(depths, this.state.next.depth);
+        let solved = this.solves(start, next.size, next.depth);
+        let depths = ringer.depthFrom(start);
+        let goal = this.clickDistance(depths, next.depth);
         let boardTimer = null;
         if (!solved) {
             boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         }
+        next.boardNum++;
         this.setState({
-            size: this.state.next.size,
-            icons: this.state.next.icons,
-            depth: this.state.next.depth,
+            ringer: ringer,
+            boardNum: boardNum,
+            size: next.size,
+            icons: next.icons,
+            depth: next.depth,
             start: start,
             history: [],
             goal: goal,
@@ -60,6 +95,7 @@ class App extends React.Component {
             solved: solved,
             showDialog: false,
             frame: 0,
+            next: next,
         });
     }
 
@@ -82,9 +118,8 @@ class App extends React.Component {
         let start = this.state.start;
         let history = this.state.history;
         let size = this.state.size;
-        let depth = this.state.depth;
         // What still needs to be clicked?
-        let clicked = this.bestSolution(start.concat(history), size, depth);
+        let clicked = this.bestSolution(start.concat(history));
         let mistakes = history.map(([x, y]) => this.toIndex(x, y, size)).filter((index) => clicked[index] !== 0);
         let misses = clicked.map((distance, index) => index).filter((index) => clicked[index] !== 0);
         let hintIndexes = mistakes.length > 0 ? mistakes :
@@ -121,8 +156,8 @@ class App extends React.Component {
     }
 
     makeMove(x, y) {
-        let step = this.state.step + 1;
         let moves = this.state.moves + 1;
+        let step = this.state.step;
         let history = this.state.history.slice(0, step).concat([[x, y]]);
         let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
         let timer = this.state.timer;
@@ -141,13 +176,27 @@ class App extends React.Component {
         }
         this.setState({
             history: history,
-            step: step,
+            step: step + 1,
             moves: moves,
             solved: solved,
             showDialog: showDialog,
             hints: hints,
             timer: timer,
             frame: 0,
+        });
+    }
+
+    handleUndo() {
+        console.log(`Undo from ${this.state.step}/${this.state.history.length}`);
+        this.setState({
+            step: this.state.step - 1,
+        });
+    }
+
+    handleRedo() {
+        console.log(`Redo to ${this.state.step + 1}/${this.state.history.length}`);
+        this.setState({
+            step: this.state.step + 1,
         });
     }
 
@@ -161,8 +210,10 @@ class App extends React.Component {
         let size = this.state.size;
         let depth = this.state.depth;
         let step = this.state.step;
+        let canUndo = step > 0;
         let start = this.state.start;
-        let history = this.state.history.slice(0, step + 1);
+        let history = this.state.history.slice(0, step);
+        let canRedo = step < this.state.history.length;
         let past = this.orderFrom(history, size, 'forward');
         let future = this.orderFrom(this.state.history.slice(step), size, 'reverse');
         let solved = this.state.solved;
@@ -181,6 +232,7 @@ class App extends React.Component {
             <div className="App">
               <header className="App-header">
                 <h1>Ringer</h1>
+                <aside>{process.env.REACT_APP_VERSION}</aside>
                 <Tabs name="options">
                   <div label="Info" id="info-tab">
                     Tap any cell to flip the ring of cells around it.
@@ -194,11 +246,17 @@ class App extends React.Component {
                     </BoardPrefs>
                     <div className="BoardButtons">
                       <button className="NewBoard"
-                        onClick={() => this.newGame()}>New Board!</button>
+                        onClick={() => this.newGame()}>Shuffle!</button>
                     </div>
                   </div>
                 </Tabs>
                 <div className="solving-buttons">
+                  <button className="Undo" onClick={() => this.handleUndo()} disabled={!canUndo}>
+                      Undo
+                  </button>
+                  <button className="Redo" onClick={() => this.handleRedo()} disabled={!canRedo}>
+                      Redo
+                  </button>
                   <button className="Hints" onClick={() => this.handleHints()} disabled={solved}>
                       Hint?
                   </button>
@@ -209,6 +267,7 @@ class App extends React.Component {
                     goal={this.state.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
+                    boardNum={this.state.boardNum}
                 />
               </header>
               <section className="App-content">
@@ -227,6 +286,7 @@ class App extends React.Component {
                     goal={this.state.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
+                    boardNum={this.state.boardNum}
                 />
                 <div>Game stats go here: moves, time, streaks...</div>
               </Dialog>
@@ -257,15 +317,17 @@ class App extends React.Component {
         }
     }
 
-    // Adds clicks to the given board until it can be solved in `times` clicks.
-    shuffle(times, size, depth, existing) {
+    // Adds clicks to a blank board until it can be solved in `times` clicks.
+    shuffle(seed, times, size, depth) {
+        let ringer = new Ringer(size, depth);
+        let rng = seedrandom(seed);
         // How many clicks will it take to solve the board right now?
-        let board = this.depthFrom(existing || [], size, depth);
+        let board = ringer.depthFrom([]);
         let clicks = this.clickDistance(board, depth);
         // Shuffle until we reach the right number of clicks
         for (var i = 0; i < 1000 && clicks < times; i++) {
-            const x = Math.floor(Math.random() * size);
-            const y = Math.floor(Math.random() * size);
+            const x = Math.floor(rng() * size);
+            const y = Math.floor(rng() * size);
             let index = y * size + x;
             // Don't *solve* a cell; only make it deeper
             if (board[index] !== 1) {
@@ -301,18 +363,6 @@ class App extends React.Component {
         return grid;
     }
 
-    // Returns a "hit map" of the board after applying the moves.
-    // Indicates how many clicks were made at each cell, looping back to 0 after reaching depth.
-    depthFrom(moves, size, depth) {
-        let depths = new Array(size * size).fill(0);
-        for (var [x, y] of moves) {
-            let index = y * size + x;
-            depths[index]++;
-            depths[index] %= depth;
-        }
-        return depths;
-    }
-
     // Returns a map of cells (by index) to their most recent click in the `moves`.
     // Early clicks are overwritten by later ones, unless `reverse` is set to `'reverse'`,
     // in which case later clicks are overwritten by earlier ones.
@@ -326,61 +376,6 @@ class App extends React.Component {
             order[index] = reverse === 'reverse' ? i + 1 : moves.length - i; 
         }
         return order;
-    }
-
-    // Returns a depth grid with the least necessary clicks to make all depths equal.
-    bestSolution(moves, size, depth) {
-        // Describe how all cells have been clicked
-        let situation = this.depthFrom(moves, size, depth);
-        // Build a histogram of how far away each cell is from depth 0
-        let histogram = [];
-        for (let clickDepth = 0; clickDepth < depth; clickDepth++) {
-            histogram.push([]);
-        }
-        situation.forEach((height, index) => histogram[height].push(index));
-        // How far are the cells from each possible depth?
-        // For each target depth
-        let clicks = new Array(depth).fill(0);
-        for (let target = 0; target < depth; target++) {
-            clicks[target] = histogram.reduce(
-                (sum, cells, clicks) => (sum + cells.length * this._clicksAway(clicks, depth, target)),
-                0);
-        }
-        // We now know have many clicks to get a uniform depth for each target depth in clicks[target depth].
-        // Which is the closest?
-        let bestTarget = clicks.reduce((current, clicks, index, all) => clicks < all[current] ? index : current, 0);
-        // Convert the histogram to a depth-map of distance from the target
-        let solution = new Array(size * size).fill(0);
-        for (let clickDepth = 0; clickDepth < depth; clickDepth++) {
-            if (clickDepth === bestTarget) {
-                continue;
-            }
-            let distance = this._clicksAway(clickDepth, depth, bestTarget);
-            histogram[clickDepth].forEach((index) => solution[index] = distance);
-        }
-        return solution;
-    }
-
-    // Helper function showing how far a cell with a click-depth is from a given target,
-    // knowing that it wraps around at depth.
-    _clicksAway(clicks, depth, target) {
-        if (target === undefined) {
-            target = 0;
-        }
-        // Each cell at a given click-depth is (target - clicks) away from reaching the target.
-        // But cells can be deeper than the target clicks, leading to negative numbers. For instance,
-        // a cell with 2 clicks is -2 away from a target of 0. That converts to its positive 
-        // equivalent by adding the depth, then modulo the whole thing by depth.
-        // For a depth of 3, and a target of 0, each cell contributes by its clicks:
-        //     0 => 0 - 0 => 0 + 3 => 3 % 3 => 0
-        //     1 => 0 - 1 => -1 + 3 => 2 % 3 => 2
-        //     2 => 0 - 2 => -2 + 3 => 1 % 3 => 1
-        // If we're trying to get to 2, each cell contributes by its clicks:
-        //     0 => 2 - 0 => 2 + 3 => 5 % 3 => 2
-        //     1 => 2 - 1 => 1 + 3 => 4 % 3 => 1
-        //     2 => 2 - 2 => 0 + 3 => 3 % 3 => 0
-        // Lots of explanation for this quick calculation. 
-        return (target - clicks + depth) % depth;
     }
 
     animatedGrid(frame, size, depth) {
