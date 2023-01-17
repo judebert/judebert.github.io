@@ -12,15 +12,18 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
+        this.boardTimer = null;
+        this.animTimer = null;
+
         let rng = seedrandom();
         let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
         rng = seedrandom(boardNum);
         let initSize = 9;
         let initDepth = 2;
         let initShuffles = 8;
-        let initMoves = this.shuffle(boardNum, initShuffles, initSize, initDepth);
+        let initMoves = [];
         let ringer = new Ringer(initSize, initDepth);
-        let goal = ringer.bestSolution(initMoves).reduce((sum, current) => sum + current);
+        let goal = 0;
         this.state = {
             ringer: ringer,
             rng: rng,
@@ -33,14 +36,12 @@ class App extends React.Component {
             moves: 0,
             elapsed: 0,
             prevTime: window.performance.now(),
-            boardTimer: null,
             icons: 'ringer-monochrome',
             depth: initDepth,
             hints: [],
             solved: true,
             showDialog: false,
             frame: 0,
-            timer: null,
             next: {
                 size: initSize,
                 icons: 'ringer-monochrome',
@@ -52,14 +53,16 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({
-            boardTimer: setInterval(() => this.handleSolveTimer(), 500),
-        });
+        this.newGame();
     }
 
     newGame() {
-        if (this.state.timer) { clearInterval(this.state.timer); }
-        if (this.state.boardTimer) { clearInterval(this.state.boardTimer); }
+        if (this.animTimer) {
+            clearInterval(this.animTimer);
+        }
+        if (this.boardTimer) {
+            clearInterval(this.boardTimer);
+        }
         let next = Object.assign({},  this.state.next);
         let ringer = new Ringer(next.size, next.depth);
         let boardNum = next.boardNum;
@@ -72,9 +75,8 @@ class App extends React.Component {
         let solved = this.solves(start, next.size, next.depth);
         let depths = ringer.depthFrom(start);
         let goal = this.clickDistance(depths, next.depth);
-        let boardTimer = null;
         if (!solved) {
-            boardTimer = setInterval(() => this.handleSolveTimer(), 500);
+            this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         }
         next.boardNum++;
         this.setState({
@@ -90,7 +92,6 @@ class App extends React.Component {
             moves: 0,
             elapsed: 0,
             prevTime: window.performance.now(),
-            boardTimer: boardTimer,
             hints: [],
             solved: solved,
             showDialog: false,
@@ -119,7 +120,7 @@ class App extends React.Component {
         let history = this.state.history;
         let size = this.state.size;
         // What still needs to be clicked?
-        let clicked = this.bestSolution(start.concat(history));
+        let clicked = this.state.ringer.bestSolution(start.concat(history));
         let mistakes = history.map(([x, y]) => this.toIndex(x, y, size)).filter((index) => clicked[index] !== 0);
         let misses = clicked.map((distance, index) => index).filter((index) => clicked[index] !== 0);
         let hintIndexes = mistakes.length > 0 ? mistakes :
@@ -134,15 +135,13 @@ class App extends React.Component {
     }
 
     handleReset(resetTimer) {
-        let boardTimer = this.state.boardTimer;
-        clearInterval(boardTimer);
-        boardTimer = setInterval(() => this.handleSolveTimer(), 500);
+        clearInterval(this.boardTimer);
+        this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         this.setState({
             step: 0,
             moves: 0,
             history: [],
             hints: [],
-            boardTimer: boardTimer,
             elapsed: 0,
             prevTime: window.performance.now(),
             showDialog: false,
@@ -160,12 +159,11 @@ class App extends React.Component {
         let step = this.state.step;
         let history = this.state.history.slice(0, step).concat([[x, y]]);
         let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
-        let timer = this.state.timer;
         let showDialog = this.state.showDialog;
         if (solved) {
-            clearInterval(this.state.timer);
-            clearInterval(this.state.boardTimer);
-            timer = setInterval(() => this.animate(), 150);
+            clearInterval(this.animTimer);
+            clearInterval(this.boardTimer);
+            this.animTimer = setInterval(() => this.animate(), 150);
             showDialog = true;
         }
         let index = this.toIndex(x, y, this.state.size);
@@ -181,7 +179,6 @@ class App extends React.Component {
             solved: solved,
             showDialog: showDialog,
             hints: hints,
-            timer: timer,
             frame: 0,
         });
     }
