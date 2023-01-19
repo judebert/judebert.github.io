@@ -66,11 +66,14 @@ class App extends React.Component {
         let next = Object.assign({},  this.state.next);
         let ringer = new Ringer(next.size, next.depth);
         let boardNum = next.boardNum;
-        let start = this.shuffle(
-            boardNum,
-            next.shuffles,
-            next.size,
-            next.depth);
+        let start = [];
+        if (!isNaN(next.shuffles) && next.shuffles > 0) {
+            start = this.shuffle(
+                boardNum,
+                next.shuffles,
+                next.size,
+                next.depth);
+        }
         // Still a *minute* chance that the start moves could solve the board, I guess. 
         let solved = this.solves(start, next.size, next.depth);
         let depths = ringer.depthFrom(start);
