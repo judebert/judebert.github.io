@@ -3,9 +3,13 @@ import React from 'react';
 class ShufflePrefs extends React.Component {
 
     handleShuffleChange(prefs, shuffles) {
-        let max = Math.floor(this.props.size * this.props.size * (this.props.depth - 1) / 2);
-        let min = 0;
-        prefs.shuffles = Math.max(min, Math.min(max, shuffles));
+        prefs.shuffles = "";
+        if (!isNaN(shuffles)) {
+            let max = Math.floor(prefs.size * prefs.size * (prefs.depth - 1) / 2);
+            let min = 0;
+            let shuffleInt = parseInt(shuffles);
+            prefs.shuffles = Math.max(min, Math.min(max, shuffleInt));
+        }
         this.props.onChange(prefs);
     }
 
@@ -19,7 +23,10 @@ class ShufflePrefs extends React.Component {
 
     render() {
         let prefs = this.props.prefs;
-        let shuffles = prefs.shuffles;
+        let shuffles = parseInt(prefs.shuffles);
+        if (isNaN(shuffles)) {
+            shuffles = "";
+        }
         let size = prefs.size;
         let depth = prefs.depth;
         let boardNum = prefs.boardNum;
