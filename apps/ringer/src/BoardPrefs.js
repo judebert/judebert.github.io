@@ -6,44 +6,16 @@ import './BoardPrefs.css';
 // The BoardPrefs component displays all the inputs for initializing a new board
 class BoardPrefs extends React.Component {
 
-    handleIconChange(event) {
-        let prefs = this.props.prefs;
-        this.props.onPrefChange({
-            size: parseInt(prefs.size),
-            depth: parseInt(prefs.depth),
-            icons: event.target.value,
-            shuffles: parseInt(prefs.shuffles),
-        });
-    }
-
     handleSizeChange(event) {
-        let prefs = this.props.prefs;
-        this.props.onPrefChange({
-            size: parseInt(event.target.value),
-            depth: parseInt(prefs.depth),
-            icons: prefs.icons,
-            shuffles: parseInt(prefs.shuffles),
-        });
+        let prefs = Object.assign({}, this.props.prefs);
+        prefs.size = parseInt(event.target.value);
+        this.props.onPrefChange(prefs);
     }
 
     handleDepthChange(event) {
-        let prefs = this.props.prefs;
-        this.props.onPrefChange({
-            size: parseInt(prefs.size),
-            depth: parseInt(event.target.value),
-            icons: prefs.icons,
-            shuffles: parseInt(prefs.shuffles),
-        });
-    }
-
-    handleShuffleChange(shuffles) {
-        let prefs = this.props.prefs;
-        this.props.onPrefChange({
-            size: parseInt(prefs.size),
-            depth: parseInt(prefs.depth),
-            icons: prefs.icons,
-            shuffles: parseInt(shuffles),
-        });
+        let prefs = Object.assign({}, this.props.prefs);
+        prefs.depth = parseInt(event.target.value);
+        this.props.onPrefChange(prefs);
     }
 
     render() {
