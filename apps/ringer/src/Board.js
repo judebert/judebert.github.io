@@ -1,4 +1,5 @@
 import React from 'react';
+// import Ringer from './Ringer.js';
 import Cell from './Cell.js';
 import './Board.css';
 
@@ -7,7 +8,10 @@ import './Board.css';
 // when it's NOT square. I wind up with a giant gutter in one dimension.
 class Board extends React.Component {
     render() {
-        let size = this.props.size;
+        let ringer = this.props.board;
+        let step = this.props.step;
+        let grid = ringer.gridFrom(this.props.moves.slice(0, step));
+        let size = ringer.size;
         let hints = this.props.hints;
         let past = this.props.past;
         let future = this.props.future;
@@ -21,7 +25,7 @@ class Board extends React.Component {
                 cells.push(<Cell coords={[x, y]}
                     key={`board${size}x${size}-${x}-${y}`}
                     icons={this.props.icons}
-                    value={this.props.cells[index]}
+                    value={grid[index]}
                     hint={hintDepth}
                     past={pastDepth}
                     future={futureDepth}
@@ -32,8 +36,8 @@ class Board extends React.Component {
 
         return (
             <div className="Board" style={{
-                gridTemplateColumns: `repeat(${this.props.size}, 1fr)`,
-                gridTemplateRows: `repeat(${this.props.size}, 1fr`,
+                gridTemplateColumns: `repeat(${size}, 1fr)`,
+                gridTemplateRows: `repeat(${size}, 1fr`,
             }}>
                 {cells}
             </div>

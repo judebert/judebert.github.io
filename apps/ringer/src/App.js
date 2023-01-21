@@ -21,7 +21,6 @@ class App extends React.Component {
         let initSize = 9;
         let initDepth = 2;
         let initShuffles = 8;
-        let initMoves = [];
         let ringer = new Ringer(initSize, initDepth);
         let goal = 0;
         this.state = {
@@ -29,7 +28,6 @@ class App extends React.Component {
             rng: rng,
             boardNum: boardNum,
             size: initSize,
-            start: initMoves,
             history: [],
             goal: goal,
             step: 0,
@@ -37,7 +35,6 @@ class App extends React.Component {
             elapsed: 0,
             prevTime: window.performance.now(),
             icons: 'ringer-monochrome',
-            depth: initDepth,
             hints: [],
             solved: true,
             showDialog: false,
@@ -65,19 +62,12 @@ class App extends React.Component {
         }
         let next = Object.assign({},  this.state.next);
         let ringer = new Ringer(next.size, next.depth);
-        let boardNum = next.boardNum;
-        let start = [];
+        let boardNum = Math.max(0, parseInt(next.boardNum));
         if (!isNaN(next.shuffles) && next.shuffles > 0) {
-            start = this.shuffle(
-                boardNum,
-                next.shuffles,
-                next.size,
-                next.depth);
+            ringer.shuffle(boardNum, next.shuffles);
         }
-        // Still a *minute* chance that the start moves could solve the board, I guess. 
-        let solved = this.solves(start, next.size, next.depth);
-        let depths = ringer.depthFrom(start);
-        let goal = this.clickDistance(depths, next.depth);
+        // Still a *minute* chance that the shuffle could create a solved multi-depth board, I guess. 
+        let solved = ringer.isSolvedBy([]);
         if (!solved) {
             this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         }
@@ -88,9 +78,8 @@ class App extends React.Component {
             size: next.size,
             icons: next.icons,
             depth: next.depth,
-            start: start,
             history: [],
-            goal: goal,
+            goal: ringer.goal,
             step: 0,
             moves: 0,
             elapsed: 0,
@@ -119,17 +108,26 @@ class App extends React.Component {
     }
 
     handleHints() {
-        let start = this.state.start;
         let history = this.state.history;
-        let size = this.state.size;
+        let size = this.state.ringer.size;
         // What still needs to be clicked?
-        let clicked = this.state.ringer.bestSolution(start.concat(history));
-        let mistakes = history.map(([x, y]) => this.toIndex(x, y, size)).filter((index) => clicked[index] !== 0);
+        let clicked = this.state.ringer.bestSolution(history);
+        let mistakes = history.map((move) => this.state.ringer._asIndex(move)).filter((index) => clicked[index] !== 0);
         let misses = clicked.map((distance, index) => index).filter((index) => clicked[index] !== 0);
         let hintIndexes = mistakes.length > 0 ? mistakes :
             misses.length > 0 ? misses.slice(0, 1) : [];
+        console.warn('Best solution:');
+        console.dir(clicked);
+        console.warn('History:');
+        console.dir(history);
+        console.warn('Mistakes:');
+        console.dir(mistakes);
+        console.warn('Misses:');
+        console.dir(misses);
+        console.log('hintIndexes:');
+        console.dir(hintIndexes);
         // Board is expecting a depth map, so we can make pretty indicators (some day)
-        let hints = new Array(size).fill(0);
+        let hints = new Array(size * size).fill(0);
         hintIndexes.forEach((index) => hints[index] = clicked[index]);
         this.setState({
             hints: hints,
@@ -161,7 +159,7 @@ class App extends React.Component {
         let moves = this.state.moves + 1;
         let step = this.state.step;
         let history = this.state.history.slice(0, step).concat([[x, y]]);
-        let solved = this.solves(this.state.start.concat(history), this.state.size, this.state.depth)
+        let solved = this.state.ringer.isSolvedBy(history);
         let showDialog = this.state.showDialog;
         if (solved) {
             clearInterval(this.animTimer);
@@ -169,7 +167,7 @@ class App extends React.Component {
             this.animTimer = setInterval(() => this.animate(), 150);
             showDialog = true;
         }
-        let index = this.toIndex(x, y, this.state.size);
+        let index = this.state.ringer._asIndex([x, y]);
         let hints = this.state.hints.slice();
         if (hints && hints.length > index && hints[index] > 0) {
             let depth = this.state.depth;
@@ -208,19 +206,13 @@ class App extends React.Component {
 
     render() {
         let size = this.state.size;
-        let depth = this.state.depth;
         let step = this.state.step;
         let canUndo = step > 0;
-        let start = this.state.start;
         let history = this.state.history.slice(0, step);
         let canRedo = step < this.state.history.length;
         let past = this.orderFrom(history, size, 'forward');
         let future = this.orderFrom(this.state.history.slice(step), size, 'reverse');
         let solved = this.state.solved;
-        let frame = this.state.frame;
-        let grid = solved && step > 0
-            ? this.animatedGrid(frame, size, depth)
-            : this.gridFrom(start.concat(history), size, depth);
         let hints = this.state.hints;
         let showDialog = this.state.showDialog;
         let dialogButtons = Array.of(
@@ -271,8 +263,9 @@ class App extends React.Component {
                 />
               </header>
               <section className="App-content">
-                <Board size={this.state.size}
-                  cells={grid}
+                <Board board={this.state.ringer}
+                  moves={this.state.history}
+                  step={step}
                   icons={this.state.icons}
                   hints={solved ? [] : hints}
                   past={solved ? [] : past}
@@ -297,71 +290,6 @@ class App extends React.Component {
     // TODO: Pull these into a BoardLogic class or something
     // They're not UI, they're logic.
     //
-    toIndex(x, y, size) {
-        return y * size + x;
-    }
-
-    // Increment all the cells in a ring around (x, y) *mutating* the given grid
-    // assuming the grid is of size and depth
-    ring(x, y, grid, size, depth) {
-        const neighbors = [
-            [-1, -1], [0, -1], [1, -1],
-            [-1, 0], [1, 0],
-            [-1, 1], [0, 1], [1, 1],
-        ];
-        for (var [dx, dy] of neighbors) {
-            const ringX = (x + dx + size) % size;
-            const ringY = (y + dy + size) % size;
-            const index = ringY * size + ringX;
-            grid[index] = (grid[index] + 1) % depth;
-        }
-    }
-
-    // Adds clicks to a blank board until it can be solved in `times` clicks.
-    shuffle(seed, times, size, depth) {
-        let ringer = new Ringer(size, depth);
-        let rng = seedrandom(seed);
-        // How many clicks will it take to solve the board right now?
-        let board = ringer.depthFrom([]);
-        let clicks = this.clickDistance(board, depth);
-        // Shuffle until we reach the right number of clicks
-        for (var i = 0; i < 1000 && clicks < times; i++) {
-            const x = Math.floor(rng() * size);
-            const y = Math.floor(rng() * size);
-            let index = y * size + x;
-            // Don't *solve* a cell; only make it deeper
-            if (board[index] !== 1) {
-                board[index] = (board[index] + depth - 1) % depth;
-                clicks++;
-            }
-        }
-        console.log(`Shuffled to ${clicks} moves in ${i} tries`);
-        // Turn that into a list of moves (order doesn't matter!)
-        let moves = board.flatMap((cellDepth, index) =>
-            Array(cellDepth).fill([index % size, Math.floor(index / size)]));
-        return moves;
-    }
-
-    // Returns the number of clicks required to solve the board.
-    clickDistance(clicks, depth) {
-        return clicks.reduce((sum, cellDepth) => sum + ((depth - cellDepth) % depth), 0);
-    }
-
-    // Returns true if the moves solve the board.
-    solves(moves, size, depth) {
-        let grid = this.gridFrom(moves, size, depth);
-        let response = grid.every((cell) => cell === grid[0]);
-        return response;
-    }
-
-    // Returns displayed board, where all the squares *around* the `moves` have been flipped.
-    gridFrom(moves, size, depth) {
-        let grid = new Array(size * size).fill(0);
-        for (var [x, y] of moves) {
-            this.ring(x, y, grid, size, depth);
-        }
-        return grid;
-    }
 
     // Returns a map of cells (by index) to their most recent click in the `moves`.
     // Early clicks are overwritten by later ones, unless `reverse` is set to `'reverse'`,

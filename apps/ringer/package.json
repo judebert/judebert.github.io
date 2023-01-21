@@ -1,6 +1,6 @@
 {
   "name": "ringer",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "homepage": "/ringer/",
   "private": true,
   "dependencies": {
