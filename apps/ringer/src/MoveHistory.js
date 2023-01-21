@@ -12,15 +12,28 @@ class MoveHistory {
     }
 
     current() {
-        return this.moves.slice(0, step);
+        return this.moves.slice(0, this.step);
+    }
+
+    all() {
+        return this.moves.slice();
+    }
+
+    undone() {
+        return this.moves.slice(this.step);
     }
 
     // Since history is entirely separate from the board, we don't know depth or height.
     // We can only use the data we get.
     makeMove(move) {
-        this.moves = this.moves.slice(0, this.step).push(move);
+        this.moves = this.moves.slice(0, this.step);
+        this.moves.push(move);
         this.step++;
         return this.moves;
+    }
+
+    step() {
+        return this.step;
     }
 
     // Luckily, 0 gets interpreted as false, and we can undo as long as there's at least 1 step,

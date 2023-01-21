@@ -115,9 +115,9 @@ class Ringer {
     }
 
     // Returns a depth grid with the least necessary clicks to make all depths equal.
-    bestSolution(moves) {
+    bestSolution(history) {
         // Describe how all cells have been clicked
-        let situation = this.depthFrom(moves);
+        let situation = this.depthFrom(history.current());
         // Build a histogram of how far away each cell is from depth 0
         let histogram = [];
         for (let clickDepth = 0; clickDepth < this.depth; clickDepth++) {
