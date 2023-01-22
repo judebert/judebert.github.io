@@ -232,7 +232,7 @@ class App extends React.Component {
                     The whole board is a ring, too: flipping a cell outside an edge flips the cell on the opposite edge!
                     Can you get all the cells to match?
                   </div>
-                  <div label="Options" id="option-tab">
+                  <div label="New" id="option-tab">
                     <BoardPrefs
                       prefs={this.state.next}
                       onPrefChange={this.handlePrefChange.bind(this)}>

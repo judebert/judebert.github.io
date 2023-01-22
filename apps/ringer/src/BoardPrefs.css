@@ -3,6 +3,16 @@
     flex-direction: column;
     justify-content: center;
     align-content: center;
+    overflow: auto;
+}
+
+.BoardSizePrefs {
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .DemoCells {
@@ -15,5 +25,28 @@
 }
 
 .BoardPrefs label {
-    padding-right: 0.5em;
+    display: block;
+    flex: 1 0 auto;
+}
+
+.BoardPrefs label input, .BoardPrefs label select {
+    margin-left: 0.5em;
+}
+
+.ShufflePrefs {
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+#ShufflesInput {
+    width: 3em;
+}
+
+#BoardNumberInput {
+    width: 6em;
 }

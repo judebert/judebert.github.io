@@ -37,7 +37,7 @@ input, button, select {
   .App {
       flex-direction: row;
       flex-wrap: nowrap;
-      overflow: scroll;
+      overflow: auto;
   }
   .App-header {
       min-width: 15em;
@@ -54,7 +54,7 @@ input, button, select {
   .App {
       flex-direction: column;
       flex-wrap: nowrap;
-      overflow: scroll;
+      overflow: auto;
   }
   .App-header {
       height: auto;
@@ -64,7 +64,4 @@ input, button, select {
   .App-content {
       margin-bottom: 1rem;
   }
-}
-
-.App-content {
 }

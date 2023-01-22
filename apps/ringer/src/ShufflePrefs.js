@@ -33,8 +33,8 @@ class ShufflePrefs extends React.Component {
         let boardHex = boardNum > 0 ? boardNum.toString(16).toUpperCase() : "";
         return (
             <div className="ShufflePrefs">
-                <label>Moves Left
-                  <input type="number"
+                <label>Shuffles
+                  <input id='ShufflesInput' type="number"
                     value={shuffles}
                     min={0}
                     max={Math.floor(size * size * (depth - 1) / 2)}
@@ -42,8 +42,8 @@ class ShufflePrefs extends React.Component {
                     onChange={(e) => this.handleShuffleChange(prefs, e.target.value)}
                   />
                 </label>
-                <label> board #
-                  <input type="text"
+                <label>Next
+                  <input id='BoardNumberInput' type="text"
                     value={boardHex}
                     maxLength={6}
                     pattern="^[0-9A-F]*$"
