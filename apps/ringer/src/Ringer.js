@@ -4,22 +4,14 @@ class Ringer {
     constructor(size, depth) {
         if (size === undefined) size = 9;
         if (depth === undefined) depth = 2;
+        this.boardNum = 0;
         this.size = size;
         this.depth = depth;
-        this.boardNum = 0;
         this.goal = 0;
         this.start = [];
-        this.startGrid = this.gridFrom(this.start);
-        this.startDepths = this.depthFrom(this.start);
         this.info = `Tap any cell to flip the ring of cells around it.
           The whole board is a ring, too: flipping a cell outside an edge flips the cell on the opposite edge!
           Can you get all the cells to match?`;
-    }
-
-    // Helper function converting an [x, y] array to a Ringer cell index
-    _asIndex([x, y]) {
-        let val = y * this.size + x;
-        return val;
     }
 
     // Helper function showing how far a cell with a click-depth is from a given target,
@@ -45,7 +37,10 @@ class Ringer {
     }
 
     // Increment all the cells in a ring around (x, y) *mutating* the given grid
-    _ticNeighbors(x, y, grid) {
+    _ticNeighbors(index, grid) {
+        // Calculate the X and Y so we can do wrap-around modulo math.
+        const x = index % this.size;
+        const y = Math.floor(index / this.size);
         const neighbors = [
             [-1, -1], [0, -1], [1, -1],
             [-1, 0], [1, 0],
@@ -54,8 +49,8 @@ class Ringer {
         for (var [dx, dy] of neighbors) {
             const ringX = (x + dx + this.size) % this.size;
             const ringY = (y + dy + this.size) % this.size;
-            const index = this._asIndex([ringX, ringY]);
-            grid[index] = (grid[index] + 1) % this.depth;
+            const neighbor = ringY * this.size + ringX;
+            grid[neighbor] = (grid[neighbor] + 1) % this.depth;
         }
     }
 
@@ -70,6 +65,7 @@ class Ringer {
     // Clears this board, then adds clicks until it can be solved in `times` clicks.
     // Saves the [x,y] start moves in this.start
     shuffle(seed, times) {
+        this.boardNum = seed > 0 ? seed.toString(16).toUpperCase() : "";
         let rng = seedrandom(seed);
         // How many clicks will it take to solve the board right now?
         this.start = [];
@@ -87,17 +83,14 @@ class Ringer {
         this.goal = board.reduce((sum, cellDepth) => sum + ((this.depth - cellDepth) % this.depth), 0);
         console.log(`Shuffled to ${clicks} moves / goal ${this.goal} in ${i} tries`);
         // Turn that into a list of moves (order doesn't matter!)
-        // TODO: Use a list of indexes, c'mon
-        this.start = board.flatMap((cellDepth, index) =>
-            Array(cellDepth).fill([index % this.size, Math.floor(index / this.size)]));
-        this.startDepths = board;
+        this.start = board.flatMap((cellDepth, index) => Array(cellDepth).fill(index));
     }
 
     // Returns displayed board, where all the squares *around* the `moves` have been flipped.
     gridFrom(moves) {
         let grid = new Array(this.size * this.size).fill(0);
-        for (var [x, y] of this.start.concat(moves)) {
-            this._ticNeighbors(x, y, grid, this.size, this.depth);
+        for (var index of this.start.concat(moves)) {
+            this._ticNeighbors(index, grid);
         }
         return grid;
     }
@@ -106,8 +99,7 @@ class Ringer {
     // Indicates how many clicks were made at each cell, looping back to 0 after reaching depth.
     depthFrom(moves) {
         let depths = new Array(this.size * this.size).fill(0);
-        for (var move of this.start.concat(moves)) {
-            let index = this._asIndex(move);
+        for (var index of this.start.concat(moves)) {
             depths[index]++;
             depths[index] %= this.depth;
         }
@@ -115,9 +107,9 @@ class Ringer {
     }
 
     // Returns a depth grid with the least necessary clicks to make all depths equal.
-    bestSolution(moves) {
+    bestSolution(history) {
         // Describe how all cells have been clicked
-        let situation = this.depthFrom(moves);
+        let situation = this.depthFrom(history.current());
         // Build a histogram of how far away each cell is from depth 0
         let histogram = [];
         for (let clickDepth = 0; clickDepth < this.depth; clickDepth++) {
@@ -147,28 +139,32 @@ class Ringer {
         return solution;
     }
 
-    save(info) {
+    toJson(info) {
         if (info === undefined) { info = `This board was saved without a description.` };
         return ({
             boardNum: this.boardNum,
             size: this.size,
             depth: this.depth,
+            goal: this.goal,
             start: this.start,
             info: info,
         });
     }
 
-    load(data) {
+    fromJson(data) {
         if (data === undefined) return; 
-        if (data.size === undefined) data.size = this.size;
-        if (data.depth === undefined) data.depth = this.depth;
-        if (data.start === undefined) data.start = [];
-        this.size = data.size;
-        this.depth = data.depth;
+        if (data.boardNum === undefined) data.boardNum = this.boardNum;
         this.boardNum = data.boardNum;
+        if (data.size === undefined) data.size = this.size;
+        this.size = data.size;
+        if (data.depth === undefined) data.depth = this.depth;
+        this.depth = data.depth;
+        if (data.goal === undefined) data.goal = this.goal;
+        this.goal = data.goal;
+        if (data.start === undefined) data.start = this.start;
         this.start = data.start;
+        if (data.info === undefined) data.info = this.info;
         this.info = data.info;
-        this.depths = this.depthFrom([]);
     }
 }
 

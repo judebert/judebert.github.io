@@ -1,10 +1,14 @@
 import './App.css';
 import React from 'react';
 import Ringer from './Ringer.js';
+import MoveHistory from './MoveHistory.js';
+import SolveStats from './SolveStats.js';
+import Persistence from './Persistence.js';
 import Board from './Board.js';
 import BoardPrefs from './BoardPrefs.js';
 import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
+import HighScores from './HighScores.js';
 import Dialog from './Dialog.js';
 import seedrandom from 'seedrandom';
 
@@ -14,23 +18,20 @@ class App extends React.Component {
 
         this.boardTimer = null;
         this.animTimer = null;
+        this.solveStats = null;
+        this.highScores = null;
+        this.persistence = new Persistence();
 
         let rng = seedrandom();
         let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
-        rng = seedrandom(boardNum);
         let initSize = 9;
         let initDepth = 2;
         let initShuffles = 8;
         let ringer = new Ringer(initSize, initDepth);
-        let goal = 0;
         this.state = {
             ringer: ringer,
-            rng: rng,
             boardNum: boardNum,
-            size: initSize,
-            history: [],
-            goal: goal,
-            step: 0,
+            history: new MoveHistory(),
             moves: 0,
             elapsed: 0,
             prevTime: window.performance.now(),
@@ -71,16 +72,14 @@ class App extends React.Component {
         if (!solved) {
             this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         }
+        this.solveStats = new SolveStats(boardNum, ringer.size, ringer.goal);
+        this.highScores = this.persistence.getIdenticalStats(this.solveStats);
         next.boardNum++;
         this.setState({
             ringer: ringer,
             boardNum: boardNum,
-            size: next.size,
             icons: next.icons,
-            depth: next.depth,
-            history: [],
-            goal: ringer.goal,
-            step: 0,
+            history: new MoveHistory(),
             moves: 0,
             elapsed: 0,
             prevTime: window.performance.now(),
@@ -95,6 +94,7 @@ class App extends React.Component {
     handleSolveTimer() {
         let now = window.performance.now();
         let subElapsed = now - this.state.prevTime;
+        this.solveStats.setTime(this.state.elapsed + subElapsed);
         this.setState({
             elapsed: this.state.elapsed + subElapsed,
             prevTime: now
@@ -108,27 +108,21 @@ class App extends React.Component {
     }
 
     handleHints() {
+        this.solveStats.addHint();
         let history = this.state.history;
         let size = this.state.ringer.size;
         // What still needs to be clicked?
         let clicked = this.state.ringer.bestSolution(history);
-        let mistakes = history.map((move) => this.state.ringer._asIndex(move)).filter((index) => clicked[index] !== 0);
-        let misses = clicked.map((distance, index) => index).filter((index) => clicked[index] !== 0);
-        let hintIndexes = mistakes.length > 0 ? mistakes :
-            misses.length > 0 ? misses.slice(0, 1) : [];
-        console.warn('Best solution:');
-        console.dir(clicked);
-        console.warn('History:');
-        console.dir(history);
-        console.warn('Mistakes:');
-        console.dir(mistakes);
-        console.warn('Misses:');
-        console.dir(misses);
-        console.log('hintIndexes:');
-        console.dir(hintIndexes);
-        // Board is expecting a depth map, so we can make pretty indicators (some day)
+        let mistakes = history.current().filter((index) => clicked[index] !== 0);
+        let misses = clicked.map((depth, index) => [depth, index])
+            .filter(([depth, index]) => depth > 0)
+            .map(([depth, index]) => index);
+        let chosen = mistakes.length > 0 ? mistakes :
+            misses.length > 0 ? [misses[0]] : [];
+        // Convert to depth map for (eventual) pretty display
         let hints = new Array(size * size).fill(0);
-        hintIndexes.forEach((index) => hints[index] = clicked[index]);
+        chosen.forEach((index) => hints[index] = clicked[index]);
+        // Only costs a move if it reveals progress; no cost for revealing mistakes
         this.setState({
             hints: hints,
             moves: this.state.moves + (mistakes.length > 0 ? 0 : 1),
@@ -136,12 +130,12 @@ class App extends React.Component {
     }
 
     handleReset(resetTimer) {
+        this.solveStats.addReset();
         clearInterval(this.boardTimer);
         this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         this.setState({
-            step: 0,
             moves: 0,
-            history: [],
+            history: new MoveHistory(),
             hints: [],
             elapsed: 0,
             prevTime: window.performance.now(),
@@ -155,27 +149,30 @@ class App extends React.Component {
         });
     }
 
-    makeMove(x, y) {
+    makeMove(index) {
+        let ringer = this.state.ringer;
         let moves = this.state.moves + 1;
-        let step = this.state.step;
-        let history = this.state.history.slice(0, step).concat([[x, y]]);
-        let solved = this.state.ringer.isSolvedBy(history);
+        let history = this.state.history.makeMove(index);
+        let solved = ringer.isSolvedBy(history);
         let showDialog = this.state.showDialog;
         if (solved) {
             clearInterval(this.animTimer);
             clearInterval(this.boardTimer);
             this.animTimer = setInterval(() => this.animate(), 150);
             showDialog = true;
+            if (this.state.elapsed > 0) {
+                this.solveStats = new SolveStats(ringer.boardNum, ringer.size, ringer.goal,
+                    moves, this.state.elapsed,
+                    this.solveStats.resets, this.solveStats.undos, this.solveStats.redos, this.solveStats.hints);
+                this.persistence.updateStats(this.solveStats);
+            }
         }
-        let index = this.state.ringer._asIndex([x, y]);
         let hints = this.state.hints.slice();
         if (hints && hints.length > index && hints[index] > 0) {
-            let depth = this.state.depth;
+            let depth = this.state.ringer.depth;
             hints[index] = (hints[index] + depth + 1) % depth;
         }
         this.setState({
-            history: history,
-            step: step + 1,
             moves: moves,
             solved: solved,
             showDialog: showDialog,
@@ -185,16 +182,26 @@ class App extends React.Component {
     }
 
     handleUndo() {
-        console.log(`Undo from ${this.state.step}/${this.state.history.length}`);
+        this.solveStats.addUndo();
+        let undone = this.state.history.undo();
+        let hints = this.state.hints.slice();
+        let depth = this.state.ringer.depth;
+        undone.filter((index) => hints.length > index && hints[index] > 0)
+            .forEach((index) => hints[index] = (hints[index] + depth + 1) % depth);
         this.setState({
-            step: this.state.step - 1,
+            hints: hints,
         });
     }
 
     handleRedo() {
-        console.log(`Redo to ${this.state.step + 1}/${this.state.history.length}`);
+        this.solveStats.addRedo();
+        let redone = this.state.history.redo();
+        let hints = this.state.hints.slice();
+        let depth = this.state.ringer.depth;
+        redone.filter((index) => hints.length > index && hints[index] > 0)
+            .forEach((index) => hints[index] = (hints[index] + depth + 1) % depth);
         this.setState({
-            step: this.state.step + 1,
+            hints: hints,
         });
     }
 
@@ -205,13 +212,7 @@ class App extends React.Component {
     }
 
     render() {
-        let size = this.state.size;
-        let step = this.state.step;
-        let canUndo = step > 0;
-        let history = this.state.history.slice(0, step);
-        let canRedo = step < this.state.history.length;
-        let past = this.orderFrom(history, size, 'forward');
-        let future = this.orderFrom(this.state.history.slice(step), size, 'reverse');
+        let history = this.state.history;
         let solved = this.state.solved;
         let hints = this.state.hints;
         let showDialog = this.state.showDialog;
@@ -243,10 +244,10 @@ class App extends React.Component {
                   </div>
                 </Tabs>
                 <div className="solving-buttons">
-                  <button className="Undo" onClick={() => this.handleUndo()} disabled={!canUndo}>
+                  <button className="Undo" onClick={() => this.handleUndo()} disabled={!history.canUndo()}>
                       Undo
                   </button>
-                  <button className="Redo" onClick={() => this.handleRedo()} disabled={!canRedo}>
+                  <button className="Redo" onClick={() => this.handleRedo()} disabled={!history.canRedo()}>
                       Redo
                   </button>
                   <button className="Hints" onClick={() => this.handleHints()} disabled={solved}>
@@ -256,7 +257,7 @@ class App extends React.Component {
                 </div>
                 <ScoreBoard
                     moves={this.state.moves}
-                    goal={this.state.goal}
+                    goal={this.state.ringer.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
                     boardNum={this.state.boardNum}
@@ -264,48 +265,31 @@ class App extends React.Component {
               </header>
               <section className="App-content">
                 <Board board={this.state.ringer}
-                  moves={this.state.history}
-                  step={step}
-                  icons={this.state.icons}
+                  history={history}
                   hints={solved ? [] : hints}
-                  past={solved ? [] : past}
-                  future={solved ? [] : future}
+                  icons={this.state.icons}
                   onClick={(x, y) => this.makeMove(x, y)}
                 />
               </section>
               <Dialog active={showDialog} buttons={dialogButtons}>
                 <ScoreBoard
                     moves={this.state.moves}
-                    goal={this.state.goal}
+                    goal={this.state.ringer.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
                     boardNum={this.state.boardNum}
                 />
-                <div>Game stats go here: moves, time, streaks...</div>
+                <HighScores
+                    current={this.solveStats}
+                    datastore={this.persistence}
+                />
               </Dialog>
             </div>
         );
     };
 
-    // TODO: Pull these into a BoardLogic class or something
-    // They're not UI, they're logic.
+    // TODO: Pull this into a separate class. Maybe a subclass of Ringer?
     //
-
-    // Returns a map of cells (by index) to their most recent click in the `moves`.
-    // Early clicks are overwritten by later ones, unless `reverse` is set to `'reverse'`,
-    // in which case later clicks are overwritten by earlier ones.
-    // Essentially, tells you that "the user clicked the cell at (3, 2) on their 3rd move".
-    // TODO: *Why* do I need this? TWO WAYS?
-    orderFrom(moves, size, reverse) {
-        let order = new Array(size * size).fill(0);
-        for (var i = 0; i < moves.length; i++) {
-            let [x, y] = moves[i];
-            let index = y * size + x;
-            order[index] = reverse === 'reverse' ? i + 1 : moves.length - i; 
-        }
-        return order;
-    }
-
     animatedGrid(frame, size, depth) {
         // TODO: choose or pass an animation
         let display;

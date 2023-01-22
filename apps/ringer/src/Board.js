@@ -6,33 +6,30 @@ import './Board.css';
 // A Board displays Cells in a *square* grid.
 // Why square? I can't figure out how to get CSS grid to condense all the cells together
 // when it's NOT square. I wind up with a giant gutter in one dimension.
+// I guess it leaves a convenient place for controls and such.
 class Board extends React.Component {
     render() {
         let ringer = this.props.board;
-        let step = this.props.step;
-        let grid = ringer.gridFrom(this.props.moves.slice(0, step));
+        let history = this.props.history;
+        let recent = history.current().reverse();
+        let undone = history.undone();
+        let grid = ringer.gridFrom(recent);
         let size = ringer.size;
         let hints = this.props.hints;
-        let past = this.props.past;
-        let future = this.props.future;
-        let cells = [];
-        for (var y = 0; y < size; y++) {
-            for (var x = 0; x < size; x++) {
-                let index = y * size + x;
-                let hintDepth = hints.length > index ? hints[index] : 0;
-                let pastDepth = past.length > index ? past[index] : 0;
-                let futureDepth = future.length > index ? future[index] : 0;
-                cells.push(<Cell coords={[x, y]}
-                    key={`board${size}x${size}-${x}-${y}`}
+        let cells = grid.map((depth, index) => {
+            let hintDepth = hints.length > index ? hints[index] : 0;
+            let undoOrder = recent.indexOf(index) + 1;
+            let redoOrder = undone.indexOf(index) + 1;
+                return (<Cell coords={index}
+                    key={`board${size}x${size}-${index}`}
                     icons={this.props.icons}
-                    value={grid[index]}
+                    value={depth}
                     hint={hintDepth}
-                    past={pastDepth}
-                    future={futureDepth}
-                    onClick={(x, y) => this.props.onClick(x, y)}
+                    undo={undoOrder}
+                    redo={redoOrder}
+                    onClick={(index) => this.props.onClick(index)}
                 />);
-            }
-        }
+        });
 
         return (
             <div className="Board" style={{

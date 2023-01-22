@@ -8,16 +8,16 @@ class Cell extends React.Component {
         // Can't be both a hint and a redo
         if (this.props.hint > 0) {
             classes.push(`Cell-hint`);
-        } else if (this.props.future > 0) {
-            classes.push(this.props.future === 1 ? `Cell-redo-1` : `Cell-redo`);
+        } else if (this.props.redo > 0) {
+            classes.push(this.props.redo === 1 ? `Cell-redo-1` : `Cell-redo`);
         }
-        if (this.props.past > 0) {
-            classes.push(this.props.past === 1 ? `Cell-undo-1` : `Cell-undo`);
+        if (this.props.undo > 0) {
+            classes.push(this.props.undo === 1 ? `Cell-undo-1` : `Cell-undo`);
         }
         let classNames = classes.join(' ');
         return (
             <button className={classNames}
-                onClick = {(event) => this.props.onClick(this.props.coords[0], this.props.coords[1])}>
+                onClick = {(event) => this.props.onClick(this.props.coords)}>
             </button>
         );
     }

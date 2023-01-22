@@ -12,15 +12,28 @@ class MoveHistory {
     }
 
     current() {
-        return this.moves.slice(0, step);
+        return this.moves.slice(0, this.step);
+    }
+
+    all() {
+        return this.moves.slice();
+    }
+
+    undone() {
+        return this.moves.slice(this.step);
     }
 
     // Since history is entirely separate from the board, we don't know depth or height.
     // We can only use the data we get.
     makeMove(move) {
-        this.moves = this.moves.slice(0, this.step).push(move);
+        this.moves = this.moves.slice(0, this.step);
+        this.moves.push(move);
         this.step++;
         return this.moves;
+    }
+
+    step() {
+        return this.step;
     }
 
     // Luckily, 0 gets interpreted as false, and we can undo as long as there's at least 1 step,
@@ -30,7 +43,7 @@ class MoveHistory {
     }
 
     // Attempts to undo the provided number of steps.
-    // Returns the number of steps actually undone.
+    // Returns the undone moves.
     undo(steps) {
         if (steps === undefined) {
             steps = 1;
@@ -39,7 +52,7 @@ class MoveHistory {
             steps = this.step;
         }
         this.step -= steps;
-        return steps;
+        return this.moves.slice(this.step, this.step + steps);
     }
 
     // Returns the number of steps we can redo.
@@ -48,14 +61,14 @@ class MoveHistory {
     }
 
     // Attempts to redo the provided number of steps.
-    // Returns the number of steps actually redone.
+    // Returns the redone steps.
     redo(steps) {
         if (steps === undefined) {
             steps = 1;
         }
         steps = Math.min(this.canRedo(), steps);
         this.step += steps;
-        return steps;
+        return this.moves.slice(this.step - steps, this.step);
     }
 }
 
