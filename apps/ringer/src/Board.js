@@ -16,26 +16,20 @@ class Board extends React.Component {
         let grid = ringer.gridFrom(recent);
         let size = ringer.size;
         let hints = this.props.hints;
-        let cells = [];
-        recent = recent.map((move) => ringer._asIndex(move));
-        undone = undone.map((move) => ringer._asIndex(move));
-        for (var y = 0; y < size; y++) {
-            for (var x = 0; x < size; x++) {
-                let index = y * size + x;
-                let hintDepth = hints.length > index ? hints[index] : 0;
-                let undoOrder = recent.indexOf(index) + 1;
-                let redoOrder = undone.indexOf(index) + 1;
-                cells.push(<Cell coords={[x, y]}
-                    key={`board${size}x${size}-${x}-${y}`}
+        let cells = grid.map((depth, index) => {
+            let hintDepth = hints.length > index ? hints[index] : 0;
+            let undoOrder = recent.indexOf(index) + 1;
+            let redoOrder = undone.indexOf(index) + 1;
+                return (<Cell coords={index}
+                    key={`board${size}x${size}-${index}`}
                     icons={this.props.icons}
-                    value={grid[index]}
+                    value={depth}
                     hint={hintDepth}
-                    past={undoOrder}
-                    future={redoOrder}
-                    onClick={(x, y) => this.props.onClick(x, y)}
+                    undo={undoOrder}
+                    redo={redoOrder}
+                    onClick={(index) => this.props.onClick(index)}
                 />);
-            }
-        }
+        });
 
         return (
             <div className="Board" style={{

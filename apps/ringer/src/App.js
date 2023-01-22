@@ -103,15 +103,16 @@ class App extends React.Component {
         let size = this.state.ringer.size;
         // What still needs to be clicked?
         let clicked = this.state.ringer.bestSolution(history);
-        let mistakes = history.current()
-            .map((move) => this.state.ringer._asIndex(move))
-            .filter((index) => clicked[index] !== 0);
-        let misses = clicked.map((distance, index) => index).filter((index) => clicked[index] !== 0);
-        let hintIndexes = mistakes.length > 0 ? mistakes :
-            misses.length > 0 ? misses.slice(0, 1) : [];
-        // Board is expecting a depth map, so we can make pretty indicators (some day)
+        let mistakes = history.current().filter((index) => clicked[index] !== 0);
+        let misses = clicked.map((depth, index) => [depth, index])
+            .filter(([depth, index]) => depth > 0)
+            .map(([depth, index]) => index);
+        let chosen = mistakes.length > 0 ? mistakes :
+            misses.length > 0 ? [misses[0]] : [];
+        // Convert to depth map for (eventual) pretty display
         let hints = new Array(size * size).fill(0);
-        hintIndexes.forEach((index) => hints[index] = clicked[index]);
+        chosen.forEach((index) => hints[index] = clicked[index]);
+        // Only costs a move if it reveals progress; no cost for revealing mistakes
         this.setState({
             hints: hints,
             moves: this.state.moves + (mistakes.length > 0 ? 0 : 1),
@@ -137,9 +138,9 @@ class App extends React.Component {
         });
     }
 
-    makeMove(x, y) {
+    makeMove(index) {
         let moves = this.state.moves + 1;
-        let history = this.state.history.makeMove([x, y]);
+        let history = this.state.history.makeMove(index);
         let solved = this.state.ringer.isSolvedBy(history);
         let showDialog = this.state.showDialog;
         if (solved) {
@@ -148,7 +149,6 @@ class App extends React.Component {
             this.animTimer = setInterval(() => this.animate(), 150);
             showDialog = true;
         }
-        let index = this.state.ringer._asIndex([x, y]);
         let hints = this.state.hints.slice();
         if (hints && hints.length > index && hints[index] > 0) {
             let depth = this.state.ringer.depth;
@@ -164,17 +164,24 @@ class App extends React.Component {
     }
 
     handleUndo() {
-        let history = this.state.history;
-        history.undo();
+        let undone = this.state.history.undo();
+        let hints = this.state.hints.slice();
+        let depth = this.state.ringer.depth;
+        undone.filter((index) => hints.length > index && hints[index] > 0)
+            .forEach((index) => hints[index] = (hints[index] + depth + 1) % depth);
         this.setState({
-            history: history,
+            hints: hints,
         });
     }
 
     handleRedo() {
-        this.state.history.redo();
+        let redone = this.state.history.redo();
+        let hints = this.state.hints.slice();
+        let depth = this.state.ringer.depth;
+        redone.filter((index) => hints.length > index && hints[index] > 0)
+            .forEach((index) => hints[index] = (hints[index] + depth + 1) % depth);
         this.setState({
-            history: this.state.history,
+            hints: hints,
         });
     }
 

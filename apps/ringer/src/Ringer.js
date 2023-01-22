@@ -16,12 +16,6 @@ class Ringer {
           Can you get all the cells to match?`;
     }
 
-    // Helper function converting an [x, y] array to a Ringer cell index
-    _asIndex([x, y]) {
-        let val = y * this.size + x;
-        return val;
-    }
-
     // Helper function showing how far a cell with a click-depth is from a given target,
     // knowing that it wraps around at depth.
     _clicksAway(clicks, target) {
@@ -45,7 +39,10 @@ class Ringer {
     }
 
     // Increment all the cells in a ring around (x, y) *mutating* the given grid
-    _ticNeighbors(x, y, grid) {
+    _ticNeighbors(index, grid) {
+        // Calculate the X and Y so we can do wrap-around modulo math.
+        const x = index % this.size;
+        const y = Math.floor(index / this.size);
         const neighbors = [
             [-1, -1], [0, -1], [1, -1],
             [-1, 0], [1, 0],
@@ -54,8 +51,8 @@ class Ringer {
         for (var [dx, dy] of neighbors) {
             const ringX = (x + dx + this.size) % this.size;
             const ringY = (y + dy + this.size) % this.size;
-            const index = this._asIndex([ringX, ringY]);
-            grid[index] = (grid[index] + 1) % this.depth;
+            const neighbor = ringY * this.size + ringX;
+            grid[neighbor] = (grid[neighbor] + 1) % this.depth;
         }
     }
 
@@ -87,17 +84,15 @@ class Ringer {
         this.goal = board.reduce((sum, cellDepth) => sum + ((this.depth - cellDepth) % this.depth), 0);
         console.log(`Shuffled to ${clicks} moves / goal ${this.goal} in ${i} tries`);
         // Turn that into a list of moves (order doesn't matter!)
-        // TODO: Use a list of indexes, c'mon
-        this.start = board.flatMap((cellDepth, index) =>
-            Array(cellDepth).fill([index % this.size, Math.floor(index / this.size)]));
+        this.start = board.flatMap((cellDepth, index) => Array(cellDepth).fill(index));
         this.startDepths = board;
     }
 
     // Returns displayed board, where all the squares *around* the `moves` have been flipped.
     gridFrom(moves) {
         let grid = new Array(this.size * this.size).fill(0);
-        for (var [x, y] of this.start.concat(moves)) {
-            this._ticNeighbors(x, y, grid, this.size, this.depth);
+        for (var index of this.start.concat(moves)) {
+            this._ticNeighbors(index, grid);
         }
         return grid;
     }
@@ -106,8 +101,7 @@ class Ringer {
     // Indicates how many clicks were made at each cell, looping back to 0 after reaching depth.
     depthFrom(moves) {
         let depths = new Array(this.size * this.size).fill(0);
-        for (var move of this.start.concat(moves)) {
-            let index = this._asIndex(move);
+        for (var index of this.start.concat(moves)) {
             depths[index]++;
             depths[index] %= this.depth;
         }
