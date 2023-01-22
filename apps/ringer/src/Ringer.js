@@ -4,13 +4,11 @@ class Ringer {
     constructor(size, depth) {
         if (size === undefined) size = 9;
         if (depth === undefined) depth = 2;
+        this.boardNum = 0;
         this.size = size;
         this.depth = depth;
-        this.boardNum = 0;
         this.goal = 0;
         this.start = [];
-        this.startGrid = this.gridFrom(this.start);
-        this.startDepths = this.depthFrom(this.start);
         this.info = `Tap any cell to flip the ring of cells around it.
           The whole board is a ring, too: flipping a cell outside an edge flips the cell on the opposite edge!
           Can you get all the cells to match?`;
@@ -67,6 +65,7 @@ class Ringer {
     // Clears this board, then adds clicks until it can be solved in `times` clicks.
     // Saves the [x,y] start moves in this.start
     shuffle(seed, times) {
+        this.boardNum = seed > 0 ? seed.toString(16).toUpperCase() : "";
         let rng = seedrandom(seed);
         // How many clicks will it take to solve the board right now?
         this.start = [];
@@ -85,7 +84,6 @@ class Ringer {
         console.log(`Shuffled to ${clicks} moves / goal ${this.goal} in ${i} tries`);
         // Turn that into a list of moves (order doesn't matter!)
         this.start = board.flatMap((cellDepth, index) => Array(cellDepth).fill(index));
-        this.startDepths = board;
     }
 
     // Returns displayed board, where all the squares *around* the `moves` have been flipped.
@@ -141,28 +139,32 @@ class Ringer {
         return solution;
     }
 
-    save(info) {
+    toJson(info) {
         if (info === undefined) { info = `This board was saved without a description.` };
         return ({
             boardNum: this.boardNum,
             size: this.size,
             depth: this.depth,
+            goal: this.goal,
             start: this.start,
             info: info,
         });
     }
 
-    load(data) {
+    fromJson(data) {
         if (data === undefined) return; 
-        if (data.size === undefined) data.size = this.size;
-        if (data.depth === undefined) data.depth = this.depth;
-        if (data.start === undefined) data.start = [];
-        this.size = data.size;
-        this.depth = data.depth;
+        if (data.boardNum === undefined) data.boardNum = this.boardNum;
         this.boardNum = data.boardNum;
+        if (data.size === undefined) data.size = this.size;
+        this.size = data.size;
+        if (data.depth === undefined) data.depth = this.depth;
+        this.depth = data.depth;
+        if (data.goal === undefined) data.goal = this.goal;
+        this.goal = data.goal;
+        if (data.start === undefined) data.start = this.start;
         this.start = data.start;
+        if (data.info === undefined) data.info = this.info;
         this.info = data.info;
-        this.depths = this.depthFrom([]);
     }
 }
 

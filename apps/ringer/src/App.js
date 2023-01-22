@@ -2,10 +2,13 @@ import './App.css';
 import React from 'react';
 import Ringer from './Ringer.js';
 import MoveHistory from './MoveHistory.js';
+import SolveStats from './SolveStats.js';
+import Persistence from './Persistence.js';
 import Board from './Board.js';
 import BoardPrefs from './BoardPrefs.js';
 import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
+import HighScores from './HighScores.js';
 import Dialog from './Dialog.js';
 import seedrandom from 'seedrandom';
 
@@ -15,6 +18,9 @@ class App extends React.Component {
 
         this.boardTimer = null;
         this.animTimer = null;
+        this.solveStats = null;
+        this.highScores = null;
+        this.persistence = new Persistence();
 
         let rng = seedrandom();
         let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
@@ -66,6 +72,8 @@ class App extends React.Component {
         if (!solved) {
             this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         }
+        this.solveStats = new SolveStats(boardNum, ringer.size, ringer.goal);
+        this.highScores = this.persistence.getIdenticalStats(this.solveStats);
         next.boardNum++;
         this.setState({
             ringer: ringer,
@@ -86,6 +94,7 @@ class App extends React.Component {
     handleSolveTimer() {
         let now = window.performance.now();
         let subElapsed = now - this.state.prevTime;
+        this.solveStats.setTime(this.state.elapsed + subElapsed);
         this.setState({
             elapsed: this.state.elapsed + subElapsed,
             prevTime: now
@@ -99,6 +108,7 @@ class App extends React.Component {
     }
 
     handleHints() {
+        this.solveStats.addHint();
         let history = this.state.history;
         let size = this.state.ringer.size;
         // What still needs to be clicked?
@@ -120,6 +130,7 @@ class App extends React.Component {
     }
 
     handleReset(resetTimer) {
+        this.solveStats.addReset();
         clearInterval(this.boardTimer);
         this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         this.setState({
@@ -139,15 +150,22 @@ class App extends React.Component {
     }
 
     makeMove(index) {
+        let ringer = this.state.ringer;
         let moves = this.state.moves + 1;
         let history = this.state.history.makeMove(index);
-        let solved = this.state.ringer.isSolvedBy(history);
+        let solved = ringer.isSolvedBy(history);
         let showDialog = this.state.showDialog;
         if (solved) {
             clearInterval(this.animTimer);
             clearInterval(this.boardTimer);
             this.animTimer = setInterval(() => this.animate(), 150);
             showDialog = true;
+            if (this.state.elapsed > 0) {
+                this.solveStats = new SolveStats(ringer.boardNum, ringer.size, ringer.goal,
+                    moves, this.state.elapsed,
+                    this.solveStats.resets, this.solveStats.undos, this.solveStats.redos, this.solveStats.hints);
+                this.persistence.updateStats(this.solveStats);
+            }
         }
         let hints = this.state.hints.slice();
         if (hints && hints.length > index && hints[index] > 0) {
@@ -164,6 +182,7 @@ class App extends React.Component {
     }
 
     handleUndo() {
+        this.solveStats.addUndo();
         let undone = this.state.history.undo();
         let hints = this.state.hints.slice();
         let depth = this.state.ringer.depth;
@@ -175,6 +194,7 @@ class App extends React.Component {
     }
 
     handleRedo() {
+        this.solveStats.addRedo();
         let redone = this.state.history.redo();
         let hints = this.state.hints.slice();
         let depth = this.state.ringer.depth;
@@ -259,7 +279,10 @@ class App extends React.Component {
                     solved={solved}
                     boardNum={this.state.boardNum}
                 />
-                <div>Game stats go here: moves, time, streaks...</div>
+                <HighScores
+                    current={this.solveStats}
+                    datastore={this.persistence}
+                />
               </Dialog>
             </div>
         );
