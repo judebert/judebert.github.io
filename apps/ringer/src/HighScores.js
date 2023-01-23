@@ -1,4 +1,5 @@
 import React from 'react';
+import './HighScores.css';
 
 class HighScores extends React.Component {
     constructor(props) {
@@ -16,33 +17,53 @@ class HighScores extends React.Component {
             return (<div className="HighScore">No stats yet!</div>);
         }
         let bestIdenticals = datastore.getIdenticalStats(current)
-            .map((scoreStat) => <div className="stats">
-            <div className="boardNum">{scoreStat.boardNum}</div>
-            <div className="moves">{scoreStat.moves}/{scoreStat.goal}</div>
-            <div className="time">{this.timerString(scoreStat.time/this.MS_PER_SEC)}</div>
-            <div className="hints">{scoreStat.hints}</div>
-            <div className="resets">{scoreStat.undos}</div>
-            <div className="undos">{scoreStat.undos}</div>
-            <div className="redos">{scoreStat.redos}</div>
-            </div>
+            .map((scoreStat, index) => {
+                let k = `identical-stat-${index}`;
+                return (
+                <tr key={k}>
+                  <td className="boardNum">{scoreStat.boardNum}</td>
+                  <td className="moves">{scoreStat.moves}/{scoreStat.goal}</td>
+                  <td className="time">{this.timerString(scoreStat.time/this.MS_PER_SEC)}</td>
+                  <td className="hints">{scoreStat.hints}</td>
+                  <td className="resets">{scoreStat.resets}</td>
+                  <td className="undos">{scoreStat.undos}</td>
+                  <td className="redos">{scoreStat.redos}</td>
+                </tr>
+                );
+            }
         );
         let bestSizeGoal = datastore.getSizeGoalStats(current)
-            .map((scoreStat) => <div className="stats">
-            <div className="boardNum">{scoreStat.boardNum}</div>
-            <div className="moves">{scoreStat.moves}/{scoreStat.goal}</div>
-            <div className="time">{this.timerString(scoreStat.time/this.MS_PER_SEC)}</div>
-            <div className="hints">{scoreStat.hints}</div>
-            <div className="resets">{scoreStat.undos}</div>
-            <div className="undos">{scoreStat.undos}</div>
-            <div className="redos">{scoreStat.redos}</div>
-            </div>
+            .map((scoreStat, index) => {
+                let k = `best-stat-${index}`;
+                return (
+                    <tr key={k}>
+                      <td className="boardNum">{scoreStat.boardNum}</td>
+                      <td className="moves">{scoreStat.moves}/{scoreStat.goal}</td>
+                      <td className="time">{this.timerString(scoreStat.time/this.MS_PER_SEC)}</td>
+                      <td className="hints">{scoreStat.hints}</td>
+                      <td className="resets">{scoreStat.resets}</td>
+                      <td className="undos">{scoreStat.undos}</td>
+                      <td className="redos">{scoreStat.redos}</td>
+                    </tr>
+                );
+            }
         );
         return (
             <div className="HighScores">
               <h3 className="identicalTitle">Best {current.size}x{current.size}/{current.goal} #{current.boardNum}</h3>
-              <div className="identicalStats">{bestIdenticals}</div>
+              <table className="identicalStats">
+                <thead>
+                <tr><th>Board#</th><th>Moves</th><th>Time</th><th>Hints</th><th>Resets</th><th>Undos</th><th>Redos</th></tr>
+                </thead>
+                <tbody>{bestIdenticals}</tbody>
+              </table>
               <h3 className="sizeGoalTitle">Best {current.size}x{current.size}/{current.goal} any board</h3>
-              <div className="sizeGoalStats">{bestSizeGoal}</div>
+              <table className="sizeGoalStats">
+                <thead>
+                <tr><th>Board#</th><th>Moves</th><th>Time</th><th>Hints</th><th>Resets</th><th>Undos</th><th>Redos</th></tr>
+                </thead>
+                <tbody>{bestSizeGoal}</tbody>
+              </table>
             </div>
         );
     }
@@ -62,7 +83,7 @@ class HighScores extends React.Component {
         let mins = Math.floor(secs / this.SEC_PER_MIN);
         display += String(mins).padStart(2, '0') + ':';
         secs -= mins * this.SEC_PER_MIN;
-        display += String(secs).padStart(2, '0');
+        display += secs.toFixed(2).padStart(5, '0');
         return display;
     }
 }

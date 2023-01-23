@@ -3,7 +3,7 @@
     flex-direction: row;
     width: 100%;
     flex-wrap: nowrap;
-    overflow: scroll;
+    overflow: auto;
     justify-content: safe center;
     align-items: center;
 }

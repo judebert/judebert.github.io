@@ -72,7 +72,7 @@ class App extends React.Component {
         if (!solved) {
             this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         }
-        this.solveStats = new SolveStats(boardNum, ringer.size, ringer.goal);
+        this.solveStats = new SolveStats({boardNum:ringer.boardNum, size:ringer.size, goal:ringer.goal});
         this.highScores = this.persistence.getIdenticalStats(this.solveStats);
         next.boardNum++;
         this.setState({
@@ -133,13 +133,15 @@ class App extends React.Component {
         this.solveStats.addReset();
         clearInterval(this.boardTimer);
         this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
+        let history = new MoveHistory();
         this.setState({
             moves: 0,
-            history: new MoveHistory(),
+            history: history,
             hints: [],
             elapsed: 0,
             prevTime: window.performance.now(),
             showDialog: false,
+            solved: this.state.ringer.isSolvedBy(history.current()),
         });
     }
 
@@ -153,17 +155,23 @@ class App extends React.Component {
         let ringer = this.state.ringer;
         let moves = this.state.moves + 1;
         let history = this.state.history.makeMove(index);
-        let solved = ringer.isSolvedBy(history);
+        // Are we auto-starting a playground?
+        if (this.state.solved) {
+            ringer = new Ringer(ringer.size, ringer.depth);
+            moves = 1;
+            history = new MoveHistory().makeMove(index);
+        }
+        let solved = ringer.isSolvedBy(history.current());
         let showDialog = this.state.showDialog;
         if (solved) {
             clearInterval(this.animTimer);
             clearInterval(this.boardTimer);
             this.animTimer = setInterval(() => this.animate(), 150);
             showDialog = true;
-            if (this.state.elapsed > 0) {
-                this.solveStats = new SolveStats(ringer.boardNum, ringer.size, ringer.goal,
-                    moves, this.state.elapsed,
-                    this.solveStats.resets, this.solveStats.undos, this.solveStats.redos, this.solveStats.hints);
+            // The SolveStats can't track the moves, because they change cost on hints.
+            this.solveStats.setMoves(moves);
+            // Don't update stats for play board
+            if (ringer.boardNum) {
                 this.persistence.updateStats(this.solveStats);
             }
         }
@@ -173,11 +181,13 @@ class App extends React.Component {
             hints[index] = (hints[index] + depth + 1) % depth;
         }
         this.setState({
+            ringer: ringer,
             moves: moves,
             solved: solved,
             showDialog: showDialog,
             hints: hints,
             frame: 0,
+            history: history,
         });
     }
 
@@ -260,7 +270,7 @@ class App extends React.Component {
                     goal={this.state.ringer.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
-                    boardNum={this.state.boardNum}
+                    boardNum={this.state.ringer.boardNum}
                 />
               </header>
               <section className="App-content">
@@ -277,7 +287,7 @@ class App extends React.Component {
                     goal={this.state.ringer.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
-                    boardNum={this.state.boardNum}
+                    boardNum={this.state.ringer.boardNum}
                 />
                 <HighScores
                     current={this.solveStats}
