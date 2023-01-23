@@ -35,7 +35,7 @@
 }
 
 .Dialog-main {
-    overflow: scroll;
+    overflow: auto;
 }
 
 .Dialog-buttons button {

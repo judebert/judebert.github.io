@@ -15,7 +15,7 @@ class Persistence {
         if (stats === undefined || stats === null) {
             return [];
         }
-        let statsList = JSON.parse(stats);
+        let statsList = JSON.parse(stats).map((opts) => new SolveStats(opts));
         return statsList;
     }
 
@@ -31,7 +31,7 @@ class Persistence {
         if (stats === undefined || stats === null) {
             return [];
         }
-        let statsList = JSON.parse(stats);
+        let statsList = JSON.parse(stats).map((opts) => new SolveStats(opts));
         return statsList;
     }
 

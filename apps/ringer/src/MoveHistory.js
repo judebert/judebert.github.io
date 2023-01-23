@@ -29,7 +29,7 @@ class MoveHistory {
         this.moves = this.moves.slice(0, this.step);
         this.moves.push(move);
         this.step++;
-        return this.moves;
+        return this;
     }
 
     step() {

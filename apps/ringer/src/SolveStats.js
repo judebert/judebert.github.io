@@ -1,21 +1,25 @@
 class SolveStats {
-    constructor(boardNum, size, goal, moves, time, resets, undos, redos, hints) {
-        if (boardNum === undefined || size === undefined || goal === undefined) {
+    constructor(opts) {
+        if (opts.boardNum === undefined || opts.size === undefined || opts.goal === undefined) {
             throw new Error('No stats without board number, size, and goal!');
         }
-        this.boardNum = boardNum;
-        this.size = size;
-        this.goal = goal;
-        this.moves = moves;
-        this.time = time;
-        this.resets = resets;
-        this.undos = undos;
-        this.hints = hints;
-        this.redos = redos;
+        this.boardNum = opts.boardNum;
+        this.size = opts.size;
+        this.goal = opts.goal;
+        this.moves = opts.moves || 0;
+        this.time = opts.time || 0;
+        this.resets = opts.resets || 0;
+        this.undos = opts.undos || 0;
+        this.hints = opts.hints || 0;
+        this.redos = opts.redos || 0;
     }
 
     addMove() {
-        this.moves++;
+        this.moves = this.moves + 1;
+    }
+
+    setMoves(moves) {
+        this.moves = moves;
     }
 
     setTime(time) {
@@ -23,15 +27,35 @@ class SolveStats {
     }
 
     addReset() {
-        this.resets++;
+        this.resets = this.resets + 1;
+    }
+
+    setResets(resets) {
+        this.resets = resets;
     }
 
     addUndo() {
-        this.undos++;
+        this.undos = this.undos + 1;
+    }
+
+    setUndos(undos) {
+        this.undos = undos;
+    }
+
+    addRedo() {
+        this.redos = this.redos + 1;
+    }
+    
+    setRedos(redos) {
+        this.redos = redos;
     }
 
     addHint() {
-        this.hint++;
+        this.hints = this.hints + 1;
+    }
+
+    setHints(hints) {
+        this.hints = hints;
     }
 
     // Prejudiced comparison of scores: fewest moves, then fastest time, then...
