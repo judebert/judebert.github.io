@@ -47,6 +47,7 @@ class App extends React.Component {
                 shuffles: initShuffles,
                 boardNum: boardNum + 1,
             },
+            optionTab: 'info-tab',
         };
     }
 
@@ -88,8 +89,15 @@ class App extends React.Component {
             showDialog: false,
             frame: 0,
             next: next,
+            optionTab: 'info-tab',
         });
     }
+
+    handleOptionTabChange = toTab => {
+        this.setState({
+            optionTab: toTab,
+        });
+    };
 
     handleSolveTimer() {
         let now = window.performance.now();
@@ -236,7 +244,7 @@ class App extends React.Component {
               <header className="App-header">
                 <h1>Ringer</h1>
                 <aside>{process.env.REACT_APP_VERSION}</aside>
-                <Tabs name="options">
+                <Tabs name="options" showing={this.state.optionTab} onChange={this.handleOptionTabChange}>
                   <div label="Info" id="info-tab">
                     Tap any cell to flip the ring of cells around it.
                     The whole board is a ring, too: flipping a cell outside an edge flips the cell on the opposite edge!

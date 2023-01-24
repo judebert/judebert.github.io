@@ -1,7 +1,13 @@
-table {
+.identicalStats, .sizeGoalStats {
     display: grid;
     min-width: 100%;
     grid-template-columns: 1.5fr 1fr 2fr 1fr 1fr 1fr 1fr;
+}
+
+.sizeGoalRunning {
+    display: grid;
+    min-width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 thead, tbody, tr {
