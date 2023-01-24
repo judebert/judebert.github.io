@@ -49,18 +49,23 @@ class HighScores extends React.Component {
             }
         );
         let running = datastore.getSizeGoalRunningStats(current);
-        let improvement = this.timerString((current.time - running.mean) / this.MS_PER_SEC);
-        let meanTime = this.timerString(running.mean / this.MS_PER_SEC);
-        let varianceTime = this.timerString(Math.sqrt(running.var2) / this.MS_PER_SEC);
+        let deltaTime = this.timerString((current.time - running.time.mean) / this.MS_PER_SEC);
+        let meanTime = this.timerString(running.time.mean / this.MS_PER_SEC);
+        let var2TimeMs2 = running.time.var2 / running.time.n;
+        let varianceTime = this.timerString(var2TimeMs2 / (this.MS_PER_SEC * this.MS_PER_SEC));
+        let deltaMove = (current.moves - running.move.mean).toFixed(2);
+        let meanMove = running.move.mean.toFixed(2);
+        let varianceMove = (running.move.var2 / running.move.n).toFixed(2);
         return (
             <div className="HighScores">
               <h3 className="sizeGoalRunningTitle">{current.size}x{current.size}/{current.goal} Average</h3>
               <table className="sizeGoalRunning">
                 <thead>
-                <tr><th>Change</th><th>Mean</th><th>Variance</th></tr>
+                <tr><th></th><th>Change</th><th>Mean</th><th>Variance</th></tr>
                 </thead>
                 <tbody>
-                <tr><td>{improvement}</td><td>{meanTime}</td><td>{varianceTime/running.n}</td></tr>
+                <tr><th>Time</th><td>{deltaTime}</td><td>{meanTime}</td><td>{varianceTime}</td></tr>
+                <tr><th>Moves</th><td>{deltaMove}</td><td>{meanMove}</td><td>{varianceMove}</td></tr>
                 </tbody>
               </table>
               <h3 className="identicalTitle">Best {current.size}x{current.size}/{current.goal} #{current.boardNum}</h3>

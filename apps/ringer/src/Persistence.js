@@ -4,12 +4,73 @@ class Persistence {
     bestK = 3;
     sameK = 3;
     latestK = 10;
+    version = 1.0;
+    initialCumulative = new Map([
+        [1.0, 
+            { 
+                time: { n: 0, mean: 0, var2: 0, latest: [], },
+                move: { n: 0, mean: 0, var2: 0, latest: [], },
+            }
+        ],
+    ]);
+
+    migrateData() {
+        let dataVersion = Number.parseFloat(localStorage.getItem('version'));
+        // Run successive migrations until we're up-to-date
+        //
+        // Since we don't store all data, only best data, this might get a little inaccurate.
+        // First off, most people don't do more than 3 tries (the number we store) for any board.
+        // Secondly, it's a game, not a scientific study.
+        while (dataVersion !== this.version) {
+            // Earliest versions, with no version number, to 1.0
+            if (Number.isNaN(dataVersion)) {
+                // No change to individual board stats
+                // No change to best scores stats
+                // Running stats only include time; add move stats
+                // Group all stats by (size, goal) type
+                let sizeGoalStats = this._groupStoredStatsV0();
+                sizeGoalStats.forEach((stats, sizeGoal) => {
+                    let cumulative = stats.reduce((accumulated, stat) => {
+                        return this._accumulateSizeGoalStats(accumulated, stat);
+                    }, this.initialCumulative.get(1.0));
+                    // Store updated stats
+                    this.setSizeGoalRunningStats(stats[0], cumulative);
+                });
+                localStorage.setItem('version', "1.0");
+            }
+            dataVersion = Number.parseFloat(localStorage.getItem('version'));
+        }
+    }
+    
+    _groupStoredStatsV0() {
+        let sizeGoalStats = new Map();
+        for (let keyDx = 0; keyDx < localStorage.length; keyDx++) {
+            const key = localStorage.key(keyDx);
+            const dashDx = key.indexOf('-');
+            if (dashDx < 0) {
+                console.error(`Skipping unrecognized V0 key: ${key}!`);
+                continue;
+            }
+            const type = key.substring(0, dashDx);
+            const sizeGoal = key.substring(dashDx + 1);
+            if (!sizeGoalStats.has(sizeGoal)) {
+                sizeGoalStats.set(sizeGoal, []);
+            }
+            if (type === 'best' || type === 'run') {
+                continue;
+            }
+            let boardStats = JSON.parse(localStorage.getItem(key)).map((line) => new SolveStats(line));
+            sizeGoalStats.set(sizeGoal, sizeGoalStats.get(sizeGoal).concat(boardStats));
+        }
+        return sizeGoalStats;
+    }
 
     identicalStatsKey(boardNum, size, goal) {
         return `${boardNum}-${size}-${goal}`;
     }
 
     getIdenticalStats(solveStats) {
+        this.migrateData();
         let boardNum = solveStats.boardNum;
         let size = solveStats.size;
         let goal = solveStats.goal;
@@ -36,6 +97,7 @@ class Persistence {
     }
 
     getSizeGoalStats(solveStats) {
+        this.migrateData();
         let size = solveStats.size;
         let goal = solveStats.goal;
         let key = this.sizeGoalStatsKey(size, goal);
@@ -53,7 +115,6 @@ class Persistence {
         let goal = solveStat.goal;
         let key = this.sizeGoalStatsKey(size, goal);
         localStorage.setItem(key, JSON.stringify(solveStats.slice(0, this.bestK)));
-
     }
 
     sizeGoalRunningKey(size, goal) {
@@ -61,12 +122,13 @@ class Persistence {
     }
 
     getSizeGoalRunningStats(solveStats) {
+        this.migrateData();
         let size = solveStats.size;
         let goal = solveStats.goal;
         let key = this.sizeGoalRunningKey(size, goal);
         let data = localStorage.getItem(key);
         if (data === undefined || data === null) {
-            return { n: 0, mean: 0, var2:0, latest: [] };
+            return this.initialCumulative.get(this.version);
         }
         let moving = JSON.parse(data);
         return moving;
@@ -94,15 +156,29 @@ class Persistence {
         this.setSizeGoalStats(bests);
 
         // Calculate running statistics
-        let moving = this.getSizeGoalRunningStats(solveStat);
-        moving.n = moving.n + 1;
-        let delta = solveStat.time - moving.mean;
-        moving.mean = moving.mean + delta / moving.n;
-        let delta2 = solveStat.time - moving.mean; // Yes, the updated mean value
-        moving.var2 = moving.var2 + (delta * delta2);
-        moving.latest.push(solveStat.time);
-        moving.latest = moving.latest.slice(-this.latestK);
+        let moving = this._accumulateSizeGoalStats(this.getSizeGoalRunningStats(solveStat), solveStat);
         this.setSizeGoalRunningStats(solveStat, moving);
+    }
+
+    _accumulateSizeGoalStats(previous, datum) {
+        let cumulative = Object.assign({}, previous);
+        // Times
+        cumulative.time = this._accumulateStat(cumulative.time, datum.time);
+        // Moves
+        cumulative.move = this._accumulateStat(cumulative.move, datum.moves);
+        return cumulative;
+    }
+
+    _accumulateStat(previous, datum) {
+        let cumulative = Object.assign({}, previous);
+        cumulative.n = cumulative.n + 1;
+        let delta = datum - cumulative.mean;
+        cumulative.mean = cumulative.mean + delta / cumulative.n;
+        let delta2 = datum - cumulative.mean; // Yes, the updated mean value.
+        cumulative.var2 = cumulative.var2 + (delta * delta2);
+        cumulative.latest.push(datum);
+        cumulative.latest = cumulative.latest.slice(-this.latestK);
+        return cumulative;
     }
 }
 
