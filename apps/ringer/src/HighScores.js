@@ -60,7 +60,7 @@ class HighScores extends React.Component {
                 <tr><th>Change</th><th>Mean</th><th>Variance</th></tr>
                 </thead>
                 <tbody>
-                <tr><td>{improvement}</td><td>{meanTime}</td><td>{varianceTime}</td></tr>
+                <tr><td>{improvement}</td><td>{meanTime}</td><td>{varianceTime/running.n}</td></tr>
                 </tbody>
               </table>
               <h3 className="identicalTitle">Best {current.size}x{current.size}/{current.goal} #{current.boardNum}</h3>
