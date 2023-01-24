@@ -11,6 +11,18 @@ class Tabs extends React.Component {
         children: PropTypes.instanceOf(Array).isRequired,
     }
 
+    handleTabClick = event => {
+        let id = event.target.id;
+        id = id.substring(0, id.indexOf('.radio'));
+        this.props.onChange(id);
+    };
+
+    componentDidMount() {
+        this.setState({
+            active: `${this.props.children[0].props.id}.radio`,
+        });
+    }
+
     /*
      * Because there's no reliable CSS "parent" selector (:has() is not widely supported,
      * and does not allow pseudo-classes like :checked for our radio button),
@@ -22,10 +34,10 @@ class Tabs extends React.Component {
             const rootId = child.props.id;
             const labelId = `${rootId}.label`;
             const inputId = `${rootId}.radio`;
-            const startCheck = index === 0;
+            const checked = this.props.showing === rootId;
             return (
               <React.Fragment key={child.props.label}>
-                <input key={inputId} id={inputId} name={this.props.name} type="radio" defaultChecked={startCheck}/>
+                <input key={inputId} id={inputId} name={this.props.name} type="radio" checked={checked} onChange={this.handleTabClick}/>
                 <label key={labelId} id={labelId} htmlFor={inputId}>{child.props.label}</label>
                 <div className="Tab" key={rootId}>{child}</div>
               </React.Fragment>

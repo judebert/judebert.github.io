@@ -48,8 +48,21 @@ class HighScores extends React.Component {
                 );
             }
         );
+        let running = datastore.getSizeGoalRunningStats(current);
+        let improvement = this.timerString((current.time - running.mean) / this.MS_PER_SEC);
+        let meanTime = this.timerString(running.mean / this.MS_PER_SEC);
+        let varianceTime = this.timerString(Math.sqrt(running.var2) / this.MS_PER_SEC);
         return (
             <div className="HighScores">
+              <h3 className="sizeGoalRunningTitle">{current.size}x{current.size}/{current.goal} Average</h3>
+              <table className="sizeGoalRunning">
+                <thead>
+                <tr><th>Change</th><th>Mean</th><th>Variance</th></tr>
+                </thead>
+                <tbody>
+                <tr><td>{improvement}</td><td>{meanTime}</td><td>{varianceTime}</td></tr>
+                </tbody>
+              </table>
               <h3 className="identicalTitle">Best {current.size}x{current.size}/{current.goal} #{current.boardNum}</h3>
               <table className="identicalStats">
                 <thead>
@@ -70,6 +83,10 @@ class HighScores extends React.Component {
 
     timerString(secs) {
         let display = "";
+        if (secs < 0) {
+            display = "-";
+            secs = -secs;
+        }
         let days = Math.floor(secs / this.SEC_PER_DAY);
         if (days > 0) {
             display += `${days}d`;
