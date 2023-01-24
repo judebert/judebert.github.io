@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/ringer/static/css/main.7df9fbcb.css",
-    "main.js": "/ringer/static/js/main.831748f1.js",
+    "main.css": "/ringer/static/css/main.1f214cd4.css",
+    "main.js": "/ringer/static/js/main.b2633832.js",
     "static/media/ringer-emojis.png": "/ringer/static/media/ringer-emojis.1c5c390f5ac46400d91e.png",
     "index.html": "/ringer/index.html",
-    "main.7df9fbcb.css.map": "/ringer/static/css/main.7df9fbcb.css.map",
-    "main.831748f1.js.map": "/ringer/static/js/main.831748f1.js.map"
+    "main.1f214cd4.css.map": "/ringer/static/css/main.1f214cd4.css.map",
+    "main.b2633832.js.map": "/ringer/static/js/main.b2633832.js.map"
   },
   "entrypoints": [
-    "static/css/main.7df9fbcb.css",
-    "static/js/main.831748f1.js"
+    "static/css/main.1f214cd4.css",
+    "static/js/main.b2633832.js"
   ]
 }
