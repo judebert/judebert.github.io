@@ -21,6 +21,11 @@ class App extends React.Component {
         this.solveStats = null;
         this.highScores = null;
         this.persistence = new Persistence();
+        this.dialogButtons = Array.of(
+          <button className="Retry" key="retry" onClick={() => this.handleReset()}>Try Again</button>,
+          <button className="NewBoard" key="new" onClick={() => this.newGame()}>Next Puzzle</button>,
+          <button className="Dismiss" key="home" onClick={() => this.handleDismissDialog()}>Home</button>
+        );
 
         let rng = seedrandom();
         let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
@@ -49,6 +54,18 @@ class App extends React.Component {
             },
             optionTab: 'info-tab',
         };
+
+        // "Auto"bind methods, so we don't update state in render() every time the clock updates
+        this.newGame = this.newGame.bind(this);
+        this.handleOptionTabChange = this.handleOptionTabChange.bind(this);
+        this.handleSolveTimer = this.handleSolveTimer.bind(this);
+        this.handlePrefChange = this.handlePrefChange.bind(this);
+        this.handleHints = this.handleHints.bind(this);
+        this.handleReset = this.handleReset.bind(this);
+        this.handleDismissDialog = this.handleDismissDialog.bind(this);
+        this.makeMove = this.makeMove.bind(this);
+        this.handleUndo = this.handleUndo.bind(this);
+        this.handleRedo = this.handleRedo.bind(this);
     }
 
     componentDidMount() {
@@ -93,7 +110,7 @@ class App extends React.Component {
         });
     }
 
-    handleOptionTabChange = toTab => {
+    handleOptionTabChange(toTab) {
         this.setState({
             optionTab: toTab,
         });
@@ -234,11 +251,6 @@ class App extends React.Component {
         let solved = this.state.solved;
         let hints = this.state.hints;
         let showDialog = this.state.showDialog;
-        let dialogButtons = Array.of(
-          <button className="Retry" key="retry" onClick={() => this.handleReset()}>Try Again</button>,
-          <button className="NewBoard" key="new" onClick={() => this.newGame()}>Next Puzzle</button>,
-          <button className="Dismiss" key="home" onClick={() => this.handleDismissDialog()}>Home</button>
-        );
         return (
             <div className="App">
               <header className="App-header">
@@ -253,25 +265,25 @@ class App extends React.Component {
                   <div label="New" id="option-tab">
                     <BoardPrefs
                       prefs={this.state.next}
-                      onPrefChange={this.handlePrefChange.bind(this)}>
+                      onPrefChange={this.handlePrefChange}>
                     </BoardPrefs>
                     <div className="BoardButtons">
                       <button className="NewBoard"
-                        onClick={() => this.newGame()}>Shuffle!</button>
+                        onClick={this.newGame}>Shuffle!</button>
                     </div>
                   </div>
                 </Tabs>
                 <div className="solving-buttons">
-                  <button className="Undo" onClick={() => this.handleUndo()} disabled={!history.canUndo()}>
+                  <button className="Undo" onClick={this.handleUndo} disabled={!history.canUndo()}>
                       Undo
                   </button>
-                  <button className="Redo" onClick={() => this.handleRedo()} disabled={!history.canRedo()}>
+                  <button className="Redo" onClick={this.handleRedo} disabled={!history.canRedo()}>
                       Redo
                   </button>
-                  <button className="Hints" onClick={() => this.handleHints()} disabled={solved}>
+                  <button className="Hints" onClick={this.handleHints} disabled={solved}>
                       Hint?
                   </button>
-                  <button className="Reset" onClick={() => this.handleReset()}>Reset</button>
+                  <button className="Reset" onClick={this.handleReset}>Reset</button>
                 </div>
                 <ScoreBoard
                     moves={this.state.moves}
@@ -286,10 +298,10 @@ class App extends React.Component {
                   history={history}
                   hints={solved ? [] : hints}
                   icons={this.state.icons}
-                  onClick={(x, y) => this.makeMove(x, y)}
+                  onClick={this.makeMove}
                 />
               </section>
-              <Dialog active={showDialog} buttons={dialogButtons}>
+              <Dialog active={showDialog} buttons={this.dialogButtons}>
                 <ScoreBoard
                     moves={this.state.moves}
                     goal={this.state.ringer.goal}
