@@ -10,6 +10,7 @@ import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
 import HighScores from './HighScores.js';
 import Dialog from './Dialog.js';
+import Share from './Share.js';
 import seedrandom from 'seedrandom';
 
 class App extends React.Component {
@@ -21,16 +22,17 @@ class App extends React.Component {
         this.solveStats = null;
         this.highScores = null;
         this.persistence = new Persistence();
+        this.dialogButtons = Array.of(
+          <button className="Retry" key="retry" onClick={() => this.handleReset()}>Try Again</button>,
+          <button className="NewBoard" key="new" onClick={() => this.newGame()}>Next Puzzle</button>,
+          <button className="Dismiss" key="home" onClick={() => this.handleDismissDialog()}>Home</button>
+        );
 
-        let rng = seedrandom();
-        let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
-        let initSize = 9;
-        let initDepth = 2;
-        let initShuffles = 8;
-        let ringer = new Ringer(initSize, initDepth);
+        // Initialize board number
+        let initParams = this._initParams();
+        let ringer = new Ringer(initParams.size, initParams.depth);
         this.state = {
             ringer: ringer,
-            boardNum: boardNum,
             history: new MoveHistory(),
             moves: 0,
             elapsed: 0,
@@ -41,18 +43,69 @@ class App extends React.Component {
             showDialog: false,
             frame: 0,
             next: {
-                size: initSize,
+                size: initParams.size,
                 icons: 'ringer-monochrome',
-                depth: initDepth,
-                shuffles: initShuffles,
-                boardNum: boardNum + 1,
+                depth: initParams.depth,
+                shuffles: initParams.shuffles,
+                boardNum: initParams.boardNum,
             },
             optionTab: 'info-tab',
         };
+
+        // "Auto"bind methods, so we don't update state in render() every time the clock updates
+        this.urlUpdated = this.urlUpdated.bind(this);
+        this.newGame = this.newGame.bind(this);
+        this.handleOptionTabChange = this.handleOptionTabChange.bind(this);
+        this.handleSolveTimer = this.handleSolveTimer.bind(this);
+        this.handlePrefChange = this.handlePrefChange.bind(this);
+        this.handleHints = this.handleHints.bind(this);
+        this.handleReset = this.handleReset.bind(this);
+        this.handleDismissDialog = this.handleDismissDialog.bind(this);
+        this.makeMove = this.makeMove.bind(this);
+        this.handleUndo = this.handleUndo.bind(this);
+        this.handleRedo = this.handleRedo.bind(this);
+
     }
 
     componentDidMount() {
         this.newGame();
+        window.addEventListener('hashchange', this.urlUpdated);
+    }
+
+    urlUpdated(event) {
+        let newInfo = this._initParams();
+        if (newInfo.boardNum === this.state.ringer.boardNum) {
+            return;
+        }
+        let merged = Object.assign({}, this.state.next, newInfo);
+        console.dir('orig:', this.state.next, 'new:', newInfo, 'result:', merged);
+        this.setState(
+            {
+                next: merged,
+            },
+            this.newGame
+        );
+    }
+
+    _initParams(data) {
+        if (data === undefined) {
+            data = window.location;
+        }
+        let boardNum = parseInt(data.hash.substring(1), 16);
+        if (Number.isNaN(boardNum) || boardNum < 1 || boardNum > 0x00FFFFFF) {
+            let rng = seedrandom();
+            boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
+        }
+        let initSize = 9;
+        let initDepth = 2;
+        let initShuffles = 8;
+        let initData = {
+            boardNum: boardNum,
+            size: initSize,
+            depth: initDepth,
+            shuffles: initShuffles,
+        };
+        return initData;
     }
 
     newGame() {
@@ -62,7 +115,7 @@ class App extends React.Component {
         if (this.boardTimer) {
             clearInterval(this.boardTimer);
         }
-        let next = Object.assign({},  this.state.next);
+        let next = Object.assign({}, this.state.next);
         let ringer = new Ringer(next.size, next.depth);
         let boardNum = Math.max(0, parseInt(next.boardNum));
         if (!isNaN(next.shuffles) && next.shuffles > 0) {
@@ -78,7 +131,6 @@ class App extends React.Component {
         next.boardNum++;
         this.setState({
             ringer: ringer,
-            boardNum: boardNum,
             icons: next.icons,
             history: new MoveHistory(),
             moves: 0,
@@ -93,7 +145,7 @@ class App extends React.Component {
         });
     }
 
-    handleOptionTabChange = toTab => {
+    handleOptionTabChange(toTab) {
         this.setState({
             optionTab: toTab,
         });
@@ -234,11 +286,6 @@ class App extends React.Component {
         let solved = this.state.solved;
         let hints = this.state.hints;
         let showDialog = this.state.showDialog;
-        let dialogButtons = Array.of(
-          <button className="Retry" key="retry" onClick={() => this.handleReset()}>Try Again</button>,
-          <button className="NewBoard" key="new" onClick={() => this.newGame()}>Next Puzzle</button>,
-          <button className="Dismiss" key="home" onClick={() => this.handleDismissDialog()}>Home</button>
-        );
         return (
             <div className="App">
               <header className="App-header">
@@ -253,25 +300,25 @@ class App extends React.Component {
                   <div label="New" id="option-tab">
                     <BoardPrefs
                       prefs={this.state.next}
-                      onPrefChange={this.handlePrefChange.bind(this)}>
+                      onPrefChange={this.handlePrefChange}>
                     </BoardPrefs>
                     <div className="BoardButtons">
                       <button className="NewBoard"
-                        onClick={() => this.newGame()}>Shuffle!</button>
+                        onClick={this.newGame}>Shuffle!</button>
                     </div>
                   </div>
                 </Tabs>
                 <div className="solving-buttons">
-                  <button className="Undo" onClick={() => this.handleUndo()} disabled={!history.canUndo()}>
+                  <button className="Undo" onClick={this.handleUndo} disabled={!history.canUndo()}>
                       Undo
                   </button>
-                  <button className="Redo" onClick={() => this.handleRedo()} disabled={!history.canRedo()}>
+                  <button className="Redo" onClick={this.handleRedo} disabled={!history.canRedo()}>
                       Redo
                   </button>
-                  <button className="Hints" onClick={() => this.handleHints()} disabled={solved}>
+                  <button className="Hints" onClick={this.handleHints} disabled={solved}>
                       Hint?
                   </button>
-                  <button className="Reset" onClick={() => this.handleReset()}>Reset</button>
+                  <button className="Reset" onClick={this.handleReset}>Reset</button>
                 </div>
                 <ScoreBoard
                     moves={this.state.moves}
@@ -286,10 +333,11 @@ class App extends React.Component {
                   history={history}
                   hints={solved ? [] : hints}
                   icons={this.state.icons}
-                  onClick={(x, y) => this.makeMove(x, y)}
+                  onClick={this.makeMove}
                 />
               </section>
-              <Dialog active={showDialog} buttons={dialogButtons}>
+              <Dialog active={showDialog} buttons={this.dialogButtons}>
+                <Share ringer={this.state.ringer}/>
                 <ScoreBoard
                     moves={this.state.moves}
                     goal={this.state.ringer.goal}
