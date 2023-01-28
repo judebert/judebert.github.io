@@ -27,15 +27,11 @@ class App extends React.Component {
           <button className="Dismiss" key="home" onClick={() => this.handleDismissDialog()}>Home</button>
         );
 
-        let rng = seedrandom();
-        let boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
-        let initSize = 9;
-        let initDepth = 2;
-        let initShuffles = 8;
-        let ringer = new Ringer(initSize, initDepth);
+        // Initialize board number
+        let initParams = this._initParams();
+        let ringer = new Ringer(initParams.size, initParams.depth);
         this.state = {
             ringer: ringer,
-            boardNum: boardNum,
             history: new MoveHistory(),
             moves: 0,
             elapsed: 0,
@@ -46,16 +42,17 @@ class App extends React.Component {
             showDialog: false,
             frame: 0,
             next: {
-                size: initSize,
+                size: initParams.size,
                 icons: 'ringer-monochrome',
-                depth: initDepth,
-                shuffles: initShuffles,
-                boardNum: boardNum + 1,
+                depth: initParams.depth,
+                shuffles: initParams.shuffles,
+                boardNum: initParams.boardNum,
             },
             optionTab: 'info-tab',
         };
 
         // "Auto"bind methods, so we don't update state in render() every time the clock updates
+        this.urlUpdated = this.urlUpdated.bind(this);
         this.newGame = this.newGame.bind(this);
         this.handleOptionTabChange = this.handleOptionTabChange.bind(this);
         this.handleSolveTimer = this.handleSolveTimer.bind(this);
@@ -66,10 +63,48 @@ class App extends React.Component {
         this.makeMove = this.makeMove.bind(this);
         this.handleUndo = this.handleUndo.bind(this);
         this.handleRedo = this.handleRedo.bind(this);
+
     }
 
     componentDidMount() {
         this.newGame();
+        window.addEventListener('hashchange', this.urlUpdated);
+    }
+
+    urlUpdated(event) {
+        let newInfo = this._initParams();
+        if (newInfo.boardNum === this.state.ringer.boardNum) {
+            return;
+        }
+        let merged = Object.assign({}, this.state.next, newInfo);
+        console.dir('orig:', this.state.next, 'new:', newInfo, 'result:', merged);
+        this.setState(
+            {
+                next: merged,
+            },
+            this.newGame
+        );
+    }
+
+    _initParams(data) {
+        if (data === undefined) {
+            data = window.location;
+        }
+        let boardNum = parseInt(data.hash.substring(1), 16);
+        if (Number.isNaN(boardNum) || boardNum < 1 || boardNum > 0x00FFFFFF) {
+            let rng = seedrandom();
+            boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
+        }
+        let initSize = 9;
+        let initDepth = 2;
+        let initShuffles = 8;
+        let initData = {
+            boardNum: boardNum,
+            size: initSize,
+            depth: initDepth,
+            shuffles: initShuffles,
+        };
+        return initData;
     }
 
     newGame() {
@@ -79,7 +114,7 @@ class App extends React.Component {
         if (this.boardTimer) {
             clearInterval(this.boardTimer);
         }
-        let next = Object.assign({},  this.state.next);
+        let next = Object.assign({}, this.state.next);
         let ringer = new Ringer(next.size, next.depth);
         let boardNum = Math.max(0, parseInt(next.boardNum));
         if (!isNaN(next.shuffles) && next.shuffles > 0) {
@@ -95,7 +130,6 @@ class App extends React.Component {
         next.boardNum++;
         this.setState({
             ringer: ringer,
-            boardNum: boardNum,
             icons: next.icons,
             history: new MoveHistory(),
             moves: 0,
