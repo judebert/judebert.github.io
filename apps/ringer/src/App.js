@@ -10,6 +10,7 @@ import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
 import HighScores from './HighScores.js';
 import Dialog from './Dialog.js';
+import Share from './Share.js';
 import seedrandom from 'seedrandom';
 
 class App extends React.Component {
@@ -336,6 +337,7 @@ class App extends React.Component {
                 />
               </section>
               <Dialog active={showDialog} buttons={this.dialogButtons}>
+                <Share ringer={this.state.ringer}/>
                 <ScoreBoard
                     moves={this.state.moves}
                     goal={this.state.ringer.goal}
