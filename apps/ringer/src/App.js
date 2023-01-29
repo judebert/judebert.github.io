@@ -11,7 +11,11 @@ import ScoreBoard from './ScoreBoard.js';
 import HighScores from './HighScores.js';
 import Dialog from './Dialog.js';
 import Share from './Share.js';
+import BitPacker from './BitPacker.js';
 import seedrandom from 'seedrandom';
+import toBase32 from 'base32-encode';
+import fromBase32 from 'base32-decode';
+
 
 class App extends React.Component {
     constructor(props) {
@@ -64,7 +68,9 @@ class App extends React.Component {
         this.makeMove = this.makeMove.bind(this);
         this.handleUndo = this.handleUndo.bind(this);
         this.handleRedo = this.handleRedo.bind(this);
-
+        this._stopTimers = this._stopTimers.bind(this);
+        this.saveBuffer = this.saveBuffer.bind(this);
+        this.loadBuffer = this.loadBuffer.bind(this);
     }
 
     componentDidMount() {
@@ -78,7 +84,6 @@ class App extends React.Component {
             return;
         }
         let merged = Object.assign({}, this.state.next, newInfo);
-        console.dir('orig:', this.state.next, 'new:', newInfo, 'result:', merged);
         this.setState(
             {
                 next: merged,
@@ -108,13 +113,17 @@ class App extends React.Component {
         return initData;
     }
 
-    newGame() {
+    _stopTimers() {
         if (this.animTimer) {
             clearInterval(this.animTimer);
         }
         if (this.boardTimer) {
             clearInterval(this.boardTimer);
         }
+    }
+
+    newGame() {
+        this._stopTimers();
         let next = Object.assign({}, this.state.next);
         let ringer = new Ringer(next.size, next.depth);
         let boardNum = Math.max(0, parseInt(next.boardNum));
@@ -142,6 +151,36 @@ class App extends React.Component {
             frame: 0,
             next: next,
             optionTab: 'info-tab',
+        });
+    }
+
+    saveBuffer() {
+        const packer = new BitPacker();
+        const buffer = packer.toUint8Array(this.state.ringer, this.state.history.current());
+        navigator.clipboard.writeText(toBase32(buffer, 'Crockford', { padding: false }))
+            .then((event) => alert('Saved board code to clipboard'))
+            .catch((event) => alert('Could not save board code to clipboard!'));
+    }
+
+    loadBuffer() {
+        const b32Text = document.getElementsByClassName('BoardCode')[0].value;
+        const data = new Uint8Array(fromBase32(b32Text, 'Crockford'));
+        const packer = new BitPacker();
+        packer.reset(data);
+        const ringer = packer.toRinger();
+        ringer.goal = ringer.depthFrom([]).reduce((sum, cellDepth) => sum + ringer._clicksAway(cellDepth), 0);
+        this.solveStats = new SolveStats({boardNum:ringer.boardNum, size:ringer.size, goal:ringer.goal});
+        this._stopTimers();
+        let history = new MoveHistory();
+        this.setState({
+            ringer: ringer,
+            moves: 0,
+            history: history,
+            hints: [],
+            elapsed: 0,
+            prevTime: window.performance.now(),
+            showDialog: false,
+            solved: this.state.ringer.isSolvedBy(history.current()),
         });
     }
 
@@ -189,9 +228,9 @@ class App extends React.Component {
         });
     }
 
-    handleReset(resetTimer) {
+    handleReset() {
         this.solveStats.addReset();
-        clearInterval(this.boardTimer);
+        this._stopTimers();
         this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         let history = new MoveHistory();
         this.setState({
@@ -305,6 +344,13 @@ class App extends React.Component {
                     <div className="BoardButtons">
                       <button className="NewBoard"
                         onClick={this.newGame}>Shuffle!</button>
+                    </div>
+                  </div>
+                  <div label="Debug" id='debug-tab'>
+                    <div className="DebugButtons">
+                      <button className="Save" onClick={this.saveBuffer}>Save</button>
+                      <input className="BoardCode" type="text"/>
+                      <button className="Load" onClick={this.loadBuffer}>Load</button>
                     </div>
                   </div>
                 </Tabs>
