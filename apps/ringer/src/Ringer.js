@@ -166,6 +166,7 @@ class Ringer {
         if (data.info === undefined) data.info = this.info;
         this.info = data.info;
     }
+
 }
 
 export default Ringer;
