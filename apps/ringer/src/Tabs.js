@@ -34,9 +34,10 @@ class Tabs extends React.Component {
             const rootId = child.props.id;
             const labelId = `${rootId}.label`;
             const inputId = `${rootId}.radio`;
+            const fragmentKey = `${rootId}.fragment`;
             const checked = this.props.showing === rootId;
             return (
-              <React.Fragment key={child.props.label}>
+              <React.Fragment key={fragmentKey}>
                 <input key={inputId} id={inputId} name={this.props.name} type="radio" checked={checked} onChange={this.handleTabClick}/>
                 <label key={labelId} id={labelId} htmlFor={inputId}>{child.props.label}</label>
                 <div className="Tab" key={rootId}>{child}</div>

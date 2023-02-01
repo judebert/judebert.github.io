@@ -21,11 +21,16 @@ class ScoreBoard extends React.Component {
     render() {
         let timerStr = this.timerString(Math.floor(this.props.elapsed / this.MS_PER_SEC));
         let boardNum = this.props.boardNum;
-        let boardHex = boardNum ? boardNum.toString(16).padStart(6, '0').toUpperCase() : "------";
+        let boardHex = "------";
+        if (boardNum) {
+            boardHex = boardNum > 0
+                ? '#' + boardNum.toString(16).padStart(6, '0').toUpperCase()
+                : `Tutorial #${-boardNum}`;
+        }
         let className = `ScoreBoard ${this.props.solved?'solved':'solving'}`;
         return (
             <div className={className}>
-              <h4>#{boardHex}</h4>
+              <h4>{boardHex}</h4>
               <h3>{this.props.moves}/{this.props.goal}</h3>
               <h4>{timerStr}</h4>
             </div>

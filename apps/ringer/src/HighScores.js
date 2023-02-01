@@ -16,6 +16,12 @@ class HighScores extends React.Component {
         if (!datastore || !current) {
             return (<div className="HighScore">No stats yet!</div>);
         }
+        if (current.boardNum < 0) {
+            return (<div className="HighScore">Tutorial boards ineligible for stats</div>);
+        }
+        if (current.boardNum === 0) {
+            return (<div className="HighScore">Playground boards ineligible for stats</div>);
+        }
         let bestIdenticals = datastore.getIdenticalStats(current)
             .map((scoreStat, index) => {
                 let k = `identical-stat-${index}`;
