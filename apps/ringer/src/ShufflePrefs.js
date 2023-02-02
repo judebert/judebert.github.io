@@ -3,12 +3,12 @@ import React from 'react';
 class ShufflePrefs extends React.Component {
 
     handleShuffleChange(prefs, shuffles) {
-        prefs.shuffles = "";
+        prefs.shuffle.shuffles = "";
         if (!isNaN(shuffles)) {
-            let max = Math.floor(prefs.size * prefs.size * (prefs.depth - 1) / 2);
+            let max = Math.floor(prefs.shuffle.size * prefs.shuffle.size * (prefs.shuffle.depth - 1) / 2);
             let min = 0;
             let shuffleInt = parseInt(shuffles);
-            prefs.shuffles = Math.max(min, Math.min(max, shuffleInt));
+            prefs.shuffle.shuffles = Math.max(min, Math.min(max, shuffleInt));
         }
         this.props.onChange(prefs);
     }
@@ -17,19 +17,19 @@ class ShufflePrefs extends React.Component {
         let max = Math.pow(2, 24);
         let boardNum = parseInt(boardHex, 16) || -1;
         boardNum = Math.min(max, boardNum);
-        prefs.boardNum = boardNum;
+        prefs.shuffle.boardNum = boardNum;
         this.props.onChange(prefs);
     }
 
     render() {
         let prefs = this.props.prefs;
-        let shuffles = parseInt(prefs.shuffles);
+        let shuffles = parseInt(prefs.shuffle.shuffles);
         if (isNaN(shuffles)) {
             shuffles = "";
         }
-        let size = prefs.size;
-        let depth = prefs.depth;
-        let boardNum = prefs.boardNum;
+        let size = prefs.shuffle.size;
+        let depth = prefs.shuffle.depth;
+        let boardNum = prefs.shuffle.boardNum;
         let boardHex = boardNum > 0 ? boardNum.toString(16).toUpperCase() : "";
         return (
             <div className="ShufflePrefs">

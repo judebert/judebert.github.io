@@ -1,17 +1,24 @@
 import './App.css';
 import React from 'react';
 import Ringer from './Ringer.js';
+import BoardDatastore from './BoardDatastore.js';
 import MoveHistory from './MoveHistory.js';
 import SolveStats from './SolveStats.js';
 import Persistence from './Persistence.js';
 import Board from './Board.js';
 import BoardPrefs from './BoardPrefs.js';
+import TutorialPrefs from './TutorialPrefs.js';
+import BoardInfo from './BoardInfo.js';
 import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
 import HighScores from './HighScores.js';
 import Dialog from './Dialog.js';
 import Share from './Share.js';
 import BitPacker from './BitPacker.js';
+import InfoIcon from '@mui/icons-material/Info';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
+import PestControlIcon from '@mui/icons-material/PestControl';
+import SchoolIcon from '@mui/icons-material/School';
 import seedrandom from 'seedrandom';
 import toBase32 from 'base32-encode';
 import fromBase32 from 'base32-decode';
@@ -21,10 +28,10 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
+        this.boardDatastore = new BoardDatastore();
         this.boardTimer = null;
         this.animTimer = null;
         this.solveStats = null;
-        this.highScores = null;
         this.persistence = new Persistence();
         this.dialogButtons = Array.of(
           <button className="Retry" key="retry" onClick={() => this.handleReset()}>Try Again</button>,
@@ -33,7 +40,7 @@ class App extends React.Component {
         );
 
         // Initialize board number
-        let initParams = this._initParams();
+        let initParams = this._parseShuffleData();
         let ringer = new Ringer(initParams.size, initParams.depth);
         this.state = {
             ringer: ringer,
@@ -47,11 +54,18 @@ class App extends React.Component {
             showDialog: false,
             frame: 0,
             next: {
-                size: initParams.size,
-                icons: 'ringer-monochrome',
-                depth: initParams.depth,
-                shuffles: initParams.shuffles,
-                boardNum: initParams.boardNum,
+                mode: 'shuffle',
+                shuffle: {
+                  size: initParams.size,
+                  depth: initParams.depth,
+                  shuffles: initParams.shuffles,
+                  boardNum: initParams.boardNum,
+                },
+                tutorial: {
+                  boardNum: -1,
+                },
+                load: {
+                }
             },
             optionTab: 'info-tab',
         };
@@ -79,11 +93,16 @@ class App extends React.Component {
     }
 
     urlUpdated(event) {
-        let newInfo = this._initParams();
+        let newInfo = this._parseShuffleData();
         if (newInfo.boardNum === this.state.ringer.boardNum) {
             return;
         }
-        let merged = Object.assign({}, this.state.next, newInfo);
+        // Copy all the existing data for the next board
+        let merged = Object.assign({}, this.state.next);
+        // Switch to shuffle mode with the parsed data
+        merged.mode = 'shuffle';
+        merged.shuffle = newInfo;
+        // Set the state, then callback for a new game
         this.setState(
             {
                 next: merged,
@@ -92,12 +111,15 @@ class App extends React.Component {
         );
     }
 
-    _initParams(data) {
+    _parseShuffleData(data) {
         if (data === undefined) {
             data = window.location;
         }
         let boardNum = parseInt(data.hash.substring(1), 16);
         if (Number.isNaN(boardNum) || boardNum < 1 || boardNum > 0x00FFFFFF) {
+            if (data.hash && data.hash.length > 0) {
+                alert('Invalid board number! Switching to random.');
+            }
             let rng = seedrandom();
             boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
         }
@@ -122,25 +144,52 @@ class App extends React.Component {
         }
     }
 
-    newGame() {
+    newGame(mode) {
         this._stopTimers();
         let next = Object.assign({}, this.state.next);
-        let ringer = new Ringer(next.size, next.depth);
-        let boardNum = Math.max(0, parseInt(next.boardNum));
-        if (!isNaN(next.shuffles) && next.shuffles > 0) {
-            ringer.shuffle(boardNum, next.shuffles);
+        if (mode === undefined) {
+            mode = next.mode;
         }
-        // Still a *minute* chance that the shuffle could create a solved multi-depth board, I guess. 
+        let ringer = undefined;
+        // What sort of game should we start?
+        switch (mode) {
+            case 'tutorial':
+                let boardInfo = this.boardDatastore.getTutorialBoardInfo(next.tutorial.boardNum);
+                const tutPacker = new BitPacker();
+                tutPacker.reset(new Uint8Array(fromBase32(boardInfo.data, 'Crockford')));
+                ringer = tutPacker.toRinger();
+                ringer.boardNum = next.tutorial.boardNum;
+                ringer.goal = ringer.depthFrom([]).reduce((sum, cellDepth) => sum + ringer._clicksAway(cellDepth), 0);
+                next.tutorial.boardNum--;
+                next.mode = 'tutorial';
+                break;
+            case 'load':
+                const b32Text = document.getElementsByClassName('BoardCode')[0].value;
+                const data = new Uint8Array(fromBase32(b32Text, 'Crockford'));
+                const packer = new BitPacker();
+                packer.reset(data);
+                ringer = packer.toRinger();
+                ringer.goal = ringer.depthFrom([]).reduce((sum, cellDepth) => sum + ringer._clicksAway(cellDepth), 0);
+                next.mode = 'shuffle';
+                break;
+            case 'shuffle':
+            default:
+                ringer = new Ringer(next.shuffle.size, next.shuffle.depth);
+                let boardNum = Math.max(0, parseInt(next.shuffle.boardNum));
+                if (!isNaN(next.shuffle.shuffles) && next.shuffle.shuffles > 0) {
+                    ringer.shuffle(boardNum, next.shuffle.shuffles);
+                }
+                next.shuffle.boardNum++;
+                next.mode = 'shuffle'; // In case we got here by 'default'
+        }
+        // If the board is not already solved, start the timer
         let solved = ringer.isSolvedBy([]);
         if (!solved) {
             this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         }
         this.solveStats = new SolveStats({boardNum:ringer.boardNum, size:ringer.size, goal:ringer.goal});
-        this.highScores = this.persistence.getIdenticalStats(this.solveStats);
-        next.boardNum++;
         this.setState({
             ringer: ringer,
-            icons: next.icons,
             history: new MoveHistory(),
             moves: 0,
             elapsed: 0,
@@ -149,6 +198,7 @@ class App extends React.Component {
             solved: solved,
             showDialog: false,
             frame: 0,
+            mode: mode,
             next: next,
             optionTab: 'info-tab',
         });
@@ -163,25 +213,11 @@ class App extends React.Component {
     }
 
     loadBuffer() {
-        const b32Text = document.getElementsByClassName('BoardCode')[0].value;
-        const data = new Uint8Array(fromBase32(b32Text, 'Crockford'));
-        const packer = new BitPacker();
-        packer.reset(data);
-        const ringer = packer.toRinger();
-        ringer.goal = ringer.depthFrom([]).reduce((sum, cellDepth) => sum + ringer._clicksAway(cellDepth), 0);
-        this.solveStats = new SolveStats({boardNum:ringer.boardNum, size:ringer.size, goal:ringer.goal});
-        this._stopTimers();
-        let history = new MoveHistory();
+        let next = Object.assign({}, this.state.next);
+        next.mode = 'load';
         this.setState({
-            ringer: ringer,
-            moves: 0,
-            history: history,
-            hints: [],
-            elapsed: 0,
-            prevTime: window.performance.now(),
-            showDialog: false,
-            solved: this.state.ringer.isSolvedBy(history.current()),
-        });
+            next: next,
+        }, this.newGame);
     }
 
     handleOptionTabChange(toTab) {
@@ -270,7 +306,7 @@ class App extends React.Component {
             // The SolveStats can't track the moves, because they change cost on hints.
             this.solveStats.setMoves(moves);
             // Don't update stats for play board
-            if (ringer.boardNum) {
+            if (ringer.boardNum && ringer.boardNum > 0) {
                 this.persistence.updateStats(this.solveStats);
             }
         }
@@ -331,22 +367,23 @@ class App extends React.Component {
                 <h1>Ringer</h1>
                 <aside>{process.env.REACT_APP_VERSION}</aside>
                 <Tabs name="options" showing={this.state.optionTab} onChange={this.handleOptionTabChange}>
-                  <div label="Info" id="info-tab">
-                    Tap any cell to flip the ring of cells around it.
-                    The whole board is a ring, too: flipping a cell outside an edge flips the cell on the opposite edge!
-                    Can you get all the cells to match?
+                  <div label={<InfoIcon/>} id="info-tab">
+                    <BoardInfo boardNum={this.state.ringer.boardNum} />
                   </div>
-                  <div label="New" id="option-tab">
+                  <div label={<SchoolIcon/>} id='tutorial-tab'>
+                    <TutorialPrefs
+                      prefs={this.state.next}
+                      onPrefChange={this.handlePrefChange}
+                      onClick={this.newGame} />
+                  </div>
+                  <div label={<ShuffleIcon/>} id="option-tab">
                     <BoardPrefs
                       prefs={this.state.next}
-                      onPrefChange={this.handlePrefChange}>
+                      onPrefChange={this.handlePrefChange}
+                      onShuffle={this.newGame}>
                     </BoardPrefs>
-                    <div className="BoardButtons">
-                      <button className="NewBoard"
-                        onClick={this.newGame}>Shuffle!</button>
-                    </div>
                   </div>
-                  <div label="Debug" id='debug-tab'>
+                  <div label={<PestControlIcon/>} id='debug-tab'>
                     <div className="DebugButtons">
                       <button className="Save" onClick={this.saveBuffer}>Save</button>
                       <input className="BoardCode" type="text"/>

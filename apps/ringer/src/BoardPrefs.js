@@ -3,25 +3,29 @@ import Cell from './Cell.js';
 import ShufflePrefs from './ShufflePrefs.js';
 import './BoardPrefs.css';
 
-// The BoardPrefs component displays all the inputs for initializing a new board
+// The BoardPrefs component displays all the inputs for initializing a new shuffled board
 class BoardPrefs extends React.Component {
 
-    handleSizeChange(event) {
+    handleSizeChange = (event) => {
         let prefs = Object.assign({}, this.props.prefs);
-        prefs.size = parseInt(event.target.value);
+        prefs.shuffle.size = parseInt(event.target.value);
         this.props.onPrefChange(prefs);
     }
 
-    handleDepthChange(event) {
+    handleDepthChange = (event) => {
         let prefs = Object.assign({}, this.props.prefs);
-        prefs.depth = parseInt(event.target.value);
+        prefs.shuffle.depth = parseInt(event.target.value);
         this.props.onPrefChange(prefs);
+    }
+
+    handleShuffleButton = (event) => {
+        this.props.onShuffle('shuffle');
     }
 
     render() {
         let prefs = this.props.prefs;
         let demoCells = [];
-        for (let i = 0; i < prefs.depth; i++) {
+        for (let i = 0; i < prefs.shuffle.depth; i++) {
             let key = `DemoCell${i}`;
             demoCells.push(
                 <Cell key={key} value={i} icons={prefs.icons} />
@@ -31,7 +35,7 @@ class BoardPrefs extends React.Component {
             <div className="BoardPrefs">
                 <div className="BoardSizePrefs" key="BoardSizePrefs">
                     <label key="BoardSizeLabel">Board Size
-                      <select id="BoardSizeSelect" value={prefs.size} onChange={(e) => this.handleSizeChange(e)}>
+                      <select id="BoardSizeSelect" value={prefs.shuffle.size} onChange={(e) => this.handleSizeChange(e)}>
                         <option value="5">5x5</option>
                         <option value="6">6x6</option>
                         <option value="7">7x7</option>
@@ -43,7 +47,7 @@ class BoardPrefs extends React.Component {
                       </select>
                     </label>
                     <label key="BoardDepthLabel">Base
-                      <select id="BoardDepthSelect" value={prefs.depth} onChange={(e) => this.handleDepthChange(e)}>
+                      <select id="BoardDepthSelect" value={prefs.shuffle.depth} onChange={(e) => this.handleDepthChange(e)}>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
@@ -56,6 +60,10 @@ class BoardPrefs extends React.Component {
                     prefs={prefs}
                     onChange={(prefs) => this.props.onPrefChange(prefs)}
                 />
+                <div className="BoardButtons">
+                  <button className="NewBoard"
+                    onClick={this.handleShuffleButton}>Shuffle!</button>
+                </div>
             </div>
         );
     }
