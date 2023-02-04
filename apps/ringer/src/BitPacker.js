@@ -1,4 +1,3 @@
-import Ringer from './Ringer.js';
 
 class BitPacker {
 

@@ -1,0 +1,19 @@
+.BoardInfo {
+    font-size: 90%;
+    height: 7em; 
+    overflow: auto;
+    padding: 02.em;
+}
+
+.BoardInfo .code {
+    font-family: Merriweather, Roboto serif, Georgia, serif;
+}
+
+.BoardTitle {
+    margin: 0.5em;
+}
+
+.BoardCredit {
+    font-style: italic;
+    font-size: 75%;
+}
