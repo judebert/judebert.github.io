@@ -290,7 +290,12 @@ class App extends React.Component {
         let history = this.state.history.makeMove(index);
         // Are we auto-starting a playground?
         if (this.state.solved) {
-            ringer = new Ringer();
+            ringer = new Ringer({
+                boardNum: 0,
+                size: ringer.size,
+                depth: ringer.depth,
+                datastore: this.boardDatastore,
+            });
             moves = 1;
             history = new MoveHistory().makeMove(index);
         }
