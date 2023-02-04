@@ -12,8 +12,7 @@ class BoardDatastore extends React.Component {
         Array.from(this.tutorials)
             .map(([boardNum, json]) => <option value={boardNum} key={boardNum}>{json.title}</option>);
 
-    getBoardInfo = (boardHex) => {
-        let boardNum = parseInt(boardHex, 16);
+    getBoardInfo = (boardNum) => {
         if (!boardNum) {
             return this.zeroBoardInfo;
         }
