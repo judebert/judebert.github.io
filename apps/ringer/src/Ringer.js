@@ -1,22 +1,61 @@
 import seedrandom from 'seedrandom';
+import fromBase32 from 'base32-decode';
+import BitPacker from './BitPacker.js';
 
 class Ringer {
-    constructor(size, depth) {
-        if (size === undefined) size = 9;
-        if (depth === undefined) depth = 2;
-        this.boardNum = 0;
-        this.size = size;
-        this.depth = depth;
+
+    // By default, a Ringer board is 9x9, depth 2, #0 with 0 shuffles: a blank 9x9.
+    // Ringer supports different combinations of options in different situations.
+    // A randomized board: {
+    //   size: 9,
+    //   depth: 2,
+    //   boardNum: 1,    // Positive number between 1 and 16,777,215
+    //   shuffles: 8,    // Will be limited to between 1 and size^2 * depth / 2
+    //   datastore: ref, // Info from this datastore will overwrite any other options
+    // }
+    // An art / challenge / saved board: {
+    //   boardNum: 0,
+    //   title: "Caterpillar Tracks",
+    //   info: "Clamshells can erase both end rows if they're on a board of the right size.",
+    //   data: "2800000000G8400000000000", // Info from this data overwrites any other options
+    // }
+    // A tutorial board: {
+    //   boardNum: -3,   // Negative number between -1 and the largest tutorial board
+    //   datastore: ref, // Info from this datastore will overwrite any other options
+    // }
+    constructor(opts) {
+        if (opts === undefined) { opts = {}; }
+        if (opts.size === undefined) opts.size = 9;
+        if (opts.depth === undefined) opts.depth = 2;
+        if (opts.boardNum === undefined) opts.boardNum = 0;
+        if (opts.shuffles === undefined) opts.shuffles = 0;
+        if (opts.boardNum > 0 && opts.shuffles === 0) opts.boardNum = 0;
+        if (opts.boardNum !== 0 && opts.datastore === undefined) opts.boardNum = 0;
+        // Provid the basic data
+        this.boardNum = opts.boardNum;
+        this.size = opts.size;
+        this.depth = opts.depth;
         this.goal = 0;
         this.start = [];
         this.info = `Tap any cell to flip the ring of cells around it.
           The whole board is a ring, too: flipping a cell outside an edge flips the cell on the opposite edge!
           Can you get all the cells to match?`;
+        // Update the data with shuffles or loading
+        if (this.boardNum > 0) {
+            // shuffle the board
+            this._shuffle(opts.shuffles);
+        } else if (this.boardNum < 0) {
+            // load from the datastore
+            this._populate(opts.datastore);
+        } else if (opts.data) {
+            // load the artwork 
+            this._load(opts.data);
+        }
     }
 
     // Helper function showing how far a cell with a click-depth is from a given target,
     // knowing that it wraps around at depth.
-    _clicksAway(clicks, target) {
+    _clicksAway = (clicks, target) => {
         if (target === undefined) {
             target = 0;
         }
@@ -37,7 +76,7 @@ class Ringer {
     }
 
     // Increment all the cells in a ring around (x, y) *mutating* the given grid
-    _ticNeighbors(index, grid) {
+    _ticNeighbors = (index, grid) => {
         // Calculate the X and Y so we can do wrap-around modulo math.
         const x = index % this.size;
         const y = Math.floor(index / this.size);
@@ -56,7 +95,7 @@ class Ringer {
 
     // Returns true if the moves solve the board.
     // Returns true if every cell in the board is the same color after applying the moves.
-    isSolvedBy(moves) {
+    isSolvedBy = (moves) => {
         let grid = this.gridFrom(moves);
         let response = grid.every((cell) => cell === grid[0]);
         return response;
@@ -64,15 +103,13 @@ class Ringer {
 
     // Clears this board, then adds clicks until it can be solved in `times` clicks.
     // Saves the [x,y] start moves in this.start
-    shuffle(seed, times) {
-        this.boardNum = seed > 0 ? seed.toString(16).toUpperCase() : "";
-        let rng = seedrandom(seed);
-        // How many clicks will it take to solve the board right now?
+    _shuffle = (distance) => {
+        let rng = seedrandom(this.boardNum);
         this.start = [];
         let board = this.depthFrom([]);
         let clicks = 0; // solveDistance is always 0 on an empty board... right?
         // Shuffle until we reach the right number of clicks
-        for (var i = 0; i < 1000 && clicks < times; i++) {
+        for (var i = 0; i < 1000 && clicks < distance; i++) {
             const index = Math.floor(rng() * board.length);
             // Don't *solve* a cell; only make it deeper
             if (board[index] !== 1) {
@@ -80,14 +117,52 @@ class Ringer {
                 clicks++;
             }
         }
-        this.goal = board.reduce((sum, cellDepth) => sum + ((this.depth - cellDepth) % this.depth), 0);
+        this.depths = board;
+        this.goal = this.depths.reduce((sum, cellDepth) => sum + this._clicksAway(cellDepth), 0);
         console.log(`Shuffled to ${clicks} moves / goal ${this.goal} in ${i} tries`);
         // Turn that into a list of moves (order doesn't matter!)
-        this.start = board.flatMap((cellDepth, index) => Array(cellDepth).fill(index));
+        this.start = this.depths.flatMap((cellDepth, index) => Array(cellDepth).fill(index));
+    }
+
+    _populate = (datastore) => {
+        let boardInfo = datastore.getTutorialBoardInfo(this.boardNum);
+        this._load(boardInfo.data);
+    }
+
+    _load = (data) => {
+        let boardInfo = this._unpack(data);
+        this.size = boardInfo.size;
+        this.depth = boardInfo.depth;
+        this.depths = boardInfo.depths;
+        this.goal = this.depths.reduce((sum, cellDepth) => sum + this._clicksAway(cellDepth), 0);
+        this.start = this.depths.flatMap((cellDepth, index) => Array(cellDepth).fill(index));
+    }
+
+    _unpack = (base32) => {
+        let bits = new Uint8Array(fromBase32(base32, 'Crockford'));
+        const packer = new BitPacker();
+        packer.reset(bits);
+        // TODO: how much of this should live in the BitPacker? Do I need a RingerPacker?
+        let version = packer.unpack(4);
+        if (version !== 1) {
+            throw new Error(`Unknown save version ${version}`);
+        }
+        let size = packer.unpack(3) + 5;
+        let depth = packer.unpack(2) + 2;
+        let depths = [];
+        for (let i = 0; i < size * size; i++) {
+            const depth = packer.unpack(3, i);
+            depths.push(depth);
+        }
+        return {
+            size: size,
+            depth: depth,
+            depths: depths,
+        }
     }
 
     // Returns displayed board, where all the squares *around* the `moves` have been flipped.
-    gridFrom(moves) {
+    gridFrom = (moves) => {
         let grid = new Array(this.size * this.size).fill(0);
         for (var index of this.start.concat(moves)) {
             this._ticNeighbors(index, grid);
@@ -97,7 +172,7 @@ class Ringer {
 
     // Returns a "hit map" of the board after applying the moves.
     // Indicates how many clicks were made at each cell, looping back to 0 after reaching depth.
-    depthFrom(moves) {
+    depthFrom = (moves) => {
         let depths = new Array(this.size * this.size).fill(0);
         for (var index of this.start.concat(moves)) {
             depths[index]++;
@@ -107,7 +182,7 @@ class Ringer {
     }
 
     // Returns a depth grid with the least necessary clicks to make all depths equal.
-    bestSolution(history) {
+    bestSolution = (history) => {
         // Describe how all cells have been clicked
         let situation = this.depthFrom(history.current());
         // Build a histogram of how far away each cell is from depth 0

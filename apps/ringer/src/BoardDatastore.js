@@ -12,8 +12,7 @@ class BoardDatastore extends React.Component {
         Array.from(this.tutorials)
             .map(([boardNum, json]) => <option value={boardNum} key={boardNum}>{json.title}</option>);
 
-    getBoardInfo = (boardHex) => {
-        let boardNum = parseInt(boardHex, 16);
+    getBoardInfo = (boardNum) => {
         if (!boardNum) {
             return this.zeroBoardInfo;
         }
@@ -162,6 +161,7 @@ class BoardDatastore extends React.Component {
             size: 6,
             depth: 2,
             info: "We know from Clamshells that we can erase an entire side of a ring by flipping its opposite side. Because the Caterpillar Tracks rely on wrapping to erase the last edge, this pattern can only appear on even-size boards, like this 6x6.",
+            data: "2800000000G8400000000000",
         }],
         [-14, {
             title: `Four Corners`,

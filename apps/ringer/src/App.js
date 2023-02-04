@@ -21,7 +21,6 @@ import PestControlIcon from '@mui/icons-material/PestControl';
 import SchoolIcon from '@mui/icons-material/School';
 import seedrandom from 'seedrandom';
 import toBase32 from 'base32-encode';
-import fromBase32 from 'base32-decode';
 
 
 class App extends React.Component {
@@ -41,7 +40,7 @@ class App extends React.Component {
 
         // Initialize board number
         let initParams = this._parseShuffleData();
-        let ringer = new Ringer(initParams.size, initParams.depth);
+        let ringer = new Ringer(Object.assign({}, initParams, { datastore: this.boardDatastore }));
         this.state = {
             ringer: ringer,
             history: new MoveHistory(),
@@ -154,31 +153,30 @@ class App extends React.Component {
         // What sort of game should we start?
         switch (mode) {
             case 'tutorial':
-                let boardInfo = this.boardDatastore.getTutorialBoardInfo(next.tutorial.boardNum);
-                const tutPacker = new BitPacker();
-                tutPacker.reset(new Uint8Array(fromBase32(boardInfo.data, 'Crockford')));
-                ringer = tutPacker.toRinger();
-                ringer.boardNum = next.tutorial.boardNum;
-                ringer.goal = ringer.depthFrom([]).reduce((sum, cellDepth) => sum + ringer._clicksAway(cellDepth), 0);
+                ringer = new Ringer({
+                    boardNum: next.tutorial.boardNum,
+                    datastore: this.boardDatastore,
+                });
                 next.tutorial.boardNum--;
                 next.mode = 'tutorial';
                 break;
             case 'load':
                 const b32Text = document.getElementsByClassName('BoardCode')[0].value;
-                const data = new Uint8Array(fromBase32(b32Text, 'Crockford'));
-                const packer = new BitPacker();
-                packer.reset(data);
-                ringer = packer.toRinger();
-                ringer.goal = ringer.depthFrom([]).reduce((sum, cellDepth) => sum + ringer._clicksAway(cellDepth), 0);
+                ringer = new Ringer({
+                    boardNum: 0,
+                    data: b32Text,
+                });
                 next.mode = 'shuffle';
                 break;
             case 'shuffle':
             default:
-                ringer = new Ringer(next.shuffle.size, next.shuffle.depth);
-                let boardNum = Math.max(0, parseInt(next.shuffle.boardNum));
-                if (!isNaN(next.shuffle.shuffles) && next.shuffle.shuffles > 0) {
-                    ringer.shuffle(boardNum, next.shuffle.shuffles);
-                }
+                ringer = new Ringer({
+                    size: next.shuffle.size,
+                    depth: next.shuffle.depth,
+                    boardNum: Math.max(0, parseInt(next.shuffle.boardNum)),
+                    shuffles: next.shuffle.shuffles,
+                    datastore: this.boardDatastore,
+                });
                 next.shuffle.boardNum++;
                 next.mode = 'shuffle'; // In case we got here by 'default'
         }
@@ -292,7 +290,7 @@ class App extends React.Component {
         let history = this.state.history.makeMove(index);
         // Are we auto-starting a playground?
         if (this.state.solved) {
-            ringer = new Ringer(ringer.size, ringer.depth);
+            ringer = new Ringer();
             moves = 1;
             history = new MoveHistory().makeMove(index);
         }

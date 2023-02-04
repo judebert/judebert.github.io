@@ -136,32 +136,6 @@ class BitPacker {
         return result;
     }
 
-    toRinger() {
-        let version = this.unpack(4);
-        if (version !== 1) {
-            throw new Error(`Unknown save version ${version}`);
-        }
-        const size = this.unpack(3) + 5;
-        const depth = this.unpack(2) + 2;
-        const depths = [];
-        for (let i = 0; i < size * size; i++) {
-            const depth = this.unpack(3, i);
-            depths.push(depth);
-        }
-        const start = depths.flatMap((cellDepth, index) => Array(cellDepth).fill(index));
-
-        const ringer = new Ringer(size, depth);
-        ringer.fromJson({
-            boardNum: 0,
-            size: size,
-            depth: depth,
-            goal: 0,
-            start: start,
-            info: 'loaded from RingerUnpacker',
-        });
-        return ringer;
-    }
-
     toUint8Array(ringer, moves) {
         // Okay, we'll need:
         // * 3 bits: a size (5 - 12 maps to 0 - 7, which fits in 3 bits)

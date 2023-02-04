@@ -23,9 +23,8 @@ class ScoreBoard extends React.Component {
         let boardNum = this.props.boardNum;
         let boardHex = "------";
         if (boardNum) {
-            boardHex = boardNum > 0
-                ? '#' + boardNum.toString(16).padStart(6, '0').toUpperCase()
-                : `Tutorial #${-boardNum}`;
+            boardHex = boardNum < 0 ? `Tutorial #${-boardNum}` :
+                `#${Math.abs(boardNum).toString(16).padStart(6, '0').toUpperCase()}`;
         }
         let className = `ScoreBoard ${this.props.solved?'solved':'solving'}`;
         return (
