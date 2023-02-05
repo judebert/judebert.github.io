@@ -35,6 +35,7 @@ class Ringer {
         this.boardNum = opts.boardNum;
         this.size = opts.size;
         this.depth = opts.depth;
+        this.shuffles = opts.shuffles;
         this.goal = 0;
         this.start = [];
         this.info = `Tap any cell to flip the ring of cells around it.
