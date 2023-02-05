@@ -68,30 +68,14 @@ class App extends React.Component {
             },
             optionTab: 'info-tab',
         };
-
-        // "Auto"bind methods, so we don't update state in render() every time the clock updates
-        this.urlUpdated = this.urlUpdated.bind(this);
-        this.newGame = this.newGame.bind(this);
-        this.handleOptionTabChange = this.handleOptionTabChange.bind(this);
-        this.handleSolveTimer = this.handleSolveTimer.bind(this);
-        this.handlePrefChange = this.handlePrefChange.bind(this);
-        this.handleHints = this.handleHints.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        this.handleDismissDialog = this.handleDismissDialog.bind(this);
-        this.makeMove = this.makeMove.bind(this);
-        this.handleUndo = this.handleUndo.bind(this);
-        this.handleRedo = this.handleRedo.bind(this);
-        this._stopTimers = this._stopTimers.bind(this);
-        this.saveBuffer = this.saveBuffer.bind(this);
-        this.loadBuffer = this.loadBuffer.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.newGame();
         window.addEventListener('hashchange', this.urlUpdated);
     }
 
-    urlUpdated(event) {
+    urlUpdated = (event) => {
         let newInfo = this._parseShuffleData();
         if (newInfo.boardNum === this.state.ringer.boardNum) {
             return;
@@ -110,7 +94,7 @@ class App extends React.Component {
         );
     }
 
-    _parseShuffleData(data) {
+    _parseShuffleData = (data) => {
         if (data === undefined) {
             data = window.location;
         }
@@ -134,7 +118,7 @@ class App extends React.Component {
         return initData;
     }
 
-    _stopTimers() {
+    _stopTimers = () => {
         if (this.animTimer) {
             clearInterval(this.animTimer);
         }
@@ -143,7 +127,7 @@ class App extends React.Component {
         }
     }
 
-    newGame(mode) {
+    newGame = (mode) => {
         this._stopTimers();
         let next = Object.assign({}, this.state.next);
         if (mode === undefined) {
@@ -202,7 +186,7 @@ class App extends React.Component {
         });
     }
 
-    saveBuffer() {
+    saveBuffer = () => {
         const packer = new BitPacker();
         const buffer = packer.toUint8Array(this.state.ringer, this.state.history.current());
         navigator.clipboard.writeText(toBase32(buffer, 'Crockford', { padding: false }))
@@ -210,7 +194,7 @@ class App extends React.Component {
             .catch((event) => alert('Could not save board code to clipboard!'));
     }
 
-    loadBuffer() {
+    loadBuffer = () => {
         let next = Object.assign({}, this.state.next);
         next.mode = 'load';
         this.setState({
@@ -218,13 +202,13 @@ class App extends React.Component {
         }, this.newGame);
     }
 
-    handleOptionTabChange(toTab) {
+    handleOptionTabChange = (toTab) => {
         this.setState({
             optionTab: toTab,
         });
     };
 
-    handleSolveTimer() {
+    handleSolveTimer = () => {
         let now = window.performance.now();
         let subElapsed = now - this.state.prevTime;
         this.solveStats.setTime(this.state.elapsed + subElapsed);
@@ -234,13 +218,13 @@ class App extends React.Component {
         });
     }
 
-    handlePrefChange(prefs) {
+    handlePrefChange = (prefs) => {
         this.setState({
             next: prefs,
         });
     }
 
-    handleHints() {
+    handleHints = () => {
         this.solveStats.addHint();
         let history = this.state.history;
         let size = this.state.ringer.size;
@@ -262,7 +246,7 @@ class App extends React.Component {
         });
     }
 
-    handleReset() {
+    handleReset = () => {
         this.solveStats.addReset();
         this._stopTimers();
         this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
@@ -278,13 +262,13 @@ class App extends React.Component {
         });
     }
 
-    handleDismissDialog() {
+    handleDismissDialog = () => {
         this.setState({
             showDialog: false,
         });
     }
 
-    makeMove(index) {
+    makeMove = (index) => {
         let ringer = this.state.ringer;
         let moves = this.state.moves + 1;
         let history = this.state.history.makeMove(index);
@@ -329,7 +313,7 @@ class App extends React.Component {
         });
     }
 
-    handleUndo() {
+    handleUndo = () => {
         this.solveStats.addUndo();
         let undone = this.state.history.undo();
         let hints = this.state.hints.slice();
@@ -341,7 +325,7 @@ class App extends React.Component {
         });
     }
 
-    handleRedo() {
+    handleRedo = () => {
         this.solveStats.addRedo();
         let redone = this.state.history.redo();
         let hints = this.state.hints.slice();
@@ -353,13 +337,13 @@ class App extends React.Component {
         });
     }
 
-    animate() {
+    animate = () => {
         this.setState({
             frame: this.state.frame + 1,
         });
     }
 
-    render() {
+    render = () => {
         let history = this.state.history;
         let solved = this.state.solved;
         let hints = this.state.hints;
@@ -442,7 +426,7 @@ class App extends React.Component {
 
     // TODO: Pull this into a separate class. Maybe a subclass of Ringer?
     //
-    animatedGrid(frame, size, depth) {
+    animatedGrid = (frame, size, depth) => {
         // TODO: choose or pass an animation
         let display;
         frame = frame % (size * 4);
