@@ -40,7 +40,9 @@ class App extends React.Component {
 
         // Initialize board number
         let initParams = this._parseShuffleData();
-        let ringer = new Ringer(Object.assign({}, initParams, { datastore: this.boardDatastore }));
+        let ringer = new Ringer(initParams);
+        let solved = ringer.isSolvedBy([]);
+        this.solveStats = new SolveStats({boardNum:ringer.boardNum, size:ringer.size, goal:ringer.goal});
         this.state = {
             ringer: ringer,
             history: new MoveHistory(),
@@ -49,7 +51,7 @@ class App extends React.Component {
             prevTime: window.performance.now(),
             icons: 'ringer-monochrome',
             hints: [],
-            solved: true,
+            solved: solved,
             showDialog: false,
             frame: 0,
             next: {
@@ -72,11 +74,18 @@ class App extends React.Component {
 
     componentDidMount = () => {
         window.addEventListener('hashchange', this.urlUpdated);
+        if (!this.state.solved) {
+            this._stopTimers();
+            this.boardTimer = setInterval(this.handleSolveTimer, 500);
+        }
     }
 
     urlUpdated = (event) => {
         let newInfo = this._parseShuffleData();
-        if (newInfo.boardNum === this.state.ringer.boardNum) {
+        if (newInfo.boardNum === this.state.ringer.boardNum
+            && newInfo.size === this.state.ringer.size 
+            && newInfo.depth === this.state.ringer.depth
+            && newInfo.shuffles === this.state.ringer.shuffles) {
             return;
         }
         // Copy all the existing data for the next board
@@ -93,26 +102,36 @@ class App extends React.Component {
         );
     }
 
+    // Shuffle data looks like #ABC123:9+8x2
+    // [#boardHex[:size[+shuffles[xdepth]]]]
     _parseShuffleData = (data) => {
         if (data === undefined) {
             data = window.location;
         }
-        let boardNum = parseInt(data.hash.substring(1), 16);
-        if (Number.isNaN(boardNum) || boardNum < 1 || boardNum > 0x00FFFFFF) {
+        // Stand back! I know the eldritch RegExp runes!
+        let opts = 
+            data.hash.match(/^(?:#([0-9A-Fa-f]{1,6})(?::([5-9]|1[0-2]))*(?:\+([1-9]\d{0,2}))*(?:x([2-5]))*)$/);
+        if (opts === null) {
+            opts = [0, 0, undefined, undefined, undefined];
+        }
+        let [matched, boardNum, size, shuffles, depth] = opts;
+        boardNum = parseInt(boardNum, 16);
+        if (Number.isNaN(boardNum) || boardNum === 0 || matched !== data.hash) {
             if (data.hash && data.hash.length > 0) {
-                alert('Invalid board number! Switching to random.');
+                alert('Invalid board data! Switching to random.');
             }
             let rng = seedrandom();
             boardNum = Math.max(rng.int32() & 0x00FFFFFF, 1);
         }
-        let initSize = 9;
-        let initDepth = 2;
-        let initShuffles = 8;
+        let initSize = parseInt(size) || 9;
+        let initDepth = parseInt(depth) || 2;
+        let initShuffles = parseInt(shuffles) || (size < 7 ? 4 : 8);
         let initData = {
             boardNum: boardNum,
             size: initSize,
             depth: initDepth,
             shuffles: initShuffles,
+            datastore: this.boardDatastore,
         };
         return initData;
     }
@@ -166,7 +185,7 @@ class App extends React.Component {
         // If the board is not already solved, start the timer
         let solved = ringer.isSolvedBy([]);
         if (!solved) {
-            this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
+            this.boardTimer = setInterval(this.handleSolveTimer, 500);
         }
         this.solveStats = new SolveStats({boardNum:ringer.boardNum, size:ringer.size, goal:ringer.goal});
         this.setState({
