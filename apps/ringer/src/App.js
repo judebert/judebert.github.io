@@ -33,9 +33,9 @@ class App extends React.Component {
         this.solveStats = null;
         this.persistence = new Persistence();
         this.dialogButtons = Array.of(
-          <button className="Retry" key="retry" onClick={() => this.handleReset()}>Try Again</button>,
-          <button className="NewBoard" key="new" onClick={() => this.newGame()}>Next Puzzle</button>,
-          <button className="Dismiss" key="home" onClick={() => this.handleDismissDialog()}>Home</button>
+          <button className="Retry" key="retry" onClick={this.handleReset}>Try Again</button>,
+          <button className="NewBoard" key="new" onClick={this.newGame}>Next Puzzle</button>,
+          <button className="Dismiss" key="home" onClick={this.handleDismissDialog}>Home</button>
         );
 
         // Initialize board number
@@ -71,7 +71,6 @@ class App extends React.Component {
     }
 
     componentDidMount = () => {
-        this.newGame();
         window.addEventListener('hashchange', this.urlUpdated);
     }
 
