@@ -22,77 +22,90 @@ class HighScores extends React.Component {
         if (current.boardNum === 0) {
             return (<div className="HighScore">Playground boards ineligible for stats</div>);
         }
-        let bestIdenticals = datastore.getIdenticalStats(current)
-            .map((scoreStat, index) => {
-                let k = `identical-stat-${index}`;
-                return (
-                <tr key={k}>
-                  <td className="boardNum">{scoreStat.boardNum}</td>
-                  <td className="moves">{scoreStat.moves}/{scoreStat.goal}</td>
-                  <td className="time">{this.timerString(scoreStat.time/this.MS_PER_SEC)}</td>
-                  <td className="hints">{scoreStat.hints}</td>
-                  <td className="resets">{scoreStat.resets}</td>
-                  <td className="undos">{scoreStat.undos}</td>
-                  <td className="redos">{scoreStat.redos}</td>
-                </tr>
-                );
-            }
-        );
+        let boardHex = current.boardNum.toString(16).padStart(6, '0').toUpperCase();
         let bestSizeGoal = datastore.getSizeGoalStats(current)
             .map((scoreStat, index) => {
                 let k = `best-stat-${index}`;
                 return (
                     <tr key={k}>
-                      <td className="boardNum">{scoreStat.boardNum}</td>
-                      <td className="moves">{scoreStat.moves}/{scoreStat.goal}</td>
+                      <td className="boardNum">#{scoreStat.boardNum.toString(16).padStart(6, '0').toUpperCase()}</td>
+                      <td className="moves">{scoreStat.moves}</td>
                       <td className="time">{this.timerString(scoreStat.time/this.MS_PER_SEC)}</td>
-                      <td className="hints">{scoreStat.hints}</td>
                       <td className="resets">{scoreStat.resets}</td>
-                      <td className="undos">{scoreStat.undos}</td>
-                      <td className="redos">{scoreStat.redos}</td>
                     </tr>
                 );
             }
         );
         let running = datastore.getSizeGoalRunningStats(current);
-        let deltaTime = this.timerString((current.time - running.time.mean) / this.MS_PER_SEC);
         let meanTime = this.timerString(running.time.mean / this.MS_PER_SEC);
-        let var2TimeMs2 = running.time.var2 / running.time.n;
-        let varianceTime = this.timerString(var2TimeMs2 / (this.MS_PER_SEC * this.MS_PER_SEC));
-        let deltaMove = (current.moves - running.move.mean).toFixed(2);
         let meanMove = running.move.mean.toFixed(2);
-        let varianceMove = (running.move.var2 / running.move.n).toFixed(2);
+        let currTime = this.timerString(current.time / this.MS_PER_SEC);
+        let latestMoveMax = running.move.mean + Math.sqrt(running.move.var2) / running.move.n;
+        let latestMoves = running.move.latest.map((moves, index) => 
+            <div className="spark" key={`move-spark-${index}`} style={{height:`${(moves/latestMoveMax)*100}%`}}></div>
+        );
+
+        let latestTimes = <div className="emptyText">No latest times</div>;
+        if (running.time.latest && running.time.latest.length > 0) {
+            let latestTimeMax = running.time.latest.reduce((a, b) => a > b ? a : b);
+            latestTimes = running.time.latest.map((time, index) => 
+                <div className="spark" key={`time-spark-${index}`} style={{height:`${(time/latestTimeMax)*100}%`}}></div>
+            );
+        }
+
+        let moveHistogramBars = <div className="emptyText">No move history</div>;
+        if (running.move.histogram && Object.entries(running.move.histogram).length > 0) {
+            let sortedMoveCounts = Object.entries(running.move.histogram).sort((a, b) => a[0] - b[0]);
+            let maxMoveCount = sortedMoveCounts.reduce((max, [moves, count]) => count > max ? count : max, 0);
+            moveHistogramBars = sortedMoveCounts.map(([moves, count], index) => 
+                <div className="spark" key={`move-hist-${index}`} style={{width:`${100*count/maxMoveCount}%`}}>{moves}</div>
+            );
+        }
+
+        let timeHistogramBars = <div className="emptyText">No time history</div>;
+        if (running.time.histogram && Object.entries(running.time.histogram).length > 0) {
+            let sortedTimeCounts = Object.entries(running.time.histogram).sort((a, b) => a[0] - b[0]);
+            sortedTimeCounts = sortedTimeCounts.map(([secs, count]) => [this.timerString(secs, "secs"), count]);
+            let maxTimeCount = sortedTimeCounts.reduce((max, [time, count]) => count > max ? count : max, 0);
+            timeHistogramBars = sortedTimeCounts.map(([time, count], index) => 
+                <div className="spark" key={`time-hist-${index}`} style={{width:`${100*count/maxTimeCount}%`}}>{time}</div>
+            );
+        }
         return (
             <div className="HighScores">
-              <h3 className="sizeGoalRunningTitle">{current.size}x{current.size}/{current.goal} Average</h3>
-              <table className="sizeGoalRunning">
+              <h3 className="latestTitle">Latest {current.size}x{current.size}/{current.goal}</h3>
+              <div className="move sparkline">
+                <div className="caption" key='move-spark-caption'>Moves</div>
+                {latestMoves}
+              </div>
+              <div className="time sparkline">
+                <div className="caption" key="time-spark-caption">Time</div>
+                {latestTimes}
+              </div>
+              <h3 className="sizeGoalRunningTitle">Best {current.size}x{current.size}/{current.goal}</h3>
+              <table className="results">
                 <thead>
-                <tr><th></th><th>Change</th><th>Mean</th><th>Variance</th></tr>
+                <tr><th></th><th>Moves</th><th>Time</th><th>Resets</th></tr>
                 </thead>
                 <tbody>
-                <tr><th>Time</th><td>{deltaTime}</td><td>{meanTime}</td><td>{varianceTime}</td></tr>
-                <tr><th>Moves</th><td>{deltaMove}</td><td>{meanMove}</td><td>{varianceMove}</td></tr>
+                <tr><th>Average</th><td>{meanMove}</td><td>{meanTime}</td><td></td></tr>
+                <tr><th>#{boardHex}</th><td>{current.moves}</td><td>{currTime}</td><td>{current.resets}</td></tr>
+                {bestSizeGoal}
                 </tbody>
               </table>
-              <h3 className="identicalTitle">Best {current.size}x{current.size}/{current.goal} #{current.boardNum}</h3>
-              <table className="identicalStats">
-                <thead>
-                <tr><th>Board#</th><th>Moves</th><th>Time</th><th>Hints</th><th>Resets</th><th>Undos</th><th>Redos</th></tr>
-                </thead>
-                <tbody>{bestIdenticals}</tbody>
-              </table>
-              <h3 className="sizeGoalTitle">Best {current.size}x{current.size}/{current.goal} any board</h3>
-              <table className="sizeGoalStats">
-                <thead>
-                <tr><th>Board#</th><th>Moves</th><th>Time</th><th>Hints</th><th>Resets</th><th>Undos</th><th>Redos</th></tr>
-                </thead>
-                <tbody>{bestSizeGoal}</tbody>
-              </table>
+              <h3 className="moveHistogramTitle">Move History</h3>
+              <div className="move histogram">
+                {moveHistogramBars}
+              </div>
+              <h3 className="timeHistogramTitle">Time History</h3>
+              <div className="time histogram">
+                {timeHistogramBars}
+              </div>
             </div>
         );
     }
 
-    timerString(secs) {
+    timerString(secs, resolution) {
         let display = "";
         if (secs < 0) {
             display = "-";
@@ -111,6 +124,9 @@ class HighScores extends React.Component {
         let mins = Math.floor(secs / this.SEC_PER_MIN);
         display += String(mins).padStart(2, '0') + ':';
         secs -= mins * this.SEC_PER_MIN;
+        if (resolution && resolution === 'secs') {
+            return display + secs.toFixed(0).padStart(2, '0')
+        }
         display += secs.toFixed(2).padStart(5, '0');
         return display;
     }
