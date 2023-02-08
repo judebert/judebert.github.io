@@ -4,7 +4,8 @@ class Persistence {
     bestK = 3;
     sameK = 3;
     latestK = 10;
-    version = 1.0;
+    version = 2.0;
+    MS_PER_SEC = 1000;
     initialCumulative = new Map([
         [1.0, 
             { 
@@ -12,9 +13,15 @@ class Persistence {
                 move: { n: 0, mean: 0, var2: 0, latest: [], },
             }
         ],
+        [2.0, 
+            { 
+                time: { n: 0, mean: 0, var2: 0, latest: [], histogram: {},},
+                move: { n: 0, mean: 0, var2: 0, latest: [], histogram: {},},
+            }
+        ],
     ]);
 
-    migrateData() {
+    migrateData = () => {
         let dataVersion = Number.parseFloat(localStorage.getItem('version'));
         // Run successive migrations until we're up-to-date
         //
@@ -31,18 +38,32 @@ class Persistence {
                 let sizeGoalStats = this._groupStoredStatsV0();
                 sizeGoalStats.forEach((stats, sizeGoal) => {
                     let cumulative = stats.reduce((accumulated, stat) => {
-                        return this._accumulateSizeGoalStats(accumulated, stat);
+                        return this._accumulateSizeGoalStats(accumulated, stat, 0);
                     }, this.initialCumulative.get(1.0));
                     // Store updated stats
                     this.setSizeGoalRunningStats(stats[0], cumulative);
                 });
                 localStorage.setItem('version', "1.0");
             }
+
+            if (dataVersion === 1.0) {
+                // Build a histogram with the data we have
+                let histograms = this._groupStoredStats();
+                histograms.forEach((stats, sizeGoal) => {
+                    let init = this.getSizeGoalRunningStats(stats[0], "migrating");
+                    init = Object.assign(this.initialCumulative.get(2.0), init);
+                    let cumulative = stats.reduce((accumulated, stat) => {
+                        return this._accumulateSizeGoalStats(accumulated, stat, 1.0);
+                    }, init);
+                    this.setSizeGoalRunningStats(stats[0], cumulative);
+                });
+                localStorage.setItem('version', "2.0");
+            }
             dataVersion = Number.parseFloat(localStorage.getItem('version'));
         }
     }
     
-    _groupStoredStatsV0() {
+    _groupStoredStatsV0 = () => {
         let sizeGoalStats = new Map();
         for (let keyDx = 0; keyDx < localStorage.length; keyDx++) {
             const key = localStorage.key(keyDx);
@@ -65,12 +86,40 @@ class Persistence {
         return sizeGoalStats;
     }
 
-    identicalStatsKey(boardNum, size, goal) {
+    _groupStoredStats = () => {
+        let sizeGoalStats = new Map();
+        for (let keyDx = 0; keyDx < localStorage.length; keyDx++) {
+            const key = localStorage.key(keyDx);
+            if (key === 'version') {
+                continue;
+            }
+            const dashDx = key.indexOf('-');
+            if (dashDx < 0) {
+                console.error(`Skipping unrecognized V1+ key: ${key}!`);
+                continue;
+            }
+            const type = key.substring(0, dashDx);
+            const sizeGoal = key.substring(dashDx + 1);
+            if (!sizeGoalStats.has(sizeGoal)) {
+                sizeGoalStats.set(sizeGoal, []);
+            }
+            if (type === 'best' || type === 'run') {
+                continue;
+            }
+            let boardStats = JSON.parse(localStorage.getItem(key)).map((line) => new SolveStats(line));
+            sizeGoalStats.set(sizeGoal, sizeGoalStats.get(sizeGoal).concat(boardStats));
+        }
+        return sizeGoalStats;
+    }
+
+    identicalStatsKey = (boardNum, size, goal) => {
         return `${boardNum}-${size}-${goal}`;
     }
 
-    getIdenticalStats(solveStats) {
-        this.migrateData();
+    getIdenticalStats = (solveStats, migrating) => {
+        if (!migrating) {
+            this.migrateData();
+        }
         let boardNum = solveStats.boardNum;
         let size = solveStats.size;
         let goal = solveStats.goal;
@@ -83,7 +132,7 @@ class Persistence {
         return statsList;
     }
 
-    setIdenticalStats(solveStats) {
+    setIdenticalStats = (solveStats) => {
         let solveStat = solveStats[0];
         let boardNum = solveStat.boardNum;
         let size = solveStat.size;
@@ -92,12 +141,14 @@ class Persistence {
         localStorage.setItem(key, JSON.stringify(solveStats.slice(0, this.sameK)));
     }
 
-    sizeGoalStatsKey(size, goal) {
+    sizeGoalStatsKey = (size, goal) => {
         return `best-${size}-${goal}`;
     }
 
-    getSizeGoalStats(solveStats) {
-        this.migrateData();
+    getSizeGoalStats = (solveStats, migrating) => {
+        if (!migrating) {
+            this.migrateData();
+        }
         let size = solveStats.size;
         let goal = solveStats.goal;
         let key = this.sizeGoalStatsKey(size, goal);
@@ -109,7 +160,7 @@ class Persistence {
         return statsList;
     }
 
-    setSizeGoalStats(solveStats) {
+    setSizeGoalStats = (solveStats) => {
         let solveStat = solveStats[0];
         let size = solveStat.size;
         let goal = solveStat.goal;
@@ -117,12 +168,14 @@ class Persistence {
         localStorage.setItem(key, JSON.stringify(solveStats.slice(0, this.bestK)));
     }
 
-    sizeGoalRunningKey(size, goal) {
+    sizeGoalRunningKey = (size, goal) => {
         return `run-${size}-${goal}`;
     }
 
-    getSizeGoalRunningStats(solveStats) {
-        this.migrateData();
+    getSizeGoalRunningStats = (solveStats, migrating) => {
+        if (!migrating) {
+            this.migrateData();
+        }
         let size = solveStats.size;
         let goal = solveStats.goal;
         let key = this.sizeGoalRunningKey(size, goal);
@@ -134,7 +187,7 @@ class Persistence {
         return moving;
     }
 
-    setSizeGoalRunningStats(solveStats, moving) {
+    setSizeGoalRunningStats = (solveStats, moving) => {
         let size = solveStats.size;
         let goal = solveStats.goal;
         let key = this.sizeGoalRunningKey(size, goal);
@@ -142,7 +195,7 @@ class Persistence {
         return moving;
     }
 
-    updateStats(solveStat) {
+    updateStats = (solveStat) => {
         // First, update the best for this particular config
         let identicals = this.getIdenticalStats(solveStat);
         let current = identicals.concat(solveStat);
@@ -160,16 +213,31 @@ class Persistence {
         this.setSizeGoalRunningStats(solveStat, moving);
     }
 
-    _accumulateSizeGoalStats(previous, datum) {
+    _accumulateSizeGoalStats = (previous, datum, migrate) => {
         let cumulative = Object.assign({}, previous);
-        // Times
-        cumulative.time = this._accumulateStat(cumulative.time, datum.time);
-        // Moves
-        cumulative.move = this._accumulateStat(cumulative.move, datum.moves);
+        // Only update running stats if we're migrating from earliest versions (or recording a win)
+        if (migrate === undefined || migrate < 1.0) {
+            // Times
+            cumulative.time = this._accumulateStat(cumulative.time, datum.time);
+            // Moves
+            cumulative.move = this._accumulateStat(cumulative.move, datum.moves);
+        }
+        // Only update move histogram if we're migrating from 2.0 or above (or recording a win)
+        if (migrate === undefined || migrate < 2.0) {
+            if (cumulative.time.histogram === undefined) {
+                cumulative.time.histogram = {};
+            }
+            let timeBucket = Math.floor(datum.time / this.MS_PER_SEC);
+            cumulative.time.histogram = this._updateHistogram(cumulative.time.histogram, timeBucket);
+            if (cumulative.move.histogram === undefined) {
+                cumulative.move.histogram = {};
+            }
+            cumulative.move.histogram = this._updateHistogram(cumulative.move.histogram, datum.moves);
+        }
         return cumulative;
     }
 
-    _accumulateStat(previous, datum) {
+    _accumulateStat = (previous, datum) => {
         let cumulative = Object.assign({}, previous);
         cumulative.n = cumulative.n + 1;
         let delta = datum - cumulative.mean;
@@ -178,6 +246,15 @@ class Persistence {
         cumulative.var2 = cumulative.var2 + (delta * delta2);
         cumulative.latest.push(datum);
         cumulative.latest = cumulative.latest.slice(-this.latestK);
+        return cumulative;
+    }
+
+    _updateHistogram = (previous, datum) => {
+        let cumulative = Object.assign({}, previous);
+        if (cumulative[datum] === undefined) {
+            cumulative[datum] = 0;
+        }
+        cumulative[datum]++;
         return cumulative;
     }
 }
