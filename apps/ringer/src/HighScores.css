@@ -12,12 +12,46 @@
 }
 
 .sparkline {
-    width:80%;
+    position: relative;
     display: flex;
     flex-direction: row;
     height: 2em;
     justify-content: center;
 }
+
+.mean {
+    width: calc(100% - 2em);
+    position: absolute;
+    left: 3em;
+    font-size: 50%;
+    text-align: right;
+}
+
+.move .mean {
+    bottom: 0;
+    border-top: 1px dashed white;
+}
+
+.time .mean {
+    top: 0;
+    border-bottom: 1px dashed white;
+}
+
+.meanLabel {
+    position: absolute;
+    padding-left: 0.5em;
+}
+
+.move .meanLabel {
+    bottom: 100%;
+    transform: translateY(50%);
+}
+
+.time .meanLabel {
+    top: 100%;
+    transform: translateY(-50%);
+}
+    
 
 .move.sparkline {
     align-items: flex-end;
@@ -38,6 +72,14 @@
     border: 1px solid var(--color-highlight);
 }
 
+.sparkline .sparkValue {
+    font-size: 50%;
+    transform: rotate(-90deg);
+    position: absolute;
+    bottom: 0.1em;
+    width: 1em; 
+}
+
 .results {
     display: grid;
     min-width: 100%;
@@ -55,6 +97,7 @@
 .histogram .spark {
     height: 1em;
     font-size: 80%;
+    position: relative;
 }
 
 .move.histogram {
@@ -65,6 +108,38 @@
 .time.histogram {
     align-items: flex-end;
     text-align: right;
+}
+
+.histogram .sparkLabel, .histogram .sparkValue {
+    position: absolute;
+}
+
+.move.histogram .sparkLabel {
+    right: 100%;
+}
+
+.move.histogram .sparkLabel::after {
+    content: ':';
+    padding-right: 0.2em;
+}
+
+.move.histogram .sparkValue {
+    left: 100%;
+    padding-left: 0.2em;
+}
+
+.time.histogram .sparkLabel {
+    left: 100%;
+}
+
+.time.histogram .sparkLabel::before {
+    content: ':';
+    padding-left: 0.2em;
+}
+
+.time.histogram .sparkValue {
+    right: 100%;
+    padding-right: 0.2em;
 }
 
 thead, tbody, tr {

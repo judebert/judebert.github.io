@@ -40,17 +40,32 @@ class HighScores extends React.Component {
         let meanTime = this.timerString(running.time.mean / this.MS_PER_SEC);
         let meanMove = running.move.mean.toFixed(2);
         let currTime = this.timerString(current.time / this.MS_PER_SEC);
-        let latestMoveMax = running.move.mean + Math.sqrt(running.move.var2) / running.move.n;
-        let latestMoves = running.move.latest.map((moves, index) => 
-            <div className="spark" key={`move-spark-${index}`} style={{height:`${(moves/latestMoveMax)*100}%`}}></div>
-        );
+
+        let latestMoves = <div className="emptyText">No latest moves</div>;
+        if (running.move.latest && running.move.latest.length > 0) {
+            let latestMoveMax = Math.max(meanMove, running.move.latest.reduce((a, b) => a > b ? a : b));
+            latestMoves = running.move.latest.map((moves, index) => 
+                <div className="spark" key={`move-spark-${index}`} style={{height:`${100*moves/latestMoveMax}%`}}>
+                  <div className="sparkValue" key={`move-spark-val-${index}`}>{moves}</div>
+                </div>
+            );
+            latestMoves.push(
+                <div className="mean" key="move-mean" style={{height:`${100*meanMove/latestMoveMax}%`}}>
+                  <span className="meanLabel">{meanMove}</span>
+                </div>);
+        }
 
         let latestTimes = <div className="emptyText">No latest times</div>;
         if (running.time.latest && running.time.latest.length > 0) {
-            let latestTimeMax = running.time.latest.reduce((a, b) => a > b ? a : b);
+            let latestTimeMax = Math.max(running.time.mean, running.time.latest.reduce((a, b) => a > b ? a : b));
             latestTimes = running.time.latest.map((time, index) => 
-                <div className="spark" key={`time-spark-${index}`} style={{height:`${(time/latestTimeMax)*100}%`}}></div>
+                <div className="spark" key={`time-spark-${index}`} style={{height:`${(time/latestTimeMax)*100}%`}}>
+                </div>
             );
+            latestTimes.push(
+                <div className="mean" key="time-mean" style={{height:`${100*running.time.mean/latestTimeMax}%`}}>
+                  <span className="meanLabel">{meanTime}</span>
+                </div>);
         }
 
         let moveHistogramBars = <div className="emptyText">No move history</div>;
@@ -58,7 +73,10 @@ class HighScores extends React.Component {
             let sortedMoveCounts = Object.entries(running.move.histogram).sort((a, b) => a[0] - b[0]);
             let maxMoveCount = sortedMoveCounts.reduce((max, [moves, count]) => count > max ? count : max, 0);
             moveHistogramBars = sortedMoveCounts.map(([moves, count], index) => 
-                <div className="spark" key={`move-hist-${index}`} style={{width:`${100*count/maxMoveCount}%`}}>{moves}</div>
+                <div className="spark" key={`move-hist-${index}`} style={{width:`${100*count/maxMoveCount}%`}}>
+                  <div className="sparkLabel">{moves}</div>
+                  <div className="sparkValue">{count}</div>
+                </div>
             );
         }
 
@@ -68,12 +86,15 @@ class HighScores extends React.Component {
             sortedTimeCounts = sortedTimeCounts.map(([secs, count]) => [this.timerString(secs, "secs"), count]);
             let maxTimeCount = sortedTimeCounts.reduce((max, [time, count]) => count > max ? count : max, 0);
             timeHistogramBars = sortedTimeCounts.map(([time, count], index) => 
-                <div className="spark" key={`time-hist-${index}`} style={{width:`${100*count/maxTimeCount}%`}}>{time}</div>
+                <div className="spark" key={`time-hist-${index}`} style={{width:`${100*count/maxTimeCount}%`}}>
+                  <div className="sparkLabel">{time}</div>
+                  <div className="sparkValue">{count}</div>
+                </div>
             );
         }
         return (
             <div className="HighScores">
-              <h3 className="latestTitle">Latest {current.size}x{current.size}/{current.goal}</h3>
+              <h3 className="latestTitle">Previous {current.size}x{current.size}/{current.goal}</h3>
               <div className="move sparkline">
                 <div className="caption" key='move-spark-caption'>Moves</div>
                 {latestMoves}
@@ -88,8 +109,6 @@ class HighScores extends React.Component {
                 <tr><th></th><th>Moves</th><th>Time</th><th>Resets</th></tr>
                 </thead>
                 <tbody>
-                <tr><th>Average</th><td>{meanMove}</td><td>{meanTime}</td><td></td></tr>
-                <tr><th>#{boardHex}</th><td>{current.moves}</td><td>{currTime}</td><td>{current.resets}</td></tr>
                 {bestSizeGoal}
                 </tbody>
               </table>
