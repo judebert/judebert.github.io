@@ -11,11 +11,15 @@
     align-items: center;
 }
 
+.HighScores h4 {
+    margin-bottom: 0.2em;
+}
+
 .sparkline {
     position: relative;
     display: flex;
     flex-direction: row;
-    height: 2em;
+    height: 3em;
     justify-content: center;
 }
 
