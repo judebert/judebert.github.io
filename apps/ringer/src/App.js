@@ -60,7 +60,7 @@ class App extends React.Component {
                   size: initParams.size,
                   depth: initParams.depth,
                   shuffles: initParams.shuffles,
-                  boardNum: initParams.boardNum,
+                  boardNum: initParams.boardNum + 1,
                 },
                 tutorial: {
                   boardNum: -1,
@@ -145,12 +145,10 @@ class App extends React.Component {
         }
     }
 
-    newGame = (mode) => {
+    newGame = () => {
         this._stopTimers();
         let next = Object.assign({}, this.state.next);
-        if (mode === undefined) {
-            mode = next.mode;
-        }
+        let mode = next.mode;
         let ringer = undefined;
         // What sort of game should we start?
         switch (mode) {
@@ -215,6 +213,22 @@ class App extends React.Component {
     loadBuffer = () => {
         let next = Object.assign({}, this.state.next);
         next.mode = 'load';
+        this.setState({
+            next: next,
+        }, this.newGame);
+    }
+
+    loadTutorial = () => {
+        let next = Object.assign({}, this.state.next);
+        next.mode = 'tutorial';
+        this.setState({
+            next: next,
+        }, this.newGame);
+    }
+
+    loadShuffle = () => {
+        let next = Object.assign({}, this.state.next);
+        next.mode = 'shuffle';
         this.setState({
             next: next,
         }, this.newGame);
@@ -379,13 +393,13 @@ class App extends React.Component {
                     <TutorialPrefs
                       prefs={this.state.next}
                       onPrefChange={this.handlePrefChange}
-                      onClick={this.newGame} />
+                      onClick={this.loadTutorial} />
                   </div>
                   <div label={<ShuffleIcon/>} id="option-tab">
                     <BoardPrefs
                       prefs={this.state.next}
                       onPrefChange={this.handlePrefChange}
-                      onShuffle={this.newGame}>
+                      onShuffle={this.loadShuffle}>
                     </BoardPrefs>
                   </div>
                   <div label={<PestControlIcon/>} id='debug-tab'>

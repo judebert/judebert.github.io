@@ -22,7 +22,6 @@ class HighScores extends React.Component {
         if (current.boardNum === 0) {
             return (<div className="HighScore">Playground boards ineligible for stats</div>);
         }
-        let boardHex = current.boardNum.toString(16).padStart(6, '0').toUpperCase();
         let bestSizeGoal = datastore.getSizeGoalStats(current)
             .map((scoreStat, index) => {
                 let k = `best-stat-${index}`;
@@ -39,7 +38,6 @@ class HighScores extends React.Component {
         let running = datastore.getSizeGoalRunningStats(current);
         let meanTime = this.timerString(running.time.mean / this.MS_PER_SEC);
         let meanMove = running.move.mean.toFixed(2);
-        let currTime = this.timerString(current.time / this.MS_PER_SEC);
 
         let latestMoves = <div className="emptyText">No latest moves</div>;
         if (running.move.latest && running.move.latest.length > 0) {
@@ -94,7 +92,8 @@ class HighScores extends React.Component {
         }
         return (
             <div className="HighScores">
-              <h3 className="latestTitle">Previous {current.size}x{current.size}/{current.goal}</h3>
+              <h3 className="statsTitle">{running.move.n} games of {current.size}+{current.goal}</h3>
+              <h4 className="latestTitle">Latest</h4>
               <div className="move sparkline">
                 <div className="caption" key='move-spark-caption'>Moves</div>
                 {latestMoves}
@@ -103,7 +102,7 @@ class HighScores extends React.Component {
                 <div className="caption" key="time-spark-caption">Time</div>
                 {latestTimes}
               </div>
-              <h3 className="sizeGoalRunningTitle">Best {current.size}x{current.size}/{current.goal}</h3>
+              <h4 className="sizeGoalRunningTitle">Best</h4>
               <table className="results">
                 <thead>
                 <tr><th></th><th>Moves</th><th>Time</th><th>Resets</th></tr>
@@ -112,11 +111,11 @@ class HighScores extends React.Component {
                 {bestSizeGoal}
                 </tbody>
               </table>
-              <h3 className="moveHistogramTitle">Move History</h3>
+              <h4 className="moveHistogramTitle">Move History</h4>
               <div className="move histogram">
                 {moveHistogramBars}
               </div>
-              <h3 className="timeHistogramTitle">Time History</h3>
+              <h4 className="timeHistogramTitle">Time History</h4>
               <div className="time histogram">
                 {timeHistogramBars}
               </div>
