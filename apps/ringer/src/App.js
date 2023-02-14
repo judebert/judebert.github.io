@@ -60,7 +60,7 @@ class App extends React.Component {
                   size: initParams.size,
                   depth: initParams.depth,
                   shuffles: initParams.shuffles,
-                  boardNum: initParams.boardNum,
+                  boardNum: initParams.boardNum + 1,
                 },
                 tutorial: {
                   boardNum: -1,
