@@ -22,7 +22,6 @@ class HighScores extends React.Component {
         if (current.boardNum === 0) {
             return (<div className="HighScore">Playground boards ineligible for stats</div>);
         }
-        let boardHex = current.boardNum.toString(16).padStart(6, '0').toUpperCase();
         let bestSizeGoal = datastore.getSizeGoalStats(current)
             .map((scoreStat, index) => {
                 let k = `best-stat-${index}`;
@@ -39,7 +38,6 @@ class HighScores extends React.Component {
         let running = datastore.getSizeGoalRunningStats(current);
         let meanTime = this.timerString(running.time.mean / this.MS_PER_SEC);
         let meanMove = running.move.mean.toFixed(2);
-        let currTime = this.timerString(current.time / this.MS_PER_SEC);
 
         let latestMoves = <div className="emptyText">No latest moves</div>;
         if (running.move.latest && running.move.latest.length > 0) {
