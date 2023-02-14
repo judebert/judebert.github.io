@@ -226,6 +226,14 @@ class App extends React.Component {
         }, this.newGame);
     }
 
+    loadShuffle = () => {
+        let next = Object.assign({}, this.state.next);
+        next.mode = 'shuffle';
+        this.setState({
+            next: next,
+        }, this.newGame);
+    }
+
     handleOptionTabChange = (toTab) => {
         this.setState({
             optionTab: toTab,
@@ -391,7 +399,7 @@ class App extends React.Component {
                     <BoardPrefs
                       prefs={this.state.next}
                       onPrefChange={this.handlePrefChange}
-                      onShuffle={this.newGame}>
+                      onShuffle={this.loadShuffle}>
                     </BoardPrefs>
                   </div>
                   <div label={<PestControlIcon/>} id='debug-tab'>
