@@ -8,6 +8,7 @@ import Persistence from './Persistence.js';
 import Board from './Board.js';
 import BoardPrefs from './BoardPrefs.js';
 import TutorialPrefs from './TutorialPrefs.js';
+import AppearancePrefs from './AppearancePrefs.js';
 import BoardInfo from './BoardInfo.js';
 import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
@@ -19,6 +20,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import PestControlIcon from '@mui/icons-material/PestControl';
 import SchoolIcon from '@mui/icons-material/School';
+import PaletteIcon from '@mui/icons-material/Palette';
 import seedrandom from 'seedrandom';
 import toBase32 from 'base32-encode';
 
@@ -256,6 +258,12 @@ class App extends React.Component {
         });
     }
 
+    handleIconChange = (icons) => {
+        this.setState({
+            icons: icons,
+        });
+    }
+
     handleHints = () => {
         this.solveStats.addHint();
         let history = this.state.history;
@@ -401,6 +409,12 @@ class App extends React.Component {
                       onPrefChange={this.handlePrefChange}
                       onShuffle={this.loadShuffle}>
                     </BoardPrefs>
+                  </div>
+                  <div label={<PaletteIcon/>} id="appearance-tab">
+                    <AppearancePrefs
+                      icons={this.state.icons}
+                      onIconChange={this.handleIconChange}>
+                    </AppearancePrefs>
                   </div>
                   <div label={<PestControlIcon/>} id='debug-tab'>
                     <div className="DebugButtons">
