@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Share from './Share.js';
 import './ScoreBoard.css';
 
 class ScoreBoard extends React.Component {
     static propTypes = {
         moves: PropTypes.number.isRequired,
-        goal: PropTypes.number.isRequired,
         elapsed: PropTypes.number,
         solved: PropTypes.bool.isRequired,
     }
@@ -19,20 +19,24 @@ class ScoreBoard extends React.Component {
     }
 
     render() {
-        let timerStr = this.timerString(Math.floor(this.props.elapsed / this.MS_PER_SEC));
-        let boardNum = this.props.boardNum;
+        let timerStr = "--:--";
+        let boardNum = this.props.ringer.boardNum;
         let boardHex = "------";
         if (boardNum) {
             boardHex = boardNum < 0 ? `Tutorial #${-boardNum}` :
                 `#${Math.abs(boardNum).toString(16).padStart(6, '0').toUpperCase()}`;
+            timerStr = this.timerString(Math.floor(this.props.elapsed / this.MS_PER_SEC));
         }
         let className = `ScoreBoard ${this.props.solved?'solved':'solving'}`;
         return (
+            <>
             <div className={className}>
               <h4>{boardHex}</h4>
-              <h3>{this.props.moves}/{this.props.goal}</h3>
+              <h3>{this.props.moves}/{this.props.ringer.goal}</h3>
               <h4>{timerStr}</h4>
             </div>
+            <Share ringer={this.props.ringer} />
+            </>
         );
     }
 

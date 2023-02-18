@@ -14,7 +14,6 @@ import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
 import HighScores from './HighScores.js';
 import Dialog from './Dialog.js';
-import Share from './Share.js';
 import BitPacker from './BitPacker.js';
 import InfoIcon from '@mui/icons-material/Info';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
@@ -35,7 +34,7 @@ class App extends React.Component {
         this.solveStats = null;
         this.persistence = new Persistence();
         this.dialogButtons = Array.of(
-          <button className="Retry" key="retry" onClick={this.handleReset}>Try Again</button>,
+          <button className="Retry" key="retry" onClick={this.handleReset}>Retry</button>,
           <button className="NewBoard" key="new" onClick={this.newGame}>Next Puzzle</button>,
           <button className="Dismiss" key="home" onClick={this.handleDismissDialog}>Home</button>
         );
@@ -170,6 +169,16 @@ class App extends React.Component {
                 });
                 next.mode = 'shuffle';
                 break;
+            case 'playground':
+                ringer = new Ringer({
+                    size: next.shuffle.size,
+                    depth: next.shuffle.depth,
+                    boardNum: 0,
+                    shuffles: 0,
+                    datastore: this.boardDatastore,
+                });
+                next.mode = 'shuffle';
+                break;
             case 'shuffle':
             default:
                 ringer = new Ringer({
@@ -228,9 +237,9 @@ class App extends React.Component {
         }, this.newGame);
     }
 
-    loadShuffle = () => {
+    loadShuffle = (boardNum) => {
         let next = Object.assign({}, this.state.next);
-        next.mode = 'shuffle';
+        next.mode = boardNum === 0 ? 'playground' : 'shuffle';
         this.setState({
             next: next,
         }, this.newGame);
@@ -290,7 +299,9 @@ class App extends React.Component {
         this.solveStats.addReset();
         this._stopTimers();
         this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
-        let history = new MoveHistory();
+        //let history = new MoveHistory();
+        let history = this.state.history;
+        history.step = 0;
         this.setState({
             moves: 0,
             history: history,
@@ -434,14 +445,13 @@ class App extends React.Component {
                   <button className="Hints" onClick={this.handleHints} disabled={solved}>
                       Hint?
                   </button>
-                  <button className="Reset" onClick={this.handleReset}>Reset</button>
+                  <button className="Reset" onClick={this.handleReset}>Retry</button>
                 </div>
                 <ScoreBoard
+                    ringer={this.state.ringer}
                     moves={this.state.moves}
-                    goal={this.state.ringer.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
-                    boardNum={this.state.ringer.boardNum}
                 />
               </header>
               <section className="App-content">
@@ -453,13 +463,11 @@ class App extends React.Component {
                 />
               </section>
               <Dialog active={showDialog} buttons={this.dialogButtons}>
-                <Share ringer={this.state.ringer}/>
                 <ScoreBoard
+                    ringer={this.state.ringer}
                     moves={this.state.moves}
-                    goal={this.state.ringer.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
-                    boardNum={this.state.ringer.boardNum}
                 />
                 <HighScores
                     current={this.solveStats}
