@@ -55,7 +55,7 @@ class Ringer {
     }
 
     // Helper function showing how far a cell with a click-depth is from a given target,
-    // knowing that it wraps around at depth.
+    // knowing that it wraps around at depth. The default target is 0.
     _clicksAway = (clicks, target) => {
         if (target === undefined) {
             target = 0;
@@ -209,7 +209,7 @@ class Ringer {
             if (clickDepth === bestTarget) {
                 continue;
             }
-            let distance = this._clicksAway(clickDepth, this.depth, bestTarget);
+            let distance = this._clicksAway(clickDepth, bestTarget);
             histogram[clickDepth].forEach((index) => solution[index] = distance);
         }
         return solution;
