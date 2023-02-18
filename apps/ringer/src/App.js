@@ -14,7 +14,6 @@ import Tabs from './Tabs.js';
 import ScoreBoard from './ScoreBoard.js';
 import HighScores from './HighScores.js';
 import Dialog from './Dialog.js';
-import Share from './Share.js';
 import BitPacker from './BitPacker.js';
 import InfoIcon from '@mui/icons-material/Info';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
@@ -449,11 +448,10 @@ class App extends React.Component {
                   <button className="Reset" onClick={this.handleReset}>Retry</button>
                 </div>
                 <ScoreBoard
+                    ringer={this.state.ringer}
                     moves={this.state.moves}
-                    goal={this.state.ringer.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
-                    boardNum={this.state.ringer.boardNum}
                 />
               </header>
               <section className="App-content">
@@ -465,13 +463,11 @@ class App extends React.Component {
                 />
               </section>
               <Dialog active={showDialog} buttons={this.dialogButtons}>
-                <Share ringer={this.state.ringer}/>
                 <ScoreBoard
+                    ringer={this.state.ringer}
                     moves={this.state.moves}
-                    goal={this.state.ringer.goal}
                     elapsed={this.state.elapsed}
                     solved={solved}
-                    boardNum={this.state.ringer.boardNum}
                 />
                 <HighScores
                     current={this.solveStats}
