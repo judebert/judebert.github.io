@@ -170,6 +170,16 @@ class App extends React.Component {
                 });
                 next.mode = 'shuffle';
                 break;
+            case 'playground':
+                ringer = new Ringer({
+                    size: next.shuffle.size,
+                    depth: next.shuffle.depth,
+                    boardNum: 0,
+                    shuffles: 0,
+                    datastore: this.boardDatastore,
+                });
+                next.mode = 'shuffle';
+                break;
             case 'shuffle':
             default:
                 ringer = new Ringer({
@@ -228,9 +238,9 @@ class App extends React.Component {
         }, this.newGame);
     }
 
-    loadShuffle = () => {
+    loadShuffle = (boardNum) => {
         let next = Object.assign({}, this.state.next);
-        next.mode = 'shuffle';
+        next.mode = boardNum === 0 ? 'playground' : 'shuffle';
         this.setState({
             next: next,
         }, this.newGame);

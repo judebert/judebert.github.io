@@ -19,7 +19,11 @@ class BoardPrefs extends React.Component {
     }
 
     handleShuffleButton = (event) => {
-        this.props.onShuffle('shuffle');
+        this.props.onShuffle();
+    }
+
+    handlePlaygroundButton = (event) => {
+        this.props.onShuffle(0);
     }
 
     render() {
@@ -63,6 +67,8 @@ class BoardPrefs extends React.Component {
                 <div className="BoardButtons">
                   <button className="NewBoard"
                     onClick={this.handleShuffleButton}>Shuffle!</button>
+                  <button className="newPlayground"
+                    onClick={this.handlePlaygroundButton}>Blank</button>
                 </div>
             </div>
         );
