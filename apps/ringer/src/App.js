@@ -35,7 +35,7 @@ class App extends React.Component {
         this.solveStats = null;
         this.persistence = new Persistence();
         this.dialogButtons = Array.of(
-          <button className="Retry" key="retry" onClick={this.handleReset}>Try Again</button>,
+          <button className="Retry" key="retry" onClick={this.handleReset}>Retry</button>,
           <button className="NewBoard" key="new" onClick={this.newGame}>Next Puzzle</button>,
           <button className="Dismiss" key="home" onClick={this.handleDismissDialog}>Home</button>
         );
@@ -300,7 +300,9 @@ class App extends React.Component {
         this.solveStats.addReset();
         this._stopTimers();
         this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
-        let history = new MoveHistory();
+        //let history = new MoveHistory();
+        let history = this.state.history;
+        history.step = 0;
         this.setState({
             moves: 0,
             history: history,
@@ -444,7 +446,7 @@ class App extends React.Component {
                   <button className="Hints" onClick={this.handleHints} disabled={solved}>
                       Hint?
                   </button>
-                  <button className="Reset" onClick={this.handleReset}>Reset</button>
+                  <button className="Reset" onClick={this.handleReset}>Retry</button>
                 </div>
                 <ScoreBoard
                     moves={this.state.moves}
