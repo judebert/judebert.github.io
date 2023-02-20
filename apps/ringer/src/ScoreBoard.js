@@ -28,6 +28,7 @@ class ScoreBoard extends React.Component {
             timerStr = this.timerString(Math.floor(this.props.elapsed / this.MS_PER_SEC));
         }
         let className = `ScoreBoard ${this.props.solved?'solved':'solving'}`;
+        let shareScore = this.props.solved ? `${this.props.moves}/${this.props.ringer.goal} in ${timerStr}` : undefined;
         return (
             <>
             <div className={className}>
@@ -35,7 +36,7 @@ class ScoreBoard extends React.Component {
               <h3>{this.props.moves}/{this.props.ringer.goal}</h3>
               <h4>{timerStr}</h4>
             </div>
-            <Share ringer={this.props.ringer} />
+            <Share ringer={this.props.ringer} score={shareScore}/>
             </>
         );
     }
