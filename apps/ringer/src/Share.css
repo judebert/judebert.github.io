@@ -1,0 +1,32 @@
+.shareButtons {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow: auto;
+    justify-content: safe center;
+    align-items: center;
+}
+
+.shareLink {
+    display: flex;
+    font-size: 100%;
+    width: 1.4em;
+    height: 1.4em;
+    text-decoration: none;
+    border-color: var(--color-highlight);
+    border-width: 1px;
+    border-style: solid;
+    color: white;
+    justify-content: safe center;
+    align-items: center;
+    border-radius: 0.2em;
+    margin-right: 0.1em;
+    background-color: var(--color-active);
+}
+
+.shareLink[disabled] {
+    color: grey;
+    background: var(--color-background);
+}
+

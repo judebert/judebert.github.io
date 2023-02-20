@@ -2,6 +2,7 @@ import React from 'react';
 import ShareIcon from '@mui/icons-material/Share';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import './Share.css';
 
 class Share extends React.Component {
     /* Building the preview characters
@@ -38,6 +39,23 @@ class Share extends React.Component {
      *
      * Colored squares it is.
      */
+    constructor(props) {
+        super(props);
+        let boardNum = this.props.ringer.boardNum.toString(16).toUpperCase();
+        let size = this.props.ringer.size;
+        let depth = this.props.ringer.depth;
+        let shuffles = this.props.ringer.shuffles;
+        this.url = new URL(`#${boardNum}:${size}+${shuffles}x${depth}`, window.location);
+        this.post = this._makePost(boardNum);
+        this.canShare = window.isSecureContext && navigator.canShare && navigator.share && navigator.canShare(this.post);
+        this.shareButton = <button className="shareLink" onClick={this.sharePost} disabled={!this.canShare}>
+            <ShareIcon/>
+        </button>
+        this.canCopy = window.isSecureContext && navigator.clipboard;
+        this.copyButton = <button className="shareLink" onClick={this.copyPost} disabled={!this.canCopy}>
+            <ContentCopyIcon/>
+        </button>
+    }
 
     tiles = [ '⬜️', '⬛️', '🟫', '🟧', '🟨', ];
 
@@ -56,45 +74,63 @@ class Share extends React.Component {
         return textGrid;
     }
 
-    _makePost = (url) => {
-        return {
-            title: "I found a neat Ringer board!",
-            text: this._makeTextGrid(),
-            url: url,
+    _makePost = (boardNum) => {
+        let title = `Try Ringer board #${boardNum}!`;
+        console.log(`Making with score: ${this.props.score}`);
+        let text = `${this._makeTextGrid()}`;
+        let post = {
+            title: title,
+            text: text,
+            url: this.url.toString(),
         };
+        return post;
     }
 
     sharePost = () => {
-        let boardNum = this.props.ringer.boardNum.toString(16).toUpperCase();
-        let size = this.props.ringer.size;
-        let depth = this.props.ringer.depth;
-        let shuffles = this.props.ringer.shuffles;
-        let url = new URL(`#${boardNum}:${size}+${shuffles}x${depth}`, window.location);
-        let post = this._makePost(url);
-        if (window.isSecureContext && navigator.canShare && navigator.canShare(post)) {
-            navigator.share(post);
+        if (!this.canShare) {
+            console.error("Sharing is disabled, but someone still called sharePost!");
+            alert("Sharing disabled!");
             return;
         }
-        navigator.clipboard.writeText(post.text + url)
+        let post = Object.assign({}, this.post);
+        if (this.props.score) {
+            post.text = `My score: ${this.props.score}\n${post.text}`;
+        }
+        navigator.share(this.post).catch((err) => {
+            console.error(`Sharing failed: ${err}!`);
+            console.dir('error:', err);
+            console.dir('post:', post);
+            alert(`Your system said it could share, but it failed!\n${err}\n\nYou'll have to share another way :(`);
+        });
+    }
+
+    copyPost = () => {
+        if (!this.canCopy) {
+            console.error("Clipboard copy is disabled, but someone still called copyPost!");
+            alert("Copy to clipboard disabled!");
+            return;
+        }
+        let post = Object.assign({}, this.post);
+        if (this.props.score) {
+            post.text = `My score: ${this.props.score}\n${post.text}`;
+        }
+        let text = `${post.title}\n${post.text}\n${post.url}`;
+        navigator.clipboard.writeText(text)
             .then(() => { alert('Copied Ringer post to clipboard'); })
-            .catch(() => { alert('Could not copy Ringer link to clipboard!');});
+            .catch((err) => {
+                console.error(`Clipboard writeText failed!: ${err}`);
+                console.dir('error:', err);
+                console.dir('text:', text);
+                alert('Could not copy Ringer link to clipboard!');
+            });
     }
 
     render = () => {
-        let boardNum = this.props.ringer.boardNum.toString(16).toUpperCase();
-        let size = this.props.ringer.size;
-        let depth = this.props.ringer.depth;
-        let shuffles = this.props.ringer.shuffles;
-        let url = new URL(`#${boardNum}:${size}+${shuffles}x${depth}`, window.location);
-        let post = this._makePost(url);
-        let canShare = window.isSecureContext && navigator.canShare && navigator.canShare(post);
-        let canCopy = window.isSecureContext && navigator.clipboard;
-        let button = canShare ? <div className="ShareLink" onClick={this.sharePost}><ShareIcon/></div>
-            : canCopy ? <div className="ShareLink" onClick={this.sharePost}><ContentCopyIcon/></div>
-            : <a href={url} className="ShareLink"><OpenInNewIcon/></a>;
         return (
-            <div className="Share-buttons">
-                {button}
+            <div className="shareButtons">
+                {this.shareButton}
+                {this.copyButton}
+                <a href={this.url} className="shareLink"><OpenInNewIcon/></a>
             </div>
         );
     }
