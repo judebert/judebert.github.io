@@ -41,12 +41,7 @@ class Share extends React.Component {
      */
     constructor(props) {
         super(props);
-        let boardNum = this.props.ringer.boardNum.toString(16).toUpperCase();
-        let size = this.props.ringer.size;
-        let depth = this.props.ringer.depth;
-        let shuffles = this.props.ringer.shuffles;
-        this.url = new URL(`#${boardNum}:${size}+${shuffles}x${depth}`, window.location);
-        this.post = this._makePost(boardNum);
+        this.post = this._makePost();
         this.canShare = window.isSecureContext && navigator.canShare && navigator.share && navigator.canShare(this.post);
         this.shareButton = <button className="shareLink" onClick={this.sharePost} disabled={!this.canShare}>
             <ShareIcon/>
@@ -74,14 +69,27 @@ class Share extends React.Component {
         return textGrid;
     }
 
-    _makePost = (boardNum) => {
-        let title = `Try Ringer board #${boardNum}!`;
+    _makePost = () => {
         console.log(`Making with score: ${this.props.score}`);
+        // Board number for URL and title
+        let boardNum = this.props.ringer.boardNum.toString(16).toUpperCase();
+        // Make URL
+        let size = this.props.ringer.size;
+        let depth = this.props.ringer.depth;
+        let shuffles = this.props.ringer.shuffles;
+        let url = new URL(`#${boardNum}:${size}+${shuffles}x${depth}`, window.location);
+        // Make title
+        let title = `Try Ringer board #${boardNum}!`;
+        // Make the text from a score and grid
         let text = `${this._makeTextGrid()}`;
+        if (this.props.score) {
+            text = `My score: ${this.props.score}\n${text}`;
+        }
+        // Put them all in a post
         let post = {
             title: title,
             text: text,
-            url: this.url.toString(),
+            url: url.toString(),
         };
         return post;
     }
@@ -92,11 +100,8 @@ class Share extends React.Component {
             alert("Sharing disabled!");
             return;
         }
-        let post = Object.assign({}, this.post);
-        if (this.props.score) {
-            post.text = `My score: ${this.props.score}\n${post.text}`;
-        }
-        navigator.share(this.post).catch((err) => {
+        let post = this._makePost();
+        navigator.share(post).catch((err) => {
             console.error(`Sharing failed: ${err}!`);
             console.dir('error:', err);
             console.dir('post:', post);
@@ -110,10 +115,7 @@ class Share extends React.Component {
             alert("Copy to clipboard disabled!");
             return;
         }
-        let post = Object.assign({}, this.post);
-        if (this.props.score) {
-            post.text = `My score: ${this.props.score}\n${post.text}`;
-        }
+        let post = this._makePost();
         let text = `${post.title}\n${post.text}\n${post.url}`;
         navigator.clipboard.writeText(text)
             .then(() => { alert('Copied Ringer post to clipboard'); })
