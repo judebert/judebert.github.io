@@ -450,6 +450,7 @@ class App extends React.Component {
                 <ScoreBoard
                     ringer={this.state.ringer}
                     moves={this.state.moves}
+                    stats={this.solveStats}
                     elapsed={this.state.elapsed}
                     solved={solved}
                 />
@@ -466,6 +467,7 @@ class App extends React.Component {
                 <ScoreBoard
                     ringer={this.state.ringer}
                     moves={this.state.moves}
+                    stats={this.solveStats}
                     elapsed={this.state.elapsed}
                     solved={solved}
                 />

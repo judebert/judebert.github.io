@@ -1,4 +1,5 @@
 import React from 'react';
+import ordinal from 'ordinal';
 import PropTypes from 'prop-types';
 import Share from './Share.js';
 import './ScoreBoard.css';
@@ -28,7 +29,7 @@ class ScoreBoard extends React.Component {
             timerStr = this.timerString(Math.floor(this.props.elapsed / this.MS_PER_SEC));
         }
         let className = `ScoreBoard ${this.props.solved?'solved':'solving'}`;
-        let shareScore = this.props.solved ? `${this.props.moves}/${this.props.ringer.goal} in ${timerStr}` : undefined;
+        let shareScore = this.props.solved ? `${this.props.moves}/${this.props.ringer.goal} in ${timerStr} on my ${ordinal(this.props.stats.resets +1)} try!` : undefined;
         return (
             <>
             <div className={className}>

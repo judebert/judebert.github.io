@@ -83,7 +83,7 @@ class Share extends React.Component {
         // Make the text from a score and grid
         let text = `${this._makeTextGrid()}`;
         if (this.props.score) {
-            text = `My score: ${this.props.score}\n${text}`;
+            text = `I got ${this.props.score}\n${text}`;
         }
         // Put them all in a post
         let post = {
