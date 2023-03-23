@@ -77,7 +77,6 @@ class App extends React.Component {
         window.addEventListener('hashchange', this.urlUpdated);
         if (!this.state.solved) {
             this._stopTimers();
-            this.boardTimer = setInterval(this.handleSolveTimer, 500);
         }
     }
 
@@ -140,9 +139,11 @@ class App extends React.Component {
     _stopTimers = () => {
         if (this.animTimer) {
             clearInterval(this.animTimer);
+            this.animTimer = null;
         }
         if (this.boardTimer) {
             clearInterval(this.boardTimer);
+            this.boardTimer = null;
         }
     }
 
@@ -191,11 +192,7 @@ class App extends React.Component {
                 next.shuffle.boardNum++;
                 next.mode = 'shuffle'; // In case we got here by 'default'
         }
-        // If the board is not already solved, start the timer
         let solved = ringer.isSolvedBy([]);
-        if (!solved) {
-            this.boardTimer = setInterval(this.handleSolveTimer, 500);
-        }
         this.solveStats = new SolveStats({boardNum:ringer.boardNum, size:ringer.size, goal:ringer.goal});
         this.setState({
             ringer: ringer,
@@ -298,7 +295,6 @@ class App extends React.Component {
     handleReset = () => {
         this.solveStats.addReset();
         this._stopTimers();
-        this.boardTimer = setInterval(() => this.handleSolveTimer(), 500);
         //let history = new MoveHistory();
         let history = this.state.history;
         history.step = 0;
@@ -337,8 +333,7 @@ class App extends React.Component {
         let solved = ringer.isSolvedBy(history.current());
         let showDialog = this.state.showDialog;
         if (solved) {
-            clearInterval(this.animTimer);
-            clearInterval(this.boardTimer);
+            this._stopTimers();
             this.animTimer = setInterval(() => this.animate(), 150);
             showDialog = true;
             // The SolveStats can't track the moves, because they change cost on hints.
@@ -348,6 +343,12 @@ class App extends React.Component {
                 this.persistence.updateStats(this.solveStats);
             }
         }
+        // Start the timer on the first click
+        let prevTime = this.state.prevTime;
+        if (ringer.boardNum !== 0 && !solved && this.boardTimer === null) {
+            this.boardTimer = setInterval(this.handleSolveTimer, 500);
+            prevTime = window.performance.now();
+        }
         let hints = this.state.hints.slice();
         if (hints && hints.length > index && hints[index] > 0) {
             let depth = this.state.ringer.depth;
@@ -356,6 +357,7 @@ class App extends React.Component {
         this.setState({
             ringer: ringer,
             moves: moves,
+            prevTime: prevTime,
             solved: solved,
             showDialog: showDialog,
             hints: hints,
